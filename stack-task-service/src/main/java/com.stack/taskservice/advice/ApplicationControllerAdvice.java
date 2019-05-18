@@ -1,6 +1,5 @@
 package com.stack.taskservice.advice;
 
-
 import com.stack.taskservice.error.ErrorCodes;
 import com.stack.taskservice.exception.StackException;
 import com.stack.taskservice.exception.TaskException;
@@ -11,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 
 @RestControllerAdvice
 public class ApplicationControllerAdvice {

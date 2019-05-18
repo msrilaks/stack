@@ -15,13 +15,15 @@ import java.util.UUID;
 public class Task {
     @Id
     private UUID   id;
-    private String createdByUserId;
     private String userId;
+    private String createdByUserId;
     private String origin;
     private String category;
     private String label;
     private String description;
+    private boolean isCompleted;
     private Long   createdTimeStamp;
+    private Long   lastModifiedTimeStamp;
     private Long   completedTimeStamp;
     private Long   deletedTimeStamp;
 }

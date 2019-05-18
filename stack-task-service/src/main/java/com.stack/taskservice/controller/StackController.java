@@ -6,6 +6,7 @@ import com.stack.taskservice.services.StackService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -55,12 +56,46 @@ public class StackController {
         return ResponseEntity.ok(stackService.getTasks(stackId));
     }
 
-    @GetMapping(path = "/stack/{stackId}/task/{taskId}", consumes = "application/json",
+    @GetMapping(path = "/stack/{stackId}/tasks/{taskId}", consumes = "application/json",
                 produces = "application/json")
-    @ApiOperation(value = "Get Tasks", tags = {"Stack"})
+    @ApiOperation(value = "Get Task", tags = {"Task"})
     public ResponseEntity<Task> getTaskOfStack(
             @PathVariable("stackId") String stackId,
             @PathVariable("taskId") String taskId) {
         return ResponseEntity.ok(stackService.getTask(stackId, taskId));
     }
+
+    @PostMapping(path = "/stack/{stackId}/tasks", consumes = "application/json",
+                 produces = "application/json")
+    @ApiOperation(value = "Create a Task", tags = {"Task"})
+    public ResponseEntity<Task> createTask(
+            @PathVariable("stackId") String stackId,
+            @RequestBody @Valid Task task) {
+        return ResponseEntity.ok(stackService.createTask(stackId, task));
+    }
+
+    @PutMapping(path = "/stack/{stackId}/tasks/{taskId}",
+                consumes = "application/json",
+                produces = "application/json")
+    @ApiOperation(value = "Modify Task", tags = {"Task"})
+    public ResponseEntity<Task> modifyTask(
+            @PathVariable("stackId") String stackId,
+            @PathVariable("taskId") String taskId,
+            @RequestParam(name = "moveToStackUserId", required = false) String moveToStackUserId,
+            @RequestBody @Valid Task task) {
+        return ResponseEntity.ok(stackService.modifyTask(stackId, taskId,
+                                                         moveToStackUserId, task));
+    }
+
+    @DeleteMapping(path = "/stack/{stackId}/tasks/{taskId}",
+                   consumes = "application/json",
+                   produces = "application/json")
+    @ApiOperation(value = "Delete Task", tags = {"Task"})
+    public ResponseEntity deleteTask(
+            @PathVariable("stackId") String stackId,
+            @PathVariable("taskId") String taskId) {
+        stackService.deleteTask(stackId, taskId);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
 }
