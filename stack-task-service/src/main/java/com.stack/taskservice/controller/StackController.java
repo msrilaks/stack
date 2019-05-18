@@ -70,7 +70,7 @@ public class StackController {
     @ApiOperation(value = "Create a Task", tags = {"Task"})
     public ResponseEntity<Task> createTask(
             @PathVariable("stackId") String stackId,
-            @RequestBody @Valid Task task) {
+            @RequestBody Task task) {
         return ResponseEntity.ok(stackService.createTask(stackId, task));
     }
 
