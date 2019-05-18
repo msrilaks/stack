@@ -34,7 +34,8 @@ public class StackController {
     public ResponseEntity deleteStack(
             @PathVariable("stackId") String stackId) {
         stackService.deleteStack(stackId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok()
+                             .build();
     }
 
     @GetMapping(path = "/stack/{stackId}", consumes = "application/json",
@@ -54,8 +55,7 @@ public class StackController {
         return ResponseEntity.ok(stackService.getTasks(stackId));
     }
 
-    @GetMapping(path = "/stack/{stackId}/task/{taskId}", consumes =
-            "application/json",
+    @GetMapping(path = "/stack/{stackId}/task/{taskId}", consumes = "application/json",
                 produces = "application/json")
     @ApiOperation(value = "Get Tasks", tags = {"Stack"})
     public ResponseEntity<Task> getTaskOfStack(
