@@ -60,6 +60,7 @@ public class StackService {
 
     public Task createTask(String stackId, Task task) {
         Stack stack = getStack(stackId);
+        task.setStackId(stackId);
         taskHandler.touchCreated(task);
         stack.getTaskList().add(task);
         Stack savedStack = stackRepository.save(stack);

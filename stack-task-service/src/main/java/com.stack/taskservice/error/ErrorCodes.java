@@ -8,9 +8,12 @@ public enum ErrorCodes {
     APPLICATION_ERROR(1, APP_ERR_MSG, APP_ERR_MSG),
     STACK_ID_INVALID(2, STACK_ID_INVALID_ERR_MSG, STACK_ID_INVALID_ERR_MSG),
     STACK_USER_ID_INVALID(3, STACK_USER_ID_INVALID_ERR_MSG,
-                          STACK_USER_ID_INVALID_ERR_MSG);
+                          STACK_USER_ID_INVALID_ERR_MSG),
+    TASK_USER_ID_INVALID(4, TASK_USER_ID_INVALID_ERR_MSG,
+                         TASK_USER_ID_INVALID_ERR_MSG);
 
-    private int    errorCode;
+
+    private int errorCode;
     private String errorMessage;
     private String errorDescription;
 

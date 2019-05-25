@@ -15,6 +15,7 @@ import java.util.UUID;
 public class Task {
     @Id
     private UUID   id;
+    private String stackId;
     private String userId;
     private String createdByUserId;
     private String origin;

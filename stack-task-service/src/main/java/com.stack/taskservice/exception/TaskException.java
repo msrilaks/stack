@@ -6,4 +6,8 @@ public class TaskException extends ApplicationException {
     public TaskException(Error error, Throwable cause) {
         super(error, cause);
     }
+
+    public TaskException(Error error) {
+        super(error);
+    }
 }
