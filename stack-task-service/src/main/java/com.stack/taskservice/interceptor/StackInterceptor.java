@@ -3,6 +3,8 @@ package com.stack.taskservice.interceptor;
 import com.stack.taskservice.context.StackRequestContext;
 import com.stack.taskservice.model.Stack;
 import com.stack.taskservice.services.StackService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerMapping;
@@ -15,6 +17,9 @@ import java.util.Map;
 
 @Component
 public class StackInterceptor extends HandlerInterceptorAdapter {
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+            StackInterceptor.class.getName());
+
     @Resource(name = "stackRequestContext")
     StackRequestContext stackRequestContext;
 
@@ -31,6 +36,7 @@ public class StackInterceptor extends HandlerInterceptorAdapter {
             final String stackId = String.valueOf(pathVariables.get("stackId"));
             Stack stack = stackService.getStack(stackId);
             stackRequestContext.setStack(stack);
+            LOGGER.info("Interceptor populates: " + stack);
         }
         return true;
     }

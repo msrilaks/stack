@@ -13,6 +13,6 @@ public class StackConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(stackInterceptor).addPathPatterns("/stack");
+        registry.addInterceptor(stackInterceptor);
     }
 }

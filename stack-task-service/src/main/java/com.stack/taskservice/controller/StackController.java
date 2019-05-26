@@ -51,8 +51,7 @@ public class StackController {
     @ApiOperation(value = "Get a Stack", tags = {"Stack"})
     public ResponseEntity<Stack> getStack(
             @PathVariable("stackId") String stackId) {
-        Stack stack = stackService.getStack(stackId);
-        return ResponseEntity.ok(stack);
+        return ResponseEntity.ok(stackRequestContext.getStack());
     }
 
     @GetMapping(path = "/stack/{stackId}/tasks", consumes = "application/json",
@@ -88,15 +87,15 @@ public class StackController {
     public ResponseEntity<Task> modifyTask(
             @PathVariable("stackId") String stackId,
             @PathVariable("taskId") UUID taskId,
-            @RequestParam(name = "moveToStackUserId", required = false)
+            @RequestParam(name = "moveToStackUser", required = false)
                     String moveToStackUserId,
-            @RequestParam(name = "markCompleted", required = false,
+            @RequestParam(name = "isCompleted", required = false,
                           defaultValue = "false")
-                    boolean markCompleted,
+                    boolean isCompleted,
             @RequestBody @Valid Task task) {
         return ResponseEntity.ok(stackService.modifyTask(stackId, taskId,
                                                          moveToStackUserId,
-                                                         markCompleted, task));
+                                                         isCompleted, task));
     }
 
     @DeleteMapping(path = "/stack/{stackId}/tasks/{taskId}",

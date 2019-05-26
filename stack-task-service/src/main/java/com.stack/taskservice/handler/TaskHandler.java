@@ -26,9 +26,11 @@ public class TaskHandler {
 
     public Task cloneTask(Task fromTask, Stack toStack) {
         Task task = fromTask.toBuilder().build();
-        initTask(task, toStack);
+        task.setId(fromTask.getId());
+        task.setStackId(toStack.getId());
         task.setUserId(toStack.getUserId());
         task.setCreatedByUserId(fromTask.getUserId());
+        touchCreated(task);
         return task;
     }
 

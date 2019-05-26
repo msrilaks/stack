@@ -1,5 +1,6 @@
 package com.stack.taskservice.services;
 
+import com.stack.taskservice.context.StackRequestContext;
 import com.stack.taskservice.handler.StackHandler;
 import com.stack.taskservice.handler.TaskHandler;
 import com.stack.taskservice.model.Stack;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +31,9 @@ public class StackService {
     @Autowired
     StackHandler stackHandler;
 
+    @Resource(name = "stackRequestContext")
+    StackRequestContext stackRequestContext;
+
     public Stack createStack(Stack stack) {
         stackHandler.initStack(stack);
         return stackRepository.save(stack);
@@ -43,18 +48,18 @@ public class StackService {
     }
 
     public List<Task> getTasks(String stackId) {
-        Stack stack = getStack(stackId);
+        Stack stack = stackRequestContext.getStack();
         return stack.getTaskList();
     }
 
     public Task getTask(String stackId, UUID taskId) {
-        Stack stack = getStack(stackId);
+        Stack stack = stackRequestContext.getStack();
         Optional<Task> optionalTask = taskHandler.getTask(taskId, stack);
         return optionalTask.orElse(null);
     }
 
     public Task createTask(String stackId, Task task) {
-        Stack stack = getStack(stackId);
+        Stack stack = stackRequestContext.getStack();
         taskHandler.initTask(task, stack);
         stack.getTaskList().add(task);
         Stack savedStack = stackRepository.save(stack);
@@ -64,7 +69,7 @@ public class StackService {
     public Task modifyTask(
             String stackId, UUID taskId, String moveToStackUserId, boolean markCompleted,
             @Valid Task task) {
-        Stack stack = getStack(stackId);
+        Stack stack = stackRequestContext.getStack();
         Optional<Task> optionalTask = taskHandler.getTask(taskId, stack);
         optionalTask.ifPresent(x -> {
             taskHandler.updateTaskDetails(x, task);
@@ -88,7 +93,7 @@ public class StackService {
     }
 
     public void deleteTask(String stackId, UUID taskId) {
-        Stack stack = getStack(stackId);
+        Stack stack = stackRequestContext.getStack();
         taskHandler.touchDeleted(taskId, stack);
         stackRepository.save(stack);
     }
