@@ -1,9 +1,6 @@
 package com.stack.taskservice.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 
 import java.util.UUID;
@@ -12,6 +9,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @ToString
+@Builder(toBuilder = true)
 public class Task {
     @Id
     private UUID   id;
@@ -22,9 +20,9 @@ public class Task {
     private String category;
     private String label;
     private String description;
-    private boolean isCompleted;
     private Long   createdTimeStamp;
     private Long   lastModifiedTimeStamp;
     private Long   completedTimeStamp;
+    private Long   movedTimeStamp;
     private Long   deletedTimeStamp;
 }

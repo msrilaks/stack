@@ -13,7 +13,7 @@ public enum ErrorCodes {
                          TASK_USER_ID_INVALID_ERR_MSG);
 
 
-    private int errorCode;
+    private int    errorCode;
     private String errorMessage;
     private String errorDescription;
 

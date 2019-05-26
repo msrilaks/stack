@@ -1,5 +1,6 @@
 package com.stack.taskservice.services;
 
+import com.stack.taskservice.handler.StackHandler;
 import com.stack.taskservice.handler.TaskHandler;
 import com.stack.taskservice.model.Stack;
 import com.stack.taskservice.model.Task;
@@ -10,8 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public class StackService {
@@ -24,14 +26,11 @@ public class StackService {
     @Autowired
     TaskHandler taskHandler;
 
+    @Autowired
+    StackHandler stackHandler;
+
     public Stack createStack(Stack stack) {
-        LOGGER.info(stack.toString());
-        Long ts = System.currentTimeMillis();
-        stack.setCreatedTimeStamp(ts);
-        stack.setLastUpdatedTimeStamp(ts);
-        if (stack.getTaskList() == null || stack.getTaskList().isEmpty()) {
-            stack.setTaskList(Collections.emptyList());
-        }
+        stackHandler.initStack(stack);
         return stackRepository.save(stack);
     }
 
@@ -40,8 +39,7 @@ public class StackService {
     }
 
     public Stack getStack(String stackId) {
-        Stack stack = stackRepository.findById(stackId).get();
-        return stack;
+        return stackRepository.findById(stackId).get();
     }
 
     public List<Task> getTasks(String stackId) {
@@ -49,46 +47,50 @@ public class StackService {
         return stack.getTaskList();
     }
 
-    public Task getTask(String stackId, String taskId) {
+    public Task getTask(String stackId, UUID taskId) {
         Stack stack = getStack(stackId);
-        List<Task> tasks = stack.getTaskList();
-        return tasks.stream()
-                    .filter(x -> x.getId().equals(taskId))
-                    .findAny()
-                    .orElse(null);
+        Optional<Task> optionalTask = taskHandler.getTask(taskId, stack);
+        return optionalTask.orElse(null);
     }
 
     public Task createTask(String stackId, Task task) {
         Stack stack = getStack(stackId);
-        task.setStackId(stackId);
-        taskHandler.touchCreated(task);
+        taskHandler.initTask(task, stack);
         stack.getTaskList().add(task);
         Stack savedStack = stackRepository.save(stack);
         return savedStack.getTaskList().get(savedStack.getTaskList().size() - 1);
     }
 
     public Task modifyTask(
-            String stackId, String taskId, String moveToStackUserId,
+            String stackId, UUID taskId, String moveToStackUserId, boolean markCompleted,
             @Valid Task task) {
         Stack stack = getStack(stackId);
-        if(moveToStackUserId == null) {
-            stack.getTaskList().stream()
-                 .filter(x -> x.getId().equals(taskId))
-                 .findAny()
-                 .ifPresent(x -> {taskHandler.copyTask(x, task);});
-        } else {
+        Optional<Task> optionalTask = taskHandler.getTask(taskId, stack);
+        optionalTask.ifPresent(x -> {
+            taskHandler.updateTaskDetails(x, task);
+            taskHandler.touchCompleted(x, markCompleted);
+        });
 
+        if (moveToStackUserId != null) {
+            Stack moveToStack = stackRepository.findByUserId(moveToStackUserId);
+            if (moveToStack == null) {
+                //TODO
+            }
+            optionalTask.ifPresent(x -> {
+                taskHandler.touchMoved(x);
+                Task newTask = taskHandler.cloneTask(x, moveToStack);
+                moveToStack.getTaskList().add(newTask);
+                stackRepository.save(moveToStack);
+            });
         }
         stackRepository.save(stack);
-        return task;
+        return getTask(stackId, taskId);
     }
 
-    public void deleteTask(String stackId, String taskId) {
+    public void deleteTask(String stackId, UUID taskId) {
         Stack stack = getStack(stackId);
-        stack.getTaskList().stream()
-             .filter(x -> x.getId().equals(taskId))
-             .findAny()
-             .ifPresent(x -> {taskHandler.touchDeleted(x);});
+        taskHandler.touchDeleted(taskId, stack);
         stackRepository.save(stack);
     }
+
 }
