@@ -6,9 +6,14 @@ import com.stack.taskservice.model.Task;
 import com.stack.taskservice.services.StackService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,12 +26,30 @@ import java.util.UUID;
 @Controller
 @Api(value = "Stack", description = "REST API for Stack", tags = {"Stack"})
 public class StackController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+            StackController.class.getName());
 
     @Resource(name = "stackRequestContext")
     StackRequestContext stackRequestContext;
 
     @Autowired
     StackService stackService;
+
+    @Autowired
+    private OAuth2AuthorizedClientService authorizedClientService;
+
+    @GetMapping(path = "/stack",
+                produces = "application/json")
+    @ApiOperation(value = "Get a Stack", tags = {"Stack"})
+    public ResponseEntity<Stack> getStacks(OAuth2AuthenticationToken authentication) {
+        OAuth2AuthorizedClient client = authorizedClientService
+                .loadAuthorizedClient(
+                        authentication.getAuthorizedClientRegistrationId(),
+                        authentication.getName());
+        String userId = (String) authentication.getPrincipal().getAttributes().get(
+                "email");
+        return ResponseEntity.ok(stackService.getStackByUserId(userId));
+    }
 
     @PostMapping(path = "/stack", consumes = "application/json",
                  produces = "application/json")

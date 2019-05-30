@@ -32,7 +32,7 @@ public class StackInterceptor extends HandlerInterceptorAdapter {
             Object handler) throws Exception {
         final Map<String, String> pathVariables = (Map<String, String>) requestServlet
                 .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-        if (pathVariables.get("stackId") != null) {
+        if (pathVariables != null && pathVariables.get("stackId") != null) {
             final String stackId = String.valueOf(pathVariables.get("stackId"));
             Stack stack = stackService.getStack(stackId);
             stackRequestContext.setStack(stack);

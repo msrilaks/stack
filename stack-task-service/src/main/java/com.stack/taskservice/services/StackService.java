@@ -47,6 +47,10 @@ public class StackService {
         return stackRepository.findById(stackId).get();
     }
 
+    public Stack getStackByUserId(String userId) {
+        return stackRepository.findByUserId(userId);
+    }
+
     public List<Task> getTasks(String stackId) {
         Stack stack = stackRequestContext.getStack();
         return stack.getTaskList();
