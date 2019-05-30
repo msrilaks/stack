@@ -55,7 +55,7 @@ public class StackController {
                  produces = "application/json")
     @ApiOperation(value = "Create a Stack", tags = {"Stack"})
     public ResponseEntity<Stack> createStack(
-            @RequestBody @Valid Stack stack) {
+            @RequestBody @Valid Stack stack, OAuth2AuthenticationToken authentication) {
         return ResponseEntity.ok(stackService.createStack(stack));
     }
 
