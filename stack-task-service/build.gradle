@@ -7,7 +7,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.5.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.5.RELEASE")
     }
 }
 
@@ -30,7 +30,11 @@ targetCompatibility = 1.8
 
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web")
+    //compile("org.springframework.boot:spring-boot-starter-web")
+//    compile group: 'org.springframework', name: 'spring-web', version: '5.1.7.RELEASE'
+//    compile group: 'org.springframework', name: 'spring-web', version: '5.1.7.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.1.4.RELEASE'
+
     compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
     compileOnly 'org.projectlombok:lombok:1.18.6'
