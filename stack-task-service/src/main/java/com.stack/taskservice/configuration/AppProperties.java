@@ -5,7 +5,6 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -13,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 public class AppProperties {
-    private String tokenSecret;
-    private long   tokenExpirationMsec;
+    private String       tokenSecret;
+    private long         tokenExpirationMsec;
     private List<String> authorizedRedirectUris;
 }

@@ -71,7 +71,7 @@ public class OAuth2AuthenticationSuccessHandler
         }
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
-        LOGGER.info("##SRI targetUrl: "+redirectUri);
+        LOGGER.info("##SRI targetUrl: " + redirectUri);
         String token = tokenProvider.createToken(authentication);
 
         return UriComponentsBuilder.fromUriString(targetUrl)
