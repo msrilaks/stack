@@ -1,8 +1,13 @@
 package com.stack.taskservice.security;
 
+import com.stack.taskservice.context.StackRequestContext;
+import com.stack.taskservice.error.ErrorCodes;
+import com.stack.taskservice.repository.UserRepository;
+import com.stack.taskservice.security.service.CustomUserDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,15 +22,20 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
-    private static final Logger                   LOGGER = LoggerFactory.getLogger(
+    private static final Logger LOGGER = LoggerFactory.getLogger(
             TokenAuthenticationFilter.class.getName());
-    private static final Logger
-                                                  logger = LoggerFactory.getLogger(
-            TokenAuthenticationFilter.class);
+
     @Autowired
-    private              TokenProvider            tokenProvider;
+    private TokenProvider tokenProvider;
+
     @Autowired
-    private              CustomUserDetailsService customUserDetailsService;
+    private UserRepository userRepository;
+
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
+
+    @Autowired
+    private StackRequestContext stackRequestContext;
 
     @Override
     protected void doFilterInternal(
@@ -34,11 +44,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                                      ServletException, IOException {
         try {
             String jwt = getJwtFromRequest(request);
-            LOGGER.info("SRI #### jwt: " + jwt);
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
                 String emailId = tokenProvider.getUserIdFromToken(jwt);
-                LOGGER.info("SRI #### userId: " + emailId);
-
                 UserDetails userDetails = customUserDetailsService.loadUserByUsername(
                         emailId);
                 UsernamePasswordAuthenticationToken
@@ -48,11 +55,15 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                         new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
-        } catch (Exception ex) {
-            logger.error("Could not set user authentication in security context", ex);
-        }
+                userRepository.findByEmail(emailId).ifPresent(user -> {
+                    stackRequestContext.setUser(user);
+                    LOGGER.info("User added to stackRequestContext: " + emailId);
+                });
 
+            }
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+        }
         filterChain.doFilter(request, response);
     }
 
@@ -60,7 +71,23 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         String bearerToken = request.getHeader("Authorization");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring("Bearer ".length());
+        } else {
+            return "";
         }
-        return null;
     }
+
+    private void setErrorResponse(
+            HttpServletResponse response,
+            Exception e) {
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.setContentType("application/json");
+        LOGGER.error(e.getMessage(), e);
+        try {
+            String json = ErrorCodes.UNAUTHORIZED_USER.constructError().toString();
+            response.getWriter().write(json);
+        } catch (IOException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+        }
+    }
+
 }

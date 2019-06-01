@@ -1,8 +1,9 @@
-package com.stack.taskservice.security;
+package com.stack.taskservice.security.service;
 
 
 import com.stack.taskservice.model.User;
 import com.stack.taskservice.repository.UserRepository;
+import com.stack.taskservice.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -1,10 +1,11 @@
-package com.stack.taskservice.security;
+package com.stack.taskservice.security.service;
 
 
 import com.stack.taskservice.exception.OAuth2AuthenticationProcessingException;
 import com.stack.taskservice.model.AuthProvider;
 import com.stack.taskservice.model.User;
 import com.stack.taskservice.repository.UserRepository;
+import com.stack.taskservice.security.UserPrincipal;
 import com.stack.taskservice.security.user.OAuth2UserInfo;
 import com.stack.taskservice.security.user.OAuth2UserInfoFactory;
 import org.slf4j.Logger;

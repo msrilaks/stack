@@ -11,9 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,27 +33,23 @@ public class StackController {
     @Autowired
     StackService stackService;
 
-    @Autowired
-    private OAuth2AuthorizedClientService authorizedClientService;
-
     @GetMapping(path = "/stack",
                 produces = "application/json")
     @ApiOperation(value = "Get a Stack", tags = {"Stack"})
-    public ResponseEntity<Stack> getStacks(OAuth2AuthenticationToken authentication) {
-        OAuth2AuthorizedClient client = authorizedClientService
-                .loadAuthorizedClient(
-                        authentication.getAuthorizedClientRegistrationId(),
-                        authentication.getName());
-        String userId = (String) authentication.getPrincipal().getAttributes().get(
-                "email");
-        return ResponseEntity.ok(stackService.getStackByUserId(userId));
+    public ResponseEntity<Stack> getStacks(Authentication authentication) {
+        LOGGER.info("### SRI AUTH " + authentication);
+        if (stackRequestContext.getUser() != null) {
+            return ResponseEntity.ok(stackService.getStackByUserId(
+                    stackRequestContext.getUser().getEmail()));
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     @PostMapping(path = "/stack", consumes = "application/json",
                  produces = "application/json")
     @ApiOperation(value = "Create a Stack", tags = {"Stack"})
     public ResponseEntity<Stack> createStack(
-            @RequestBody @Valid Stack stack, OAuth2AuthenticationToken authentication) {
+            @RequestBody @Valid Stack stack, Authentication authentication) {
         return ResponseEntity.ok(stackService.createStack(stack));
     }
 
