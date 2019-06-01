@@ -8,10 +8,12 @@ import Home from '../home/Home';
 import Login from '../user/login/Login';
 import Signup from '../user/signup/Signup';
 import Profile from '../user/profile/Profile';
+import Stack from '../stack/Stack';
 import OAuth2RedirectHandler from '../user/oauth2/OAuth2RedirectHandler';
 import NotFound from '../common/NotFound';
 import LoadingIndicator from '../common/LoadingIndicator';
 import { getCurrentUser } from '../util/APIUtils';
+import { getStack } from '../util/APIUtils';
 import { ACCESS_TOKEN } from '../constants';
 import PrivateRoute from '../common/PrivateRoute';
 import Alert from 'react-s-alert';
@@ -25,10 +27,12 @@ class App extends Component {
     this.state = {
       authenticated: false,
       currentUser: null,
-      loading: false
+      loading: false,
+      stack: null
     }
 
     this.loadCurrentlyLoggedInUser = this.loadCurrentlyLoggedInUser.bind(this);
+    this.loadStack = this.loadStack.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
   }
 
@@ -51,6 +55,25 @@ class App extends Component {
     });    
   }
 
+  loadStack() {
+    this.setState({
+      loading: true
+    });
+
+    getStack()
+    .then(response => {
+      this.setState({
+        stack: response,
+        authenticated: true,
+        loading: false
+      });
+    }).catch(error => {
+      this.setState({
+        loading: false
+      });  
+    });    
+  }
+
   handleLogout() {
     localStorage.removeItem(ACCESS_TOKEN);
     this.setState({
@@ -62,6 +85,7 @@ class App extends Component {
 
   componentDidMount() {
     this.loadCurrentlyLoggedInUser();
+    this.loadStack();
   }
 
   render() {
@@ -79,6 +103,8 @@ class App extends Component {
             <Route exact path="/" component={Home}></Route>           
             <PrivateRoute path="/profile" authenticated={this.state.authenticated} currentUser={this.state.currentUser}
               component={Profile}></PrivateRoute>
+            <PrivateRoute path="/stack" authenticated={this.state.authenticated} currentUser={this.state.currentUser} stack={this.state.stack}
+              component={Stack}></PrivateRoute>
             <Route path="/login"
               render={(props) => <Login authenticated={this.state.authenticated} {...props} />}></Route>
             <Route path="/signup"
