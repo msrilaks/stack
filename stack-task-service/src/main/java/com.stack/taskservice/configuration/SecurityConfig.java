@@ -3,6 +3,7 @@ package com.stack.taskservice.configuration;
 import com.stack.taskservice.security.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.stack.taskservice.security.RestAuthenticationEntryPoint;
 import com.stack.taskservice.security.TokenAuthenticationFilter;
+import com.stack.taskservice.security.handler.OAuth2AuthenticationFailureHandler;
 import com.stack.taskservice.security.handler.OAuth2AuthenticationSuccessHandler;
 import com.stack.taskservice.security.service.CustomOAuth2UserService;
 import com.stack.taskservice.security.service.CustomUserDetailsService;
@@ -31,6 +32,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+
+    @Autowired
+    private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
     @Autowired
     private HttpCookieOAuth2AuthorizationRequestRepository
@@ -75,10 +79,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/stack/**").authenticated()
             .and()
             .oauth2Login()
+            .authorizationEndpoint()
+            .baseUri("/oauth2/authorize")
+            .authorizationRequestRepository(cookieAuthorizationRequestRepository())
+            .and()
             .userInfoEndpoint()
             .userService(customOAuth2UserService)
             .and()
-            .successHandler(oAuth2AuthenticationSuccessHandler);
+            .successHandler(oAuth2AuthenticationSuccessHandler)
+            .failureHandler(oAuth2AuthenticationFailureHandler);
 
         http.addFilterBefore(tokenAuthenticationFilter(),
                              UsernamePasswordAuthenticationFilter.class);

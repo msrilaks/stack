@@ -34,7 +34,6 @@ public class UserPrincipal implements OAuth2User, UserDetails {
                                                                                 "ROLE_USER"));
 
         return new UserPrincipal(
-                //user.getId(),
                 user.getEmail(),
                 user.getPassword(),
                 authorities

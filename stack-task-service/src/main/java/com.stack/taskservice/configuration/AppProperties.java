@@ -5,6 +5,9 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Component
 @ConfigurationProperties(prefix = "app.auth")
 @Getter
@@ -12,4 +15,5 @@ import org.springframework.stereotype.Component;
 public class AppProperties {
     private String tokenSecret;
     private long   tokenExpirationMsec;
+    private List<String> authorizedRedirectUris;
 }

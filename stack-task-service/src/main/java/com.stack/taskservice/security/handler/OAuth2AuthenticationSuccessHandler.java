@@ -1,6 +1,8 @@
 package com.stack.taskservice.security.handler;
 
 import com.stack.taskservice.configuration.AppProperties;
+import com.stack.taskservice.exception.BadRequestException;
+import com.stack.taskservice.security.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.stack.taskservice.security.TokenProvider;
 import com.stack.taskservice.util.CookieUtils;
 import org.slf4j.Logger;
@@ -16,27 +18,31 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Optional;
+
+import static com.stack.taskservice.security.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 
 @Component
 public class OAuth2AuthenticationSuccessHandler
         extends SimpleUrlAuthenticationSuccessHandler {
-    public static final  String        REDIRECT_URI_PARAM_COOKIE_NAME = "redirect_uri";
-    private static final Logger        LOGGER = LoggerFactory.getLogger(
+    private static final Logger LOGGER = LoggerFactory.getLogger(
             OAuth2AuthenticationSuccessHandler.class.getName());
-    @Autowired
-    private              TokenProvider tokenProvider;
 
     @Autowired
+    private TokenProvider tokenProvider;
+    @Autowired
     private AppProperties appProperties;
+    @Autowired
+    private HttpCookieOAuth2AuthorizationRequestRepository
+                          httpCookieOAuth2AuthorizationRequestRepository;
+
 
     @Override
     public void onAuthenticationSuccess(
             HttpServletRequest request, HttpServletResponse response,
             Authentication authentication) throws
                                            IOException, ServletException {
-        //String token = tokenProvider.createToken(authentication);
-        //LOGGER.info("SRI #### token : " + token);
         String targetUrl = determineTargetUrl(request, response, authentication);
 
         if (response.isCommitted()) {
@@ -45,7 +51,7 @@ public class OAuth2AuthenticationSuccessHandler
             return;
         }
 
-        //clearAuthenticationAttributes(request, response);
+        clearAuthenticationAttributes(request, response);
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
 
     }
@@ -57,14 +63,15 @@ public class OAuth2AuthenticationSuccessHandler
                                                              REDIRECT_URI_PARAM_COOKIE_NAME)
                                                   .map(Cookie::getValue);
 
-        //        if(redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri
-        //        .get())) {
-        //            throw new Exception("Sorry! We've got an Unauthorized Redirect
-        //            URI and can't proceed with the authentication");
-        //        }
+        if (redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri
+                                                                        .get())) {
+            throw new BadRequestException(
+                    "Unauthorized Redirect URI and can't proceed with the " +
+                    "authentication");
+        }
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
-
+        LOGGER.info("##SRI targetUrl: "+redirectUri);
         String token = tokenProvider.createToken(authentication);
 
         return UriComponentsBuilder.fromUriString(targetUrl)
@@ -72,5 +79,26 @@ public class OAuth2AuthenticationSuccessHandler
                                    .build().toUriString();
     }
 
+    protected void clearAuthenticationAttributes(
+            HttpServletRequest request, HttpServletResponse response) {
+        super.clearAuthenticationAttributes(request);
+        httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(
+                request, response);
+    }
 
+    private boolean isAuthorizedRedirectUri(String uri) {
+        URI clientRedirectUri = URI.create(uri);
+
+        return appProperties.getAuthorizedRedirectUris()
+                            .stream()
+                            .anyMatch(authorizedRedirectUri -> {
+                                // Only validate host and port. Let the clients use
+                                // different paths if they want to
+                                URI authorizedURI = URI.create(authorizedRedirectUri);
+                                return authorizedURI.getHost().equalsIgnoreCase(
+                                        clientRedirectUri.getHost())
+                                       && authorizedURI.getPort() ==
+                                          clientRedirectUri.getPort();
+                            });
+    }
 }

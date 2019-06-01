@@ -1,34 +1,33 @@
 package com.stack.taskservice.controller;
 
+import com.stack.taskservice.exception.ResourceNotFoundException;
+import com.stack.taskservice.model.User;
+import com.stack.taskservice.repository.UserRepository;
+import com.stack.taskservice.security.CurrentUser;
+import com.stack.taskservice.security.UserPrincipal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.security.Principal;
-
-@Controller
+@RestController
 public class UserController {
     private static final Logger LOGGER = LoggerFactory.getLogger(
             UserController.class.getName());
 
     @Autowired
-    private OAuth2AuthorizedClientService authorizedClientService;
+    private UserRepository userRepository;
 
-    @RequestMapping(value = "/user")
-    public Principal user(Principal principal) {
-        LOGGER.info("## SRI prince: " + principal);
-        return principal;
+    @GetMapping("/user/me")
+    @PreAuthorize("hasRole('USER')")
+    public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
+        return userRepository.findByEmail(userPrincipal.getEmail())
+                             .orElseThrow(() -> new ResourceNotFoundException("User",
+                                                                              "email",
+                                                                              userPrincipal
+                                                                                      .getEmail()));
     }
 
-    //    @GetMapping(value = "/user/login")
-    //    public ResponseEntity<Void> userLogin(@RequestParam(required = true) String
-    //    token) {
-    //        LOGGER.info("## SRI prince: " + token);
-    //        HttpHeaders responseHeaders = new HttpHeaders();
-    //        responseHeaders.set("Authentication", "Bearer " + token);
-    //        return new ResponseEntity<Void>(responseHeaders, HttpStatus.OK);
-    //    }
 }
