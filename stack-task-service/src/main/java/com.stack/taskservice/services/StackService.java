@@ -88,8 +88,9 @@ public class StackService {
             optionalTask.ifPresent(x -> {
                 taskHandler.touchMoved(x);
                 Task newTask = taskHandler.cloneTask(x, moveToStack);
-                moveToStack.getTasks().put(String.valueOf(moveToStack.getTasks().size() + 1),
-                                           newTask);
+                moveToStack.getTasks().put(
+                        String.valueOf(moveToStack.getTasks().size() + 1),
+                        newTask);
                 stackRepository.save(moveToStack);
             });
         }

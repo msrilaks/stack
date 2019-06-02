@@ -1,10 +1,7 @@
 package com.stack.taskservice.model;
 
 import com.stack.taskservice.validator.StackConstraint;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 
 import java.util.Map;
@@ -14,6 +11,7 @@ import java.util.Map;
 @AllArgsConstructor
 @ToString
 @StackConstraint
+@Builder(toBuilder = true)
 public class Stack {
     @Id
     private String            id;

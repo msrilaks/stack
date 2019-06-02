@@ -36,13 +36,19 @@ public class StackController {
     @GetMapping(path = "/stack",
                 produces = "application/json")
     @ApiOperation(value = "Get a Stack", tags = {"Stack"})
-    public ResponseEntity<Stack> getStacks(Authentication authentication) {
-        LOGGER.info("### SRI AUTH " + authentication);
-        if (stackRequestContext.getUser() != null) {
-            return ResponseEntity.ok(stackService.getStackByUserId(
-                    stackRequestContext.getUser().getEmail()));
+    public ResponseEntity<Stack> getStack(Authentication authentication) {
+        if (stackRequestContext.getUser() == null) {
+            return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.badRequest().build();
+        Stack stack = stackService.getStackByUserId(
+                stackRequestContext.getUser().getEmail());
+        if (stack != null) {
+            return ResponseEntity.ok(stack);
+        } else {
+            stack = Stack.builder().userId(stackRequestContext.getUser().getEmail())
+                         .build();
+            return ResponseEntity.ok(stackService.createStack(stack));
+        }
     }
 
     @PostMapping(path = "/stack", consumes = "application/json",
