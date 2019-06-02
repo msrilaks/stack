@@ -28,7 +28,7 @@ class App extends Component {
       authenticated: false,
       currentUser: null,
       loading: false,
-      stack: null
+      stack: ''
     }
 
     this.loadCurrentlyLoggedInUser = this.loadCurrentlyLoggedInUser.bind(this);
@@ -84,7 +84,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.loadCurrentlyLoggedInUser();
+   // this.loadCurrentlyLoggedInUser();
     this.loadStack();
   }
 
