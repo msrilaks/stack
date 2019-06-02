@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -51,9 +51,9 @@ public class StackService {
         return stackRepository.findByUserId(userId);
     }
 
-    public List<Task> getTasks(String stackId) {
+    public Map<String, Task> getTasks(String stackId) {
         Stack stack = stackRequestContext.getStack();
-        return stack.getTaskList();
+        return stack.getTasks();
     }
 
     public Task getTask(String stackId, UUID taskId) {
@@ -65,9 +65,9 @@ public class StackService {
     public Task createTask(String stackId, Task task) {
         Stack stack = stackRequestContext.getStack();
         taskHandler.initTask(task, stack);
-        stack.getTaskList().add(task);
+        stack.getTasks().put(String.valueOf(stack.getTasks().size() + 1), task);
         Stack savedStack = stackRepository.save(stack);
-        return savedStack.getTaskList().get(savedStack.getTaskList().size() - 1);
+        return savedStack.getTasks().get(String.valueOf(savedStack.getTasks().size()));
     }
 
     public Task modifyTask(
@@ -88,7 +88,8 @@ public class StackService {
             optionalTask.ifPresent(x -> {
                 taskHandler.touchMoved(x);
                 Task newTask = taskHandler.cloneTask(x, moveToStack);
-                moveToStack.getTaskList().add(newTask);
+                moveToStack.getTasks().put(String.valueOf(moveToStack.getTasks().size() + 1),
+                                           newTask);
                 stackRepository.save(moveToStack);
             });
         }

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -74,7 +74,7 @@ public class StackController {
     @GetMapping(path = "/stack/{stackId}/tasks", consumes = "application/json",
                 produces = "application/json")
     @ApiOperation(value = "Get Tasks", tags = {"Stack"})
-    public ResponseEntity<List<Task>> getTasksOfStack(
+    public ResponseEntity<Map<String, Task>> getTasksOfStack(
             @PathVariable("stackId") String stackId) {
         return ResponseEntity.ok(stackService.getTasks(stackId));
     }

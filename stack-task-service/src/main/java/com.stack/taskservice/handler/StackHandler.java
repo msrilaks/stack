@@ -11,8 +11,8 @@ public class StackHandler {
         Long ts = System.currentTimeMillis();
         stack.setCreatedTimeStamp(ts);
         stack.setLastUpdatedTimeStamp(ts);
-        if (stack.getTaskList() == null || stack.getTaskList().isEmpty()) {
-            stack.setTaskList(Collections.emptyList());
+        if (stack.getTasks() == null || stack.getTasks().isEmpty()) {
+            stack.setTasks(Collections.emptyMap());
         }
     }
 }

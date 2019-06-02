@@ -66,7 +66,7 @@ public class TaskHandler {
     }
 
     public Optional<Task> getTask(UUID taskId, Stack stack) {
-        return stack.getTaskList().stream()
+        return stack.getTasks().values().stream()
                     .filter(x -> x.getId().equals(taskId))
                     .findAny();
     }

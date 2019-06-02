@@ -7,7 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
 
-import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -16,9 +16,9 @@ import java.util.List;
 @StackConstraint
 public class Stack {
     @Id
-    private String     id;
-    private String     userId;
-    private Long       createdTimeStamp;
-    private Long       lastUpdatedTimeStamp;
-    private List<Task> taskList;
+    private String            id;
+    private String            userId;
+    private Long              createdTimeStamp;
+    private Long              lastUpdatedTimeStamp;
+    private Map<String, Task> tasks;
 }
