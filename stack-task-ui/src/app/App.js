@@ -84,7 +84,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-   // this.loadCurrentlyLoggedInUser();
+    this.loadCurrentlyLoggedInUser();
     this.loadStack();
   }
 
