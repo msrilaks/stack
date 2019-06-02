@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
+import { Link, NavLink } from 'react-router-dom';
+import Create from '../stack/create/Create';
+import Task from '../stack/task/Task';
 import './Stack.css';
+
 
 class Stack extends Component {
 
@@ -7,8 +11,16 @@ class Stack extends Component {
         super(props);
         console.log({props});
         this.state = {
-            tasks: null
-          }
+            tasks: null,
+            showCreateTask: false,
+        }
+        this.onButtonCreateTaskClicked = this.onButtonCreateTaskClicked.bind(this);
+    }
+
+    onButtonCreateTaskClicked() {
+        this.setState({
+            showCreateTask: true,
+        });
     }
 
     componentWillMount() {
@@ -25,10 +37,22 @@ class Stack extends Component {
                             { 
                                 this.props.stack.tasks ? (
                                     <div className="stack-task-container">
+                                        <div>
+                                        <button onClick={this.onButtonCreateTaskClicked}>+Create</button>
+                                        {this.state.showCreateTask ?
+                                            <Create  authenticated={this.props.authenticated} currentUser={this.props.currentUser} stack={this.props.stack}/>:
+                                            null
+                                        }  
+                                        </div>
                                         {
+                                            
                                             Object.keys(this.state.tasks).map((item, i) => (
-                                            <div className="stack-task" key={i}>
-                                                <span>{ this.state.tasks[item].description }</span>
+                                            <div key={i}>
+                                                <Task  authenticated={this.props.authenticated} currentUser={this.props.currentUser} stack={this.props.stack}
+                                                task={ this.state.tasks[item]}/>
+                                                {/*<div>{ this.state.tasks[item].category }</div>
+                                                <div>{ this.state.tasks[item].label }</div>
+                                            <div>{ this.state.tasks[item].description }</div>*/}
                                             </div>
                                             ))
                                         }

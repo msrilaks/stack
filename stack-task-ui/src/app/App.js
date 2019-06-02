@@ -8,6 +8,7 @@ import Home from '../home/Home';
 import Login from '../user/login/Login';
 import Signup from '../user/signup/Signup';
 import Profile from '../user/profile/Profile';
+import Create from '../stack/create/Create';
 import Stack from '../stack/Stack';
 import OAuth2RedirectHandler from '../user/oauth2/OAuth2RedirectHandler';
 import NotFound from '../common/NotFound';
@@ -103,6 +104,8 @@ class App extends Component {
             <Route exact path="/" component={Home}></Route>           
             <PrivateRoute path="/profile" authenticated={this.state.authenticated} currentUser={this.state.currentUser}
               component={Profile}></PrivateRoute>
+              <PrivateRoute path="/create" authenticated={this.state.authenticated} currentUser={this.state.currentUser} stack={this.state.stack}
+              component={Create}></PrivateRoute>
             <PrivateRoute path="/stack" authenticated={this.state.authenticated} currentUser={this.state.currentUser} stack={this.state.stack}
               component={Stack}></PrivateRoute>
             <Route path="/login"
