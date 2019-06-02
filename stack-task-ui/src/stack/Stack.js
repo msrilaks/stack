@@ -22,15 +22,14 @@ class Stack extends Component {
             <div className="stack-container">
                 <div className="container">
                     <div className="stack-info">
-                        <div className="stack-task-container">
                             { 
                                 this.props.stack.tasks ? (
                                     <div className="stack-task-container">
                                         {
                                             Object.keys(this.state.tasks).map((item, i) => (
-                                            <li key={i}>
-                                                <span className="stack-task">{ this.state.tasks[item].description }</span>
-                                            </li>
+                                            <div className="stack-task" key={i}>
+                                                <span>{ this.state.tasks[item].description }</span>
+                                            </div>
                                             ))
                                         }
                                     </div>
@@ -41,7 +40,6 @@ class Stack extends Component {
                                     </div>
                                 )
                             }
-                        </div>
                     </div>
                 </div>    
             </div>
