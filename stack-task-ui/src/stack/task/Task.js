@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import './Task.css';
+import { UncontrolledCollapse, Collapse, Button, CardBody, Card , CardImg, CardText,
+    CardTitle, CardSubtitle} from 'reactstrap';
 import Alert from 'react-s-alert';
 
 class Task extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            task:{
             id: '',
             stackId: '',
             category: '',
@@ -19,12 +22,17 @@ class Task extends Component {
             completedTimeStamp:'',
             movedTimeStamp: '',
             deletedTimeStamp: ''
+            }
         };
     }
+
+
 
     componentWillMount() {
         this.setState(
             {
+                task:{
+                    ...this.state.task,
                 stackId:this.props.task.stackId,
                 id:this.props.task.id,
                 category: this.props.task.category,
@@ -38,6 +46,7 @@ class Task extends Component {
                 completedTimeStamp:this.props.task.completedTimeStamp,
                 movedTimeStamp: this.props.task.movedTimeStamp,
                 deletedTimeStamp: this.props.task.deletedTimeStamp
+                }
             },function () {
             console.log(this.state.stackId);
         });
@@ -46,13 +55,13 @@ class Task extends Component {
     
     render() {
         return (
-            <div className="task-container">
-               <div className="task">
-                    <div>{ this.state.category }</div>
-                    <div>{ this.state.label }</div>
-                    <div>{ this.state.description }</div>
-                </div>
-            </div>                    
+            <Card className="task">
+        <CardBody>
+          <CardTitle>{ this.state.task.label }</CardTitle>
+          <CardSubtitle>{ this.state.task.category }</CardSubtitle>
+          <CardText>{ this.state.task.description }</CardText>
+        </CardBody>
+      </Card>
         );
     }
 }
