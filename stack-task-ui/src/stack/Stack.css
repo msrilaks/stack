@@ -29,6 +29,9 @@
     font-weight: 400;
 }
 
+.stack-create-button {
+    outline: none;
+}
 .text-avatar {
     width: 200px;
     height: 200px;

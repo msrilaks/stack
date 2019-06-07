@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import './Task.css';
+import Fab from '@material-ui/core/Fab';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import { UncontrolledCollapse, Collapse, Button, CardBody, Card , CardImg, CardText,
     CardTitle, CardSubtitle} from 'reactstrap';
+    import { Container, Row, Col } from 'reactstrap';
 import Alert from 'react-s-alert';
 
 class Task extends Component {
@@ -55,11 +59,32 @@ class Task extends Component {
     
     render() {
         return (
-            <Card className="task">
+        <Card className="task">
         <CardBody>
-          <CardTitle>{ this.state.task.label }</CardTitle>
-          <CardSubtitle>{ this.state.task.category }</CardSubtitle>
-          <CardText>{ this.state.task.description }</CardText>
+        <Container>
+            <Row className="task-buttons">
+            <Col>
+            <span>
+                <Fab size="small" color="secondary" aria-label="Edit">
+                    <EditIcon/>
+                </Fab>
+                </span>
+                <span className="task-delete">
+                <Fab size="small" aria-label="Delete" >
+                    <DeleteIcon />
+                </Fab>
+                </span>
+          </Col>
+            </Row>
+        <Row className="task-details">
+          <Col>
+                <CardTitle><span className="task-label">label:</span> { this.state.task.label }</CardTitle>
+                <CardSubtitle><span className="task-label">category:</span> { this.state.task.category }</CardSubtitle>
+                <CardText><span className="task-label">description:</span> { this.state.task.description }</CardText>
+          </Col>
+          
+        </Row>
+        </Container>
         </CardBody>
       </Card>
         );

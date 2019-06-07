@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './Create.css';
 import { createTask } from '../../util/APIUtils';
 import Alert from 'react-s-alert';
-import { Collapse, Button, CardBody, Card } from 'reactstrap';
 
 class Create extends Component {
     constructor(props) {
@@ -16,8 +15,7 @@ class Create extends Component {
             userId: ''
             }
         };
-        // this.toggle = this.toggle.bind(this);
-        // this.state = { collapse: false };
+        this.state = { newTaskAdded: false };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -49,17 +47,19 @@ class Create extends Component {
         event.preventDefault();   
 
         const createTaskRequest = Object.assign({}, this.state.task);
-console.log(createTaskRequest);
+        console.log(createTaskRequest);
         createTask(createTaskRequest)
         .then(response => {
             Alert.success("Task created successfully!");
-            // this.props.history.push("/stack");
+            this.props.reloadTasksFunc();
         }).catch(error => {
             Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
         });
+     
     }
 
     render() {
+
         return (
             <form onSubmit={this.handleSubmit}>
                 <div className="form-item">
@@ -83,7 +83,7 @@ console.log(createTaskRequest);
                         value={this.state.task.userId} onChange={this.handleInputChange} required/>
                 </div>
                 <div className="form-item">
-                    <button type="submit" className="btn btn-block btn-primary">Create</button>
+                    <button type="submit" className="btn btn-primary">Create</button>
                 </div>
             </form>                    
         );

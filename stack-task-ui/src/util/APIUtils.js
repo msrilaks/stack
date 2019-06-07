@@ -65,7 +65,16 @@ export function createTask(createTaskRequest) {
     });
 }
 
-  
+export function getTasks(stackId) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/stack/"+stackId+"/tasks",
+        method: 'GET'
+    });
+} 
 
 export function signup(signupRequest) {
     return request({

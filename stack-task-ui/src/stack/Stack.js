@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import Create from '../stack/create/Create';
 import Task from '../stack/task/Task';
 import './Stack.css';
-
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import { getTasks } from '../util/APIUtils';
+import Alert from 'react-s-alert';
 
 class Stack extends Component {
 
@@ -14,11 +17,25 @@ class Stack extends Component {
             showCreateTask: false,
         }
         this.onButtonCreateTaskClicked = this.onButtonCreateTaskClicked.bind(this);
+        this.reloadTasks = this.reloadTasks.bind(this)
+    }
+
+    reloadTasks() {
+        console.log("With love from parent P land :)");
+        getTasks(this.props.stack.id)
+        .then(response => {
+            this.setState({
+            tasks: response, 
+            showCreateTask:false,
+            });
+        }).catch(error => {
+            Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
+        });    
     }
 
     onButtonCreateTaskClicked() {
         this.setState({
-            showCreateTask: true,
+            showCreateTask: !this.state.showCreateTask,
         });
     }
 
@@ -34,9 +51,11 @@ class Stack extends Component {
                 <div className="container">
                     <div className="stack-task-container">
                     <div className="stack-create-task">
-                                        <button onClick={this.onButtonCreateTaskClicked}>+Create</button>
-                                        {this.state.showCreateTask ?
-                                            <Create  authenticated={this.props.authenticated} currentUser={this.props.currentUser} stack={this.props.stack}/>:
+                    <Fab size="small" color="primary" aria-label="Add" >
+                        <AddIcon onClick={this.onButtonCreateTaskClicked}/>
+                    </Fab>
+                        {this.state.showCreateTask ?
+                                            <Create  authenticated={this.props.authenticated} currentUser={this.props.currentUser} stack={this.props.stack} reloadTasksFunc={this.reloadTasks}/>:
                                             null
                                         }  
                                         </div>
@@ -44,10 +63,10 @@ class Stack extends Component {
                                 this.props.stack.tasks && Object.keys(this.props.stack.tasks).length > 0 ? (
                                     <div>
                                         {
-                                            Object.keys(this.state.tasks).map((item, i) => (
+                                            Object.keys(this.props.stack.tasks).map((item, i) => (
                                             <div key={i}>
                                                 <Task  authenticated={this.props.authenticated} currentUser={this.props.currentUser} stack={this.props.stack}
-                                                task={ this.state.tasks[item]}/>
+                                                task={ this.props.stack.tasks[item]}/>
                                             </div>
                                             ))
                                         }
