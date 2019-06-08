@@ -7,36 +7,13 @@ import { UncontrolledCollapse, Collapse, Button, CardBody, Card , CardImg, CardT
     CardTitle, CardSubtitle} from 'reactstrap';
     import { Container, Row, Col } from 'reactstrap';
 import Alert from 'react-s-alert';
+import { deleteTask } from '../../util/APIUtils';
 
 class Task extends Component {
     constructor(props) {
         super(props);
         this.state = {
             task:{
-            id: '',
-            stackId: '',
-            category: '',
-            label: '',
-            description: '',
-            userId: '',
-            createdByUserId: '',
-            origin: '',
-            createdTimeStamp: '',
-            lastModifiedTimeStamp: '',
-            completedTimeStamp:'',
-            movedTimeStamp: '',
-            deletedTimeStamp: ''
-            }
-        };
-    }
-
-
-
-    componentWillMount() {
-        this.setState(
-            {
-                task:{
-                    ...this.state.task,
                 stackId:this.props.task.stackId,
                 id:this.props.task.id,
                 category: this.props.task.category,
@@ -50,13 +27,32 @@ class Task extends Component {
                 completedTimeStamp:this.props.task.completedTimeStamp,
                 movedTimeStamp: this.props.task.movedTimeStamp,
                 deletedTimeStamp: this.props.task.deletedTimeStamp
-                }
-            },function () {
-            console.log(this.state.stackId);
-        });
-       }
+            },
+            deleteTask: false,
+        };
+        this.onButtonDeleteTaskClicked = this.onButtonDeleteTaskClicked.bind(this);
+    }
 
-    
+    onButtonDeleteTaskClicked() {
+        this.setState({
+            deleteTask: true,
+        });
+        const deleteTaskRequest = Object.assign({}, this.state.task);
+        console.log(deleteTaskRequest);
+        deleteTask(deleteTaskRequest)
+        .then((response) => {
+            this.setState({
+                task: response, 
+                },function () {
+                    console.log("## SRI onButtonDeleteTaskClicked "+this.state.task);
+                });
+            Alert.success("Task deleted successfully!");
+            this.props.reloadTasksFunc();
+        }).catch(error => {
+            Alert.error((error && error.message+"SRI") || 'Oops! Something went wrong. Please try again!');
+        });
+    }
+     
     render() {
         return (
         <Card className="task">
@@ -71,14 +67,14 @@ class Task extends Component {
                 </span>
                 <span className="task-delete">
                 <Fab size="small" aria-label="Delete" >
-                    <DeleteIcon />
+                    <DeleteIcon  onClick={this.onButtonDeleteTaskClicked}/>
                 </Fab>
                 </span>
           </Col>
             </Row>
         <Row className="task-details">
           <Col>
-                <CardTitle><span className="task-label">label:</span> { this.state.task.label }</CardTitle>
+                <CardTitle><span className="task-label">label:</span> { this.state.task.label }<span>isDeleted:</span> { this.state.task.deletedTimeStamp }</CardTitle>
                 <CardSubtitle><span className="task-label">category:</span> { this.state.task.category }</CardSubtitle>
                 <CardText><span className="task-label">description:</span> { this.state.task.description }</CardText>
           </Col>

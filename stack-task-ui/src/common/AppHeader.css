@@ -45,3 +45,16 @@
 .app-nav ul li a.active {
     color: #0f96f6;
 }
+
+.app-nav ul li .app-profile-avatar img {
+    display: inline-block;
+    line-height: 60px;
+    vertical-align: middle;
+    background-size: 32px 32px;
+    border-radius: 50%;
+    margin: 0;
+    overflow: hidden;
+    position: relative;
+    height: 32px;
+    width: 32px;
+}

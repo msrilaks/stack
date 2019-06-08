@@ -15,11 +15,23 @@ class AppHeader extends Component {
                                 { this.props.authenticated ? (
                                     <ul>
                                         <li>
-                                            <NavLink to="/profile">Profile</NavLink>
-                                        </li>
-                                        <li>
                                             <a onClick={this.props.onLogout}>Logout</a>
                                         </li>
+                                        <li>
+                                        <div className="app-profile-avatar">
+                                        { 
+                                            this.props.currentUser && this.props.currentUser.imageUrl ? (
+                                                <img src={this.props.currentUser.imageUrl} alt={this.props.currentUser.name}/>
+                                            ) : (
+                                                <div className="text-avatar">
+                                                    <span>{this.props.currentUser.name && this.props.currentUser.name[0]}</span>
+                                                </div>
+                                            )
+                                        }
+                                        </div>
+                                            {/* <NavLink to="/profile">Profile</NavLink> */}
+                                        </li>
+                                        
                                     </ul>
                                 ): (
                                     <ul>
