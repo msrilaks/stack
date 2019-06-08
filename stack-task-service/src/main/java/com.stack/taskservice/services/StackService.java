@@ -98,10 +98,11 @@ public class StackService {
         return getTask(stackId, taskId);
     }
 
-    public void deleteTask(String stackId, UUID taskId) {
+    public Task deleteTask(String stackId, UUID taskId) {
         Stack stack = stackRequestContext.getStack();
         taskHandler.touchDeleted(taskId, stack);
         stackRepository.save(stack);
+        return taskHandler.getTask(taskId, stack).orElse(null);
     }
 
 }

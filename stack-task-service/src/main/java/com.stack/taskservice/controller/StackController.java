@@ -125,11 +125,11 @@ public class StackController {
                    consumes = "application/json",
                    produces = "application/json")
     @ApiOperation(value = "Delete Task", tags = {"Task"})
-    public ResponseEntity deleteTask(
+    public ResponseEntity<Task> deleteTask(
             @PathVariable("stackId") String stackId,
             @PathVariable("taskId") UUID taskId) {
-        stackService.deleteTask(stackId, taskId);
-        return new ResponseEntity(HttpStatus.OK);
+        Task task = stackService.deleteTask(stackId, taskId);
+        return ResponseEntity.ok(task);
     }
 
 }
