@@ -16,19 +16,27 @@ class Stack extends Component {
             tasks: this.props.stack.tasks,
             showCreateTask: false,
         }
+        
         this.onButtonCreateTaskClicked = this.onButtonCreateTaskClicked.bind(this);
         this.reloadTasks = this.reloadTasks.bind(this);
     }
+    componentWillMount() {
+          this.setState({
+            tasks:this.props.stack.tasks,
+         },function () {
+            console.log("stackTasks : "+ this.state.tasks)
+        });
+       }
 
     reloadTasks() {
         getTasks(this.props.stack.id)
         .then(response => {
             this.setState({
-            tasks: response, 
-            showCreateTask:false,
-            },function () {
-                console.log("## SRI reloadTasks "+this.state.tasks);
-            });
+                tasks: response, 
+                showCreateTask:false,
+                },function () {
+                    console.log("stackTasks : "+ this.state.stackTasks)
+                });
           }).catch(error => {
             Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
         });    
@@ -50,39 +58,29 @@ class Stack extends Component {
                         <AddIcon onClick={this.onButtonCreateTaskClicked}/>
                     </Fab>
                         {this.state.showCreateTask ?
-                                            <Create  authenticated={this.props.authenticated} currentUser={this.props.currentUser} stack={this.props.stack} reloadTasksFunc={this.reloadTasks}/>:
-                                            null
-                                        }  
-                                        </div>
-                            { 
-                                this.state.tasks && Object.keys(this.state.tasks).length > 0 ? (
+                            <Create  authenticated={this.props.authenticated} 
+                                    currentUser={this.props.currentUser} 
+                                    stack={this.props.stack} 
+                                    reloadTasksFunc={this.reloadTasks}/>
+                                    :null}
+                    </div>
+                    { 
+                               ( this.state.tasks && Object.keys(this.state.tasks).length > 0) ? (
                                     <div>
                                         {
-                                            Object.keys(this.state.tasks).map((item, i) => (
-                                            <div key={i}>
+                                            Object.entries(this.state.tasks).map(([key,value])=>(
+                                                <div name={key} key={key}>
                                                 <Task  authenticated={this.props.authenticated} currentUser={this.props.currentUser} stack={this.props.stack}
-                                                task={ this.state.tasks[item]} reloadTasksFunc={this.reloadTasks}/>
+                                                task={ this.state.tasks[key]} 
+                                                taskIndex= {key}
+                                                reloadTasksFunc={this.reloadTasks}/>
                                             </div>
-                                            ))
+                                              ))
                                         }
                                     </div>
                                     
                                 ) : (
-                                    this.props.stack.tasks && Object.keys(this.props.stack.tasks).length > 0 ? (
-                                        <div>
-                                            {
-                                                Object.keys(this.props.stack.tasks).map((item, i) => (
-                                                <div key={i}>
-                                                    <Task  authenticated={this.props.authenticated} currentUser={this.props.currentUser} stack={this.props.stack}
-                                                    task={ this.props.stack.tasks[item]} reloadTasksFunc={this.reloadTasks}/>
-                                                </div>
-                                                ))
-                                            }
-                                        </div>
-                                        
-                                    )
-                                       :(<div>You have no pending tasks!</div>)
-
+                                    <div>You have no pending tasks!</div>
                                 )
                             }
                     </div>
