@@ -65,9 +65,10 @@ public class StackService {
     public Task createTask(String stackId, Task task) {
         Stack stack = stackRequestContext.getStack();
         taskHandler.initTask(task, stack);
-        stack.getTasks().put(String.valueOf(stack.getTasks().size() + 1), task);
+        stack.getTasks().put(String.valueOf(task.getId()), task);
+        stackHandler.reorderTasks(stack);
         Stack savedStack = stackRepository.save(stack);
-        return savedStack.getTasks().get(String.valueOf(savedStack.getTasks().size()));
+        return taskHandler.getTask(task.getId(),savedStack).orElse(null);
     }
 
     public Task modifyTask(
@@ -89,11 +90,13 @@ public class StackService {
                 taskHandler.touchMoved(x);
                 Task newTask = taskHandler.cloneTask(x, moveToStack);
                 moveToStack.getTasks().put(
-                        String.valueOf(moveToStack.getTasks().size() + 1),
+                        String.valueOf(newTask.getId()),
                         newTask);
+                stackHandler.reorderTasks(moveToStack);
                 stackRepository.save(moveToStack);
             });
         }
+        stackHandler.reorderTasks(stack);
         stackRepository.save(stack);
         return getTask(stackId, taskId);
     }
@@ -101,6 +104,7 @@ public class StackService {
     public Task deleteTask(String stackId, UUID taskId) {
         Stack stack = stackRequestContext.getStack();
         taskHandler.touchDeleted(taskId, stack);
+        stackHandler.reorderTasks(stack);
         stackRepository.save(stack);
         return taskHandler.getTask(taskId, stack).orElse(null);
     }

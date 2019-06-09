@@ -10,7 +10,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @ToString
 @Builder(toBuilder = true)
-public class Task {
+public class Task implements Comparable<Task> {
     @Id
     private UUID   id;
     private String stackId;
@@ -25,4 +25,9 @@ public class Task {
     private Long   completedTimeStamp;
     private Long   movedTimeStamp;
     private Long   deletedTimeStamp;
+
+    @Override
+    public int compareTo(Task task) {
+        return this.createdTimeStamp.compareTo(task.getCreatedTimeStamp()) * -1;
+    }
 }
