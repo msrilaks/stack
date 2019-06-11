@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import Create from '../stack/create/Create';
-import Task from '../stack/task/Task';
+import TaskList from '../stack/tasklist/TaskList';
 import './Stack.css';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import { getTasks } from '../util/APIUtils';
 import Alert from 'react-s-alert';
+
 
 class Stack extends Component {
 
@@ -20,9 +21,10 @@ class Stack extends Component {
         this.onButtonCreateTaskClicked = this.onButtonCreateTaskClicked.bind(this);
         this.reloadTasks = this.reloadTasks.bind(this);
     }
-    componentWillMount() {
+    componentDidMount() {
           this.setState({
             tasks:this.props.stack.tasks,
+            
          },function () {
             console.log("stackTasks : "+ this.state.tasks)
         });
@@ -34,13 +36,15 @@ class Stack extends Component {
             this.setState({
                 tasks: response, 
                 showCreateTask:false,
+                
                 },function () {
-                    console.log("stackTasks : "+ this.state.stackTasks)
+                    console.log("stackTasks : "+ this.state.tasks)
                 });
           }).catch(error => {
             Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
         });    
     }
+
 
     onButtonCreateTaskClicked() {
         this.setState({
@@ -64,24 +68,12 @@ class Stack extends Component {
                                     reloadTasksFunc={this.reloadTasks}/>
                                     :null}
                     </div>
+                   
                     { 
-                               ( this.state.tasks && Object.keys(this.state.tasks).length > 0) ? (
-                                    <div>
-                                        {
-                                            Object.entries(this.state.tasks).map(([key,value])=>(
-                                                <div name={key} key={key}>
-                                                <Task  authenticated={this.props.authenticated} currentUser={this.props.currentUser} stack={this.props.stack}
-                                                task={ this.state.tasks[key]} 
-                                                taskIndex= {key}
-                                                reloadTasksFunc={this.reloadTasks}/>
-                                            </div>
-                                              ))
-                                        }
-                                    </div>
-                                    
-                                ) : (
-                                    <div>You have no pending tasks!</div>
-                                )
+                         <TaskList tasks={this.state.tasks} reloadTasks={this.reloadTasks}
+                            authenticated={this.props.authenticated}
+                         currentUser={this.props.currentUser}
+                        stack={this.props.stack}/>
                             }
                     </div>
                 </div>    
