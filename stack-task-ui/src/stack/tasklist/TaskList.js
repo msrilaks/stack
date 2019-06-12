@@ -15,7 +15,6 @@ class TaskList extends Component {
         super(props);
         this.state = {
             value: 0,
-            toDoCounter: 0,
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -57,7 +56,6 @@ class TaskList extends Component {
                             taskProfile='todo'
                             reloadTasksFunc={this.props.reloadTasks}/>
                         </div>
-                        {this.state.toDoCounter} = {this.state.toDoCounter} + 1
                     </Then>
                     <ElseIf condition={this.state.value === 1  && item.deletedTimeStamp === null
                          && item.completedTimeStamp !==null}>
@@ -101,11 +99,6 @@ class TaskList extends Component {
                 <div>You have no pending tasks!</div>
             )
             }
-            <If condition={this.state.toDoCounter === 0 && this.state.value === 0}>
-                <Then>
-                <div>You have no pending tasks!</div>
-                </Then>
-            </If>
             </div>
             );
     }
