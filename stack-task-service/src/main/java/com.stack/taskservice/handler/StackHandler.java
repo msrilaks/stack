@@ -24,12 +24,13 @@ public class StackHandler {
     public void reorderTasks(Stack stack) {
         AtomicInteger i = new AtomicInteger(0);
         Map<String, Task> tasks = stack.getTasks().entrySet()
-                     .stream()
-                     .sorted(Map.Entry.comparingByValue())
-                     .collect(Collectors.toMap(
-                             n->i.incrementAndGet() +"",
-                             Map.Entry::getValue,
-                             (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+                                       .stream()
+                                       .sorted(Map.Entry.comparingByValue())
+                                       .collect(Collectors.toMap(
+                                               n -> i.incrementAndGet() + "",
+                                               Map.Entry::getValue,
+                                               (oldValue, newValue) -> oldValue,
+                                               LinkedHashMap::new));
 
         stack.setTasks(tasks);
     }

@@ -13,9 +13,10 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Component
 public class StackService {
@@ -56,6 +57,34 @@ public class StackService {
         return stack.getTasks();
     }
 
+    public Map<String, Task> getTasks(
+            String stackId,
+            Boolean isDeleted,
+            Boolean isMoved,
+            Boolean isCompleted,
+            Boolean isToDo) {
+        Stack stack = stackRequestContext.getStack();
+        AtomicInteger i = new AtomicInteger(0);
+        Predicate<Task> predicate=(task->true);
+        if (isDeleted) {
+            predicate = (task -> task.getDeletedTimeStamp() != null);
+        } else if (isMoved) {
+            predicate = (task -> task.getMovedTimeStamp() != null);
+        }else if (isCompleted) {
+            predicate = (task -> task.getCompletedTimeStamp() != null);
+        }else if(isToDo) {
+            predicate =
+                    (task -> task.getDeletedTimeStamp() == null && task.getCompletedTimeStamp()==null && task.getMovedTimeStamp()==null);
+        }
+        return stack.getTasks().values()
+                    .stream()
+                    .filter(predicate)
+                    .collect(Collectors.toMap(
+                            n -> i.incrementAndGet() + "",
+                            t -> t,
+                            (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+    }
+
     public Task getTask(String stackId, UUID taskId) {
         Stack stack = stackRequestContext.getStack();
         Optional<Task> optionalTask = taskHandler.getTask(taskId, stack);
@@ -68,7 +97,7 @@ public class StackService {
         stack.getTasks().put(String.valueOf(task.getId()), task);
         stackHandler.reorderTasks(stack);
         Stack savedStack = stackRepository.save(stack);
-        return taskHandler.getTask(task.getId(),savedStack).orElse(null);
+        return taskHandler.getTask(task.getId(), savedStack).orElse(null);
     }
 
     public Task modifyTask(
@@ -108,5 +137,6 @@ public class StackService {
         stackRepository.save(stack);
         return taskHandler.getTask(taskId, stack).orElse(null);
     }
+
 
 }

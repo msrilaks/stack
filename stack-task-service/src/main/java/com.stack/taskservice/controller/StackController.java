@@ -9,7 +9,6 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -81,8 +80,17 @@ public class StackController {
                 produces = "application/json")
     @ApiOperation(value = "Get Tasks", tags = {"Stack"})
     public ResponseEntity<Map<String, Task>> getTasksOfStack(
-            @PathVariable("stackId") String stackId) {
-        return ResponseEntity.ok(stackService.getTasks(stackId));
+            @PathVariable("stackId") String stackId,
+            @RequestParam(name = "isDeleted", required = false, defaultValue =
+                    "false") Boolean isDeleted,
+            @RequestParam(name = "isMoved", required = false, defaultValue =
+                    "false") Boolean isMoved,
+            @RequestParam(name = "isCompleted", required = false, defaultValue =
+                    "false") Boolean isCompleted,
+            @RequestParam(name = "isToDo", required = false, defaultValue =
+                    "false") Boolean isToDo) {
+        return ResponseEntity.ok(stackService.getTasks(stackId, isDeleted,
+                                                       isMoved, isCompleted, isToDo));
     }
 
     @GetMapping(path = "/stack/{stackId}/tasks/{taskId}", consumes = "application/json",
