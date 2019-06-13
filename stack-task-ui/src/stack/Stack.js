@@ -4,7 +4,7 @@ import TaskList from '../stack/tasklist/TaskList';
 import './Stack.css';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import { getTasks } from '../util/APIUtils';
+import { getTasks, getCompletedTasks, getDeletedTasks, getMovedTasks, getTodoTasks } from '../util/APIUtils';
 import Alert from 'react-s-alert';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
@@ -47,21 +47,61 @@ class Stack extends Component {
          },function () {
             console.log("stackTasks : "+ this.state.tasks)
         });
+        this.reloadTasks();
        }
 
     reloadTasks() {
-        getTasks(this.props.stack.id)
+        getTodoTasks(this.props.stack.id)
         .then(response => {
             this.setState({
-                tasks: response, 
+                todoTasks: response, 
                 showCreateTask:false,
                 
                 },function () {
-                    console.log("stackTasks : "+ this.state.tasks)
+                    console.log("todoTasks : "+ this.state.todoTasks)
                 });
           }).catch(error => {
             Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
-        });    
+        }); 
+        
+        getDeletedTasks(this.props.stack.id)
+        .then(response => {
+            this.setState({
+                deletedTasks: response, 
+                showCreateTask:false,
+                
+                },function () {
+                    console.log("deletedTasks : "+ this.state.deletedTasks)
+                });
+          }).catch(error => {
+            Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
+        }); 
+
+        getMovedTasks(this.props.stack.id)
+        .then(response => {
+            this.setState({
+                movedTasks: response, 
+                showCreateTask:false,
+                
+                },function () {
+                    console.log("movedTasks : "+ this.state.movedTasks)
+                });
+          }).catch(error => {
+            Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
+        }); 
+
+        getCompletedTasks(this.props.stack.id)
+        .then(response => {
+            this.setState({
+                completedTasks: response, 
+                showCreateTask:false,
+                
+                },function () {
+                    console.log("completedTasks : "+ this.state.completedTasks)
+                });
+          }).catch(error => {
+            Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
+        }); 
     }
 
 
@@ -104,28 +144,28 @@ class Stack extends Component {
             {              
                 <If condition={this.state.value === 0}>
                    <Then>
-                   <TaskList tasks={this.state.tasks} reloadTasks={this.reloadTasks}
+                   <TaskList tasks={this.state.todoTasks} reloadTasks={this.reloadTasks}
                             authenticated={this.props.authenticated}
                          currentUser={this.props.currentUser}
                         stack={this.props.stack}
                         taskProfile='todo'/>
                    </Then>
                    <ElseIf condition={this.state.value === 1 }>
-                         <TaskList tasks={this.state.tasks} reloadTasks={this.reloadTasks}
+                         <TaskList tasks={this.state.completedTasks} reloadTasks={this.reloadTasks}
                             authenticated={this.props.authenticated}
                          currentUser={this.props.currentUser}
                         stack={this.props.stack}
                         taskProfile='completed'/>
                     </ElseIf>
                     <ElseIf condition={this.state.value === 2 }>
-                         <TaskList tasks={this.state.tasks} reloadTasks={this.reloadTasks}
+                         <TaskList tasks={this.state.movedTasks} reloadTasks={this.reloadTasks}
                             authenticated={this.props.authenticated}
                          currentUser={this.props.currentUser}
                         stack={this.props.stack}
                         taskProfile='assigned'/>
                     </ElseIf>
                     <ElseIf condition={this.state.value === 3}>
-                    <TaskList tasks={this.state.tasks} reloadTasks={this.reloadTasks}
+                    <TaskList tasks={this.state.deletedTasks} reloadTasks={this.reloadTasks}
                             authenticated={this.props.authenticated}
                          currentUser={this.props.currentUser}
                         stack={this.props.stack}

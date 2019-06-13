@@ -88,6 +88,50 @@ export function getTasks(stackId) {
     });
 } 
 
+export function getTodoTasks(stackId) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/stack/"+stackId+"/tasks?isToDo=true",
+        method: 'GET'
+    });
+} 
+
+export function getDeletedTasks(stackId) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/stack/"+stackId+"/tasks?isDeleted=true",
+        method: 'GET'
+    });
+} 
+
+export function getMovedTasks(stackId) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/stack/"+stackId+"/tasks?isMoved=true",
+        method: 'GET'
+    });
+} 
+
+export function getCompletedTasks(stackId) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/stack/"+stackId+"/tasks?isCompleted=true",
+        method: 'GET'
+    });
+} 
+
 export function getTask(stackId, taskId) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
