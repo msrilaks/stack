@@ -5,10 +5,13 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Alert from 'react-s-alert';
 import { deleteTask } from '../../util/APIUtils';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import ShareIcon from '@material-ui/icons/Share';
+import DoneIcon from '@material-ui/icons/Done';
 
   
 class Task extends Component {
@@ -32,8 +35,22 @@ class Task extends Component {
             Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
         });
     }
-     
+
     render() {
+        let TaskButtonPanel;
+        if(this.props.taskProfile == 'todo') {
+           TaskButtonPanel = <div>
+               <IconButton aria-label="Complete">
+                    <DoneIcon />
+                </IconButton>
+                <IconButton aria-label="Assign">
+                    <ShareIcon />
+                </IconButton>
+                <IconButton aria-label="Delete" onClick={this.onButtonDeleteTaskClicked}>
+                    <DeleteIcon />
+                </IconButton>
+            </div>
+        }
         return (
             <Card>
                 <CardActionArea>
@@ -46,13 +63,9 @@ class Task extends Component {
                     </Typography>
                     </CardContent>
                 </CardActionArea>
-                <CardActions>
-                    <Button size="small" color="primary">
-                    Send
-                    </Button>
-                    <Button size="small" color="primary" onClick={this.onButtonDeleteTaskClicked}>
-                    Delete
-                    </Button>
+                <CardActions className="task-button-panel">
+{TaskButtonPanel}
+                
                 </CardActions>
             </Card>
         );
