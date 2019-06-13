@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import Create from '../stack/create/Create';
 import TaskList from '../stack/tasklist/TaskList';
 import './Stack.css';
-import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import { getTasks, getCompletedTasks, getDeletedTasks, getMovedTasks, getTodoTasks } from '../util/APIUtils';
+import { getTasks, getCompletedTasks, getDeletedTasks, getMovedTasks, getTodoTasks, styles } from '../util/APIUtils';
 import Alert from 'react-s-alert';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
@@ -15,9 +14,11 @@ import CreateIcon from '@material-ui/icons/Create';
 import ShareIcon from '@material-ui/icons/Share';
 import { If, Then, ElseIf, Else } from 'react-if-elseif-else-render';
 import IconButton from '@material-ui/core/IconButton';
+import { makeStyles } from '@material-ui/styles';
+
 
 class Stack extends Component {
-
+    
     constructor(props) {
         super(props);
         console.log({props});
@@ -30,7 +31,7 @@ class Stack extends Component {
             showCreateTask: false,
             value: 0,
         }
-
+        
         this.handleChange = this.handleChange.bind(this);
         this.onButtonCreateTaskClicked = this.onButtonCreateTaskClicked.bind(this);
         this.reloadTasks = this.reloadTasks.bind(this);
@@ -113,12 +114,9 @@ class Stack extends Component {
     }
 
     render() {
+        
         return (
             <div className="stack-container">
-                <div className="container">
-                    <div className="stack-task-container">
-                    
-                               
             <Paper>
                 <Tabs value={this.state.value}
                     onChange={this.handleChange}
@@ -129,17 +127,17 @@ class Stack extends Component {
                 <Tab icon={<DoneIcon />} label="Completed"/>
                 <Tab icon={<ShareIcon />} label="Assigned"/>
                 <Tab icon={<DeleteIcon />} label="Deleted"/>
-
                 </Tabs>
             </Paper>
+            <div className="stack-task-container">
             {              
                 <If condition={this.state.value === 0}>
                    <Then>
                    <div className="stack-create-task">
-                    {/* <IconButton aria-label="Add" onClick={this.onButtonCreateTaskClicked}>
-                    <AddIcon />
-                    </IconButton> */}
-                        {this.state.showCreateTask ?
+                    <IconButton aria-label="Add" onClick={this.onButtonCreateTaskClicked}>
+                        <AddIcon  style={styles.stackIcon}/>
+                    </IconButton>
+                    {this.state.showCreateTask ?
                             <Create  authenticated={this.props.authenticated} 
                                     currentUser={this.props.currentUser} 
                                     stack={this.props.stack} 
@@ -176,7 +174,7 @@ class Stack extends Component {
                 </If>
             }
             </div>
-        </div>    
+
      </div>
     );
     }

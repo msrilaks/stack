@@ -7,7 +7,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Alert from 'react-s-alert';
-import { deleteTask } from '../../util/APIUtils';
+import { deleteTask, styles } from '../../util/APIUtils';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ShareIcon from '@material-ui/icons/Share';
@@ -41,13 +41,13 @@ class Task extends Component {
         if(this.props.taskProfile == 'todo') {
            TaskButtonPanel = <div>
                <IconButton aria-label="Complete">
-                    <DoneIcon />
+                    <DoneIcon style={styles.taskIcon}/>
                 </IconButton>
                 <IconButton aria-label="Assign">
-                    <ShareIcon />
+                    <ShareIcon style={styles.taskIcon}/>
                 </IconButton>
                 <IconButton aria-label="Delete" onClick={this.onButtonDeleteTaskClicked}>
-                    <DeleteIcon />
+                    <DeleteIcon style={styles.taskIcon}/>
                 </IconButton>
             </div>
         }

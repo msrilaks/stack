@@ -23,6 +23,17 @@ const request = (options) => {
     );
 };
 
+export const styles = {
+    stackIcon: {
+    //   background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+    color:'#EA005E',
+    },
+    taskIcon: {
+        //   background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+        color:'#EA005E',
+        },
+  };
+
 export function getCurrentUser() {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");

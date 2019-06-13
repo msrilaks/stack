@@ -1,15 +1,15 @@
 .stack-container {
-    padding-top: 30px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 .stack-task-container {
     width: 100%;
     height: 100%;
     text-align: left;
-    padding-left: 30px;
 }
 .stack-create-task{
-    padding-bottom:30px ;
+
 }
 .stack-info {
     text-align: center;
