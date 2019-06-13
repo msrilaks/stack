@@ -68,7 +68,7 @@ class Task extends Component {
          </div>
         }
         return (
-            <Card>
+            <Card className="task-container">
                 <CardActionArea>
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">

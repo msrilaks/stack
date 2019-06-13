@@ -1,9 +1,5 @@
 .task-container {
-    padding-bottom: 30px;
-    width: 100%;
-    height: 100%;
-    text-align: left;
-    
+    margin-bottom: 30px;
 }
 
 .task-buttons {

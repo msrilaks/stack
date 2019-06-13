@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import './Create.css';
-import { createTask } from '../../util/APIUtils';
+import { createTask, styles } from '../../util/APIUtils';
 import Alert from 'react-s-alert';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import SaveIcon from '@material-ui/icons/Save';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
@@ -72,27 +73,33 @@ class Create extends Component {
 
         return (
             <form onSubmit={this.handleSubmit}>
-            <Card >
+            <Card className="create-container">
             <CardActionArea>
               <CardContent>
                 <TextField
                     id="standard-name"
                     label="label"
                     name="label"
+                    style={styles.taskTextField}
                     value={this.state.task.label} onChange={this.handleInputChange} required
                     margin="normal"
                 />
                 <TextField
-                    id="standard-name"
+                    id="standard-required"
                     label="category"
                     name="category"
+                    defaultValue="default"
+                    style={styles.taskTextField}
                     value={this.state.task.category} onChange={this.handleInputChange} required
                     margin="normal"
                 />
                 <Typography variant="body2" component="p">
                     <TextField
-                        id="standard-name"
+                        id="standard-multiline-flexible"
                         label="description"
+                        multiline
+                        fullWidth
+                        rowsMax="4"
                         name="description"
                         value={this.state.task.description} onChange={this.handleInputChange} required
                         margin="normal"
@@ -109,10 +116,10 @@ class Create extends Component {
                 />
               </CardContent>
             </CardActionArea>
-            <CardActions>
-              <Button  type="submit" size="small" color="primary">
-                Create
-              </Button>
+            <CardActions className="create-button-panel">
+              <IconButton type="submit" aria-label="Assign">
+                    <SaveIcon style={styles.taskIcon}/>
+                </IconButton>
             </CardActions>
           </Card>
         </form>                 

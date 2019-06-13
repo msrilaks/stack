@@ -51,8 +51,10 @@ export const styles = {
     },
     taskEmpty: {
         color:'#0050ef',
-    }
-
+    },
+    taskTextField: {
+        marginRight: '10px',
+      },
   };
 
 export function getCurrentUser() {

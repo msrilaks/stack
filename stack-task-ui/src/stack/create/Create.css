@@ -1,5 +1,5 @@
 .create-container {
-    padding-top: 30px;
+    margin-bottom: 30px;
 }
 
 .create-info {
@@ -20,6 +20,9 @@
     font-weight: 400;
 }
 
+.create-button-panel {
+    float: right;
+}
 .text-avatar {
     width: 200px;
     height: 200px;
