@@ -12,7 +12,8 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ShareIcon from '@material-ui/icons/Share';
 import DoneIcon from '@material-ui/icons/Done';
-
+import ClearIcon from '@material-ui/icons/Clear';
+import UndoIcon from '@material-ui/icons/Undo';
   
 class Task extends Component {
     constructor(props) {
@@ -50,22 +51,36 @@ class Task extends Component {
                     <DeleteIcon style={styles.taskIcon}/>
                 </IconButton>
             </div>
+        } else if(this.props.taskProfile == 'deleted'){
+            TaskButtonPanel = <div>
+            <IconButton aria-label="Clear">
+                 <ClearIcon style={styles.taskIcon}/>
+             </IconButton>
+         </div>
+        } else if(this.props.taskProfile == 'completed'){
+            TaskButtonPanel = <div>
+            <IconButton aria-label="Undo">
+                 <UndoIcon style={styles.taskIcon}/>
+             </IconButton>
+            <IconButton aria-label="Clear">
+                 <ClearIcon style={styles.taskIcon}/>
+             </IconButton>
+         </div>
         }
         return (
             <Card>
                 <CardActionArea>
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
-                    {this.props.task.label }<span className="task-label">{this.props.taskIndex}  category:{this.props.task.category}   isDeleted: { this.props.task.deletedTimeStamp } </span>
+                        {this.props.task.label }<span className="task-label"> category:{this.props.task.category} </span>
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p">
-                    { this.props.task.description }
+                        { this.props.task.description }
                     </Typography>
-                    </CardContent>
+                </CardContent>
                 </CardActionArea>
                 <CardActions className="task-button-panel">
-{TaskButtonPanel}
-                
+                    {TaskButtonPanel}
                 </CardActions>
             </Card>
         );

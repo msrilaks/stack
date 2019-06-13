@@ -12,9 +12,11 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
 import CreateIcon from '@material-ui/icons/Create';
 import ShareIcon from '@material-ui/icons/Share';
+import ClearIcon from '@material-ui/icons/Clear';
+import AlarmIcon from '@material-ui/icons/Alarm';
 import { If, Then, ElseIf, Else } from 'react-if-elseif-else-render';
 import IconButton from '@material-ui/core/IconButton';
-import { makeStyles } from '@material-ui/styles';
+
 
 
 class Stack extends Component {
@@ -34,6 +36,8 @@ class Stack extends Component {
         
         this.handleChange = this.handleChange.bind(this);
         this.onButtonCreateTaskClicked = this.onButtonCreateTaskClicked.bind(this);
+        this.onButtonClearTasksClicked = this.onButtonClearTasksClicked.bind(this);
+        this.onButtonRemindTasksClicked = this.onButtonRemindTasksClicked.bind(this);
         this.reloadTasks = this.reloadTasks.bind(this);
     }
 
@@ -113,27 +117,35 @@ class Stack extends Component {
         });
     }
 
+    onButtonClearTasksClicked() {
+
+    }
+
+    onButtonRemindTasksClicked(){
+
+    }
+
     render() {
         
         return (
-            <div className="stack-container">
+           <div>
             <Paper>
                 <Tabs value={this.state.value}
                     onChange={this.handleChange}
                     variant="fullWidth"
-                    indicatorColor="primary"
-                    textColor="primary">
+                    style={styles.stackTab}>
                 <Tab icon={<CreateIcon />} label="To Do"></Tab>
                 <Tab icon={<DoneIcon />} label="Completed"/>
                 <Tab icon={<ShareIcon />} label="Assigned"/>
                 <Tab icon={<DeleteIcon />} label="Deleted"/>
                 </Tabs>
             </Paper>
+             <div className="stack-container">
             <div className="stack-task-container">
             {              
                 <If condition={this.state.value === 0}>
                    <Then>
-                   <div className="stack-create-task">
+                   <div>
                     <IconButton aria-label="Add" onClick={this.onButtonCreateTaskClicked}>
                         <AddIcon  style={styles.stackIcon}/>
                     </IconButton>
@@ -151,6 +163,11 @@ class Stack extends Component {
                         taskProfile='todo'/>
                    </Then>
                    <ElseIf condition={this.state.value === 1 }>
+                        <div>
+                            <IconButton aria-label="Clear" onClick={this.onButtonClearTasksClicked}>
+                                <ClearIcon  style={styles.stackIcon}/>
+                            </IconButton>
+                        </div>
                          <TaskList tasks={this.state.completedTasks} reloadTasks={this.reloadTasks}
                             authenticated={this.props.authenticated}
                          currentUser={this.props.currentUser}
@@ -158,6 +175,11 @@ class Stack extends Component {
                         taskProfile='completed'/>
                     </ElseIf>
                     <ElseIf condition={this.state.value === 2 }>
+                        <div>
+                        <IconButton aria-label="Alarm" onClick={this.onButtonRemindTasksClicked}>
+                            <AlarmIcon  style={styles.stackIcon}/>
+                        </IconButton>
+                        </div>
                          <TaskList tasks={this.state.movedTasks} reloadTasks={this.reloadTasks}
                             authenticated={this.props.authenticated}
                          currentUser={this.props.currentUser}
@@ -165,6 +187,11 @@ class Stack extends Component {
                         taskProfile='assigned'/>
                     </ElseIf>
                     <ElseIf condition={this.state.value === 3}>
+                    <div>
+                    <IconButton aria-label="Clear" onClick={this.onButtonClearTasksClicked}>
+                        <ClearIcon  style={styles.stackIcon}/>
+                    </IconButton>
+                    </div>
                     <TaskList tasks={this.state.deletedTasks} reloadTasks={this.reloadTasks}
                             authenticated={this.props.authenticated}
                          currentUser={this.props.currentUser}
@@ -175,6 +202,7 @@ class Stack extends Component {
             }
             </div>
 
+     </div>
      </div>
     );
     }

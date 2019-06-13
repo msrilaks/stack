@@ -19,6 +19,10 @@
     padding-top: 10px;
 }
 
+.task-empty-details{
+    text-align: center;
+}
+
 .task-label{
     font-style: italic;
     font-size: 15px;

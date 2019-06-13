@@ -24,14 +24,35 @@ const request = (options) => {
 };
 
 export const styles = {
+    appTitle: {
+        color:'#0050ef',
+        fontFamily: 'Montserrat, sans-serif',
+        
+    },
+    appLogout: {
+        color:'#0050ef',
+        fontFamily: 'Montserrat, sans-serif',
+    },
+    appHeader: {
+        background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+        
+    },
     stackIcon: {
     //   background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
     color:'#EA005E',
     },
+    stackTab: {
+        indicatorColor:'#0050ef',
+        textColor:'#0050ef',
+        color:'#0050ef',
+    },
     taskIcon: {
-        //   background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
         color:'#EA005E',
-        },
+    },
+    taskEmpty: {
+        color:'#0050ef',
+    }
+
   };
 
 export function getCurrentUser() {

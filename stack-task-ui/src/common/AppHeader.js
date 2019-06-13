@@ -1,21 +1,26 @@
 import React, { Component } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+import { styles } from '../util/APIUtils';
+import Typography from '@material-ui/core/Typography';
+
 import './AppHeader.css';
 
 class AppHeader extends Component {
     render() {
         return (
-            <header className="app-header">
+            <header className="app-header"  style={styles.appHeader}>
                 <div className="container">
                     <div className="app-branding">
-                        <Link to="/stack" className="app-title">Stack It Down</Link>
+                    <Typography  variant="h5" component="h2">
+                        <Link to="/stack" style={styles.appTitle} className="app-title">Stack It Down</Link>
+                        </Typography>
                     </div>
                     <div className="app-options">
                         <nav className="app-nav">
                                 { this.props.authenticated ? (
                                     <ul>
                                         <li>
-                                            <a onClick={this.props.onLogout}>Logout</a>
+                                            <a  style={styles.appLogout} onClick={this.props.onLogout}>Logout</a>
                                         </li>
                                         <li>
                                         <div className="app-profile-avatar">
