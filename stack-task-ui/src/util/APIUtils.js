@@ -54,7 +54,12 @@ export const styles = {
     },
     taskTextField: {
         marginRight: '10px',
-      },
+    },
+    taskCard: {
+        background:'#F5F5F5',
+        // background:'#FDF5E6'
+    }
+   
   };
 
 export function getCurrentUser() {

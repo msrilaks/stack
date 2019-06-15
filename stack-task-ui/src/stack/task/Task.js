@@ -114,10 +114,10 @@ class Task extends Component {
         }
         return (
             <Paper>
-            <Card className="task-container">
-                <CardActionArea>
+            <Card className="task-container" style={styles.taskCard}>
+                <CardActionArea >
                 <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
+                    <Typography gutterBottom variant="h5" component="h2" >
                         {this.props.task.label }<span className="task-description"> { this.props.task.description }</span>
                     </Typography>
                     {/* <span className="task-label"> category:{this.props.task.category} </span> */}

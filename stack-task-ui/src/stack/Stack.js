@@ -3,7 +3,7 @@ import Create from '../stack/create/Create';
 import TaskList from '../stack/tasklist/TaskList';
 import './Stack.css';
 import AddIcon from '@material-ui/icons/Add';
-import { getTasks, getCompletedTasks, getDeletedTasks, getMovedTasks, getTodoTasks, styles } from '../util/APIUtils';
+import { getCompletedTasks, getDeletedTasks, getMovedTasks, getTodoTasks, styles } from '../util/APIUtils';
 import Alert from 'react-s-alert';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
@@ -140,8 +140,8 @@ class Stack extends Component {
                     variant="fullWidth"
                     style={styles.stackTab}>
                 <Tab icon={<CreateIcon />} label="To Do"></Tab>
-                <Tab icon={<DoneIcon />} label="Completed"/>
                 <Tab icon={<ShareIcon />} label="Pushed"/>
+                <Tab icon={<DoneIcon />} label="Completed"/>
                 <Tab icon={<DeleteIcon />} label="Deleted"/>
                 </Tabs>
             </Paper>
@@ -169,18 +169,6 @@ class Stack extends Component {
                    </Then>
                    <ElseIf condition={this.state.value === 1 }>
                         <div>
-                            <IconButton aria-label="Clear" onClick={this.onButtonDeleteTasksClicked}>
-                                <ClearIcon  style={styles.stackIcon}/>
-                            </IconButton>
-                        </div>
-                         <TaskList tasks={this.state.completedTasks} reloadTasks={this.reloadTasks}
-                            authenticated={this.props.authenticated}
-                         currentUser={this.props.currentUser}
-                        stack={this.props.stack}
-                        taskProfile='completed'/>
-                    </ElseIf>
-                    <ElseIf condition={this.state.value === 2 }>
-                        <div>
                         <IconButton aria-label="Alarm" onClick={this.onButtonRemindTasksClicked}>
                             <AlarmIcon  style={styles.stackIcon}/>
                         </IconButton>
@@ -190,6 +178,18 @@ class Stack extends Component {
                          currentUser={this.props.currentUser}
                         stack={this.props.stack}
                         taskProfile='pushed'/>
+                    </ElseIf>
+                   <ElseIf condition={this.state.value === 2 }>
+                        <div>
+                            <IconButton aria-label="Delete" onClick={this.onButtonDeleteTasksClicked}>
+                                <DeleteIcon  style={styles.stackIcon}/>
+                            </IconButton>
+                        </div>
+                         <TaskList tasks={this.state.completedTasks} reloadTasks={this.reloadTasks}
+                            authenticated={this.props.authenticated}
+                         currentUser={this.props.currentUser}
+                        stack={this.props.stack}
+                        taskProfile='completed'/>
                     </ElseIf>
                     <ElseIf condition={this.state.value === 3}>
                     <div>
