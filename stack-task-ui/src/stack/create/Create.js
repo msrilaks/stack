@@ -76,14 +76,14 @@ class Create extends Component {
             <Card className="create-container">
             <CardActionArea>
               <CardContent>
-                <TextField
+                {/* <TextField
                     id="standard-name"
                     label="label"
                     name="label"
                     style={styles.taskTextField}
                     value={this.state.task.label} onChange={this.handleInputChange} required
                     margin="normal"
-                />
+                /> */}
                 <TextField
                     id="standard-required"
                     label="category"
@@ -96,7 +96,7 @@ class Create extends Component {
                 <Typography variant="body2" component="p">
                     <TextField
                         id="standard-multiline-flexible"
-                        label="description"
+                        label="details"
                         multiline
                         fullWidth
                         rowsMax="4"
@@ -107,9 +107,11 @@ class Create extends Component {
                 </Typography>
                 <TextField
                     id="email-input"
-                    label="email"
+                    label="push to"
                     type="email"
                     name="email"
+                    fullWidth
+                    defaultValue={this.props.currentUser.email}
                     autoComplete="email"
                     margin="normal"
                     value={this.state.task.userId} onChange={this.handleInputChange} required

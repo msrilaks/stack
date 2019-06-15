@@ -118,15 +118,8 @@ public class StackController {
     public ResponseEntity<Task> modifyTask(
             @PathVariable("stackId") String stackId,
             @PathVariable("taskId") UUID taskId,
-            @RequestParam(name = "moveToStackUser", required = false)
-                    String moveToStackUserId,
-            @RequestParam(name = "isCompleted", required = false,
-                          defaultValue = "false")
-                    boolean isCompleted,
             @RequestBody @Valid Task task) {
-        return ResponseEntity.ok(stackService.modifyTask(stackId, taskId,
-                                                         moveToStackUserId,
-                                                         isCompleted, task));
+        return ResponseEntity.ok(stackService.modifyTask(stackId, taskId, task));
     }
 
     @DeleteMapping(path = "/stack/{stackId}/tasks/{taskId}",
@@ -140,4 +133,29 @@ public class StackController {
         return ResponseEntity.ok(task);
     }
 
+    @PatchMapping(path = "/stack/{stackId}/tasks/{taskId}",
+                   consumes = "application/json",
+                   produces = "application/json")
+    @ApiOperation(value = "Patch Task", tags = {"Task"})
+    public ResponseEntity<Task> patchTask(
+            @PathVariable("stackId") String stackId,
+            @PathVariable("taskId") UUID taskId,
+            @RequestParam(name = "isMoved", required = false, defaultValue =
+                    "false") Boolean isMoved,
+            @RequestParam(name = "isCompleted", required = false, defaultValue =
+                    "false") Boolean isCompleted,
+            @RequestParam(name = "isToDo", required = false, defaultValue =
+                    "false") Boolean isToDo,
+            @RequestBody @Valid Task task) {
+        if(isCompleted) {
+            return ResponseEntity.ok(stackService.completeTask(stackId, taskId, true));
+        } else if(isToDo) {
+            return ResponseEntity.ok(stackService.completeTask(stackId, taskId, false));
+        } else if(isMoved) {
+            return ResponseEntity.ok(stackService.moveTask(stackId,taskId,
+                                                           task.getUserId()));
+        } else {
+            return ResponseEntity.ok(task);
+        }
+    }
 }

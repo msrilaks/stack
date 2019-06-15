@@ -111,6 +111,19 @@ export function deleteTask(deleteTaskRequest) {
     });
 }
 
+export function patchTask(patchTaskRequest, patchAction) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/stack/"+patchTaskRequest.stackId+"/tasks/"+patchTaskRequest.id
+        +"?"+patchAction,
+        method: 'PATCH',
+        body: JSON.stringify(patchTaskRequest)
+    });
+}
+
 export function getTasks(stackId) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");

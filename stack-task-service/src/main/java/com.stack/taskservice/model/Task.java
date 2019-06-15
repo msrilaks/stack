@@ -25,6 +25,7 @@ public class Task implements Comparable<Task> {
     private Long   completedTimeStamp;
     private Long   movedTimeStamp;
     private Long   deletedTimeStamp;
+    private Long   completeByTimeStamp;
 
     @Override
     public int compareTo(Task task) {

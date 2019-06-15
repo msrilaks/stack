@@ -38,6 +38,7 @@ class Stack extends Component {
         this.onButtonCreateTaskClicked = this.onButtonCreateTaskClicked.bind(this);
         this.onButtonClearTasksClicked = this.onButtonClearTasksClicked.bind(this);
         this.onButtonRemindTasksClicked = this.onButtonRemindTasksClicked.bind(this);
+        this.onButtonDeleteTasksClicked = this.onButtonDeleteTasksClicked.bind(this);
         this.reloadTasks = this.reloadTasks.bind(this);
     }
 
@@ -121,6 +122,10 @@ class Stack extends Component {
 
     }
 
+    onButtonDeleteTasksClicked() {
+
+    }
+
     onButtonRemindTasksClicked(){
 
     }
@@ -136,7 +141,7 @@ class Stack extends Component {
                     style={styles.stackTab}>
                 <Tab icon={<CreateIcon />} label="To Do"></Tab>
                 <Tab icon={<DoneIcon />} label="Completed"/>
-                <Tab icon={<ShareIcon />} label="Assigned"/>
+                <Tab icon={<ShareIcon />} label="Pushed"/>
                 <Tab icon={<DeleteIcon />} label="Deleted"/>
                 </Tabs>
             </Paper>
@@ -164,7 +169,7 @@ class Stack extends Component {
                    </Then>
                    <ElseIf condition={this.state.value === 1 }>
                         <div>
-                            <IconButton aria-label="Clear" onClick={this.onButtonClearTasksClicked}>
+                            <IconButton aria-label="Clear" onClick={this.onButtonDeleteTasksClicked}>
                                 <ClearIcon  style={styles.stackIcon}/>
                             </IconButton>
                         </div>
@@ -184,7 +189,7 @@ class Stack extends Component {
                             authenticated={this.props.authenticated}
                          currentUser={this.props.currentUser}
                         stack={this.props.stack}
-                        taskProfile='assigned'/>
+                        taskProfile='pushed'/>
                     </ElseIf>
                     <ElseIf condition={this.state.value === 3}>
                     <div>
