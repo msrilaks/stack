@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -65,16 +64,19 @@ public class StackService {
             Boolean isToDo) {
         Stack stack = stackRequestContext.getStack();
         AtomicInteger i = new AtomicInteger(0);
-        Predicate<Task> predicate=(task->true);
+        Predicate<Task> predicate = (task -> true);
         if (isDeleted) {
             predicate = (task -> task.getDeletedTimeStamp() != null);
         } else if (isMoved) {
             predicate = (task -> task.getMovedTimeStamp() != null);
-        }else if (isCompleted) {
-            predicate = (task -> task.getCompletedTimeStamp() != null && task.getDeletedTimeStamp() == null);
-        }else if(isToDo) {
+        } else if (isCompleted) {
+            predicate = (task -> task.getCompletedTimeStamp() != null &&
+                                 task.getDeletedTimeStamp() == null);
+        } else if (isToDo) {
             predicate =
-                    (task -> task.getDeletedTimeStamp() == null && task.getCompletedTimeStamp()==null && task.getMovedTimeStamp()==null);
+                    (task -> task.getDeletedTimeStamp() == null &&
+                             task.getCompletedTimeStamp() == null &&
+                             task.getMovedTimeStamp() == null);
         }
         return stack.getTasks().values()
                     .stream()
@@ -94,11 +96,12 @@ public class StackService {
 
     public Task createTask(Task task) {
         Stack stack = getStackByUserId(task.getUserId());
-        if(stack == null) {
+        if (stack == null) {
             stack = createStack(Stack.builder().userId(task.getUserId()).build());
         }
-        return createTask(stack.getId(),task);
+        return createTask(stack.getId(), task);
     }
+
     public Task createTask(String stackId, Task task) {
         Stack stack = stackRequestContext.getStack();
         taskHandler.initTask(task, stack);
@@ -108,7 +111,7 @@ public class StackService {
         return taskHandler.getTask(task.getId(), savedStack).orElse(null);
     }
 
-    public Task completeTask(String stackId, UUID taskId, boolean markCompleted){
+    public Task completeTask(String stackId, UUID taskId, boolean markCompleted) {
         Stack stack = stackRequestContext.getStack();
         Optional<Task> optionalTask = taskHandler.getTask(taskId, stack);
         optionalTask.ifPresent(x -> {
@@ -119,7 +122,7 @@ public class StackService {
         return getTask(stackId, taskId);
     }
 
-    public Task moveTask(String stackId, UUID taskId, String toUserId){
+    public Task moveTask(String stackId, UUID taskId, String toUserId) {
         Stack stack = stackRequestContext.getStack();
         Task task = taskHandler.getTask(taskId, stack).orElse(null);
         if (toUserId != null) {

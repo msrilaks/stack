@@ -134,8 +134,8 @@ public class StackController {
     }
 
     @PatchMapping(path = "/stack/{stackId}/tasks/{taskId}",
-                   consumes = "application/json",
-                   produces = "application/json")
+                  consumes = "application/json",
+                  produces = "application/json")
     @ApiOperation(value = "Patch Task", tags = {"Task"})
     public ResponseEntity<Task> patchTask(
             @PathVariable("stackId") String stackId,
@@ -147,12 +147,12 @@ public class StackController {
             @RequestParam(name = "isToDo", required = false, defaultValue =
                     "false") Boolean isToDo,
             @RequestBody @Valid Task task) {
-        if(isCompleted) {
+        if (isCompleted) {
             return ResponseEntity.ok(stackService.completeTask(stackId, taskId, true));
-        } else if(isToDo) {
+        } else if (isToDo) {
             return ResponseEntity.ok(stackService.completeTask(stackId, taskId, false));
-        } else if(isMoved) {
-            return ResponseEntity.ok(stackService.moveTask(stackId,taskId,
+        } else if (isMoved) {
+            return ResponseEntity.ok(stackService.moveTask(stackId, taskId,
                                                            task.getUserId()));
         } else {
             return ResponseEntity.ok(task);
