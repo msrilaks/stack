@@ -43,8 +43,9 @@ export const styles = {
     },
     stackTab: {
         indicatorColor:'#0050ef',
-        textColor:'#0050ef',
-        color:'#0050ef',
+        textColor:'#5D5A58',
+        color:'#5D5A58',
+        background:'#F5F5F5',
     },
     taskIcon: {
         color:'#EA005E',
@@ -57,7 +58,6 @@ export const styles = {
     },
     taskCard: {
         background:'#F5F5F5',
-        // background:'#FDF5E6'
     }
    
   };

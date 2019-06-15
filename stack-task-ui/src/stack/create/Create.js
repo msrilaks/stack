@@ -73,7 +73,7 @@ class Create extends Component {
 
         return (
             <form onSubmit={this.handleSubmit}>
-            <Card className="create-container">
+            <Card className="create-container" style={styles.taskCard}>
             <CardActionArea>
               <CardContent>
                 {/* <TextField
