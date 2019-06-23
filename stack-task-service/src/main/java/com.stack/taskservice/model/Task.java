@@ -1,5 +1,6 @@
 package com.stack.taskservice.model;
 
+import com.stack.taskservice.validator.TaskConstraint;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 
@@ -10,6 +11,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @ToString
 @Builder(toBuilder = true)
+@TaskConstraint
 public class Task implements Comparable<Task> {
     @Id
     private UUID   id;

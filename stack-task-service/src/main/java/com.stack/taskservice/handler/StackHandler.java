@@ -4,7 +4,6 @@ import com.stack.taskservice.model.Stack;
 import com.stack.taskservice.model.Task;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;

@@ -99,11 +99,11 @@ public class StackService {
 
     public Task createTask(Task task) {
         Stack stack = stackRequestContext.getStack();
-        if(stack == null) {
+        if (stack == null) {
             //Stack is not in context as stackId not part of URI
             stack = getStackByUserId(task.getUserId());
         }
-        if(task.getUserId() !=  null && task.getUserId()!=stack.getUserId()) {
+        if (!task.getUserId().equals(stack.getUserId())) {
             stack = createStack(Stack.builder().userId(task.getUserId()).build());
         }
         taskHandler.initTask(task, stack);

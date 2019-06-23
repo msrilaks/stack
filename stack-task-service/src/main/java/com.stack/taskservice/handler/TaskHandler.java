@@ -12,7 +12,6 @@ public class TaskHandler {
     public void initTask(Task task, Stack stack) {
         task.setId(UUID.randomUUID());
         task.setStackId(stack.getId());
-        task.setCreatedByUserId(stack.getUserId());
         touchCreated(task);
     }
 

@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -23,7 +22,6 @@ import java.util.UUID;
 
 @Controller
 @Api(value = "Stack", description = "REST API for Stack", tags = {"Stack"})
-@Validated
 public class StackController {
     private static final Logger LOGGER = LoggerFactory.getLogger(
             StackController.class.getName());

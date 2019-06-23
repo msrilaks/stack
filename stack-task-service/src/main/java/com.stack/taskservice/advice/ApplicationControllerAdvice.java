@@ -20,7 +20,7 @@ public class ApplicationControllerAdvice {
     public ResponseEntity<Error> stackException(final StackException e) {
         LOGGER.error(e.getApplicationError()
                       .getMessage(), e);
-        return new ResponseEntity<Error>(e.getApplicationError(), HttpStatus.OK);
+        return new ResponseEntity<Error>(e.getApplicationError(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(TaskException.class)
@@ -28,7 +28,7 @@ public class ApplicationControllerAdvice {
             final TaskException e) {
         LOGGER.error(e.getApplicationError()
                       .getMessage(), e);
-        return new ResponseEntity<Error>(e.getApplicationError(), HttpStatus.OK);
+        return new ResponseEntity<Error>(e.getApplicationError(), HttpStatus.BAD_REQUEST);
     }
 
 
