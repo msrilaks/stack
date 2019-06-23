@@ -97,17 +97,15 @@ public class StackService {
         return optionalTask.orElse(null);
     }
 
-
     public Task createTask(Task task) {
-        Stack stack = getStackByUserId(task.getUserId());
-        if (stack == null) {
+        Stack stack = stackRequestContext.getStack();
+        if(stack == null) {
+            //Stack is not in context as stackId not part of URI
+            stack = getStackByUserId(task.getUserId());
+        }
+        if(task.getUserId() !=  null && task.getUserId()!=stack.getUserId()) {
             stack = createStack(Stack.builder().userId(task.getUserId()).build());
         }
-        return createTask(stack.getId(), task);
-    }
-
-    public Task createTask(String stackId, Task task) {
-        Stack stack = stackRequestContext.getStack();
         taskHandler.initTask(task, stack);
         stack.getTasks().put(String.valueOf(task.getId()), task);
         stackHandler.reorderTasks(stack);

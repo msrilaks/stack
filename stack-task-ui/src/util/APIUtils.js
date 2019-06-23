@@ -116,6 +116,18 @@ export function deleteTask(deleteTaskRequest) {
     });
 }
 
+
+export function getProfilePic(userName){
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+    userName = 'gajanan.mudaliar@gmail.com'; 
+    return request({
+        url: "https://www.google.com/m8/feeds/photos/profile/google/"+userName+"?v=3",
+        method: 'GET',
+    });
+ 
+}
 export function patchTask(patchTaskRequest, patchAction) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");

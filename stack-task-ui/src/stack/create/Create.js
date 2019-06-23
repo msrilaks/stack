@@ -109,7 +109,7 @@ class Create extends Component {
                     id="email-input"
                     label="push to"
                     type="email"
-                    name="email"
+                    name="userId"
                     fullWidth
                     defaultValue={this.props.currentUser.email}
                     autoComplete="email"

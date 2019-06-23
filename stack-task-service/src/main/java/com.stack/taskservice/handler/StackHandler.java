@@ -17,7 +17,7 @@ public class StackHandler {
         stack.setCreatedTimeStamp(ts);
         stack.setLastUpdatedTimeStamp(ts);
         if (stack.getTasks() == null || stack.getTasks().isEmpty()) {
-            stack.setTasks(Collections.emptyMap());
+            stack.setTasks(new LinkedHashMap<>());
         }
     }
 

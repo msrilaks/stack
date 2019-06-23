@@ -39,11 +39,11 @@ class Login extends Component {
                 <div className="login-content">
                     <h1 className="login-title">Login to StackItDown</h1>
                     <SocialLogin />
-                    <div className="or-separator">
+                    {/* <div className="or-separator">
                         <span className="or-text">OR</span>
                     </div>
-                    <LoginForm {...this.props} />
-                    <span className="signup-link">New user? <Link to="/signup">Sign up!</Link></span>
+                    <LoginForm {...this.props} /> */}
+                    {/* <span className="signup-link">New user? <Link to="/signup">Sign up!</Link></span> */}
                 </div>
             </div>
         );

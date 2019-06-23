@@ -39,9 +39,6 @@ class AppHeader extends Component {
                                         <li>
                                             <NavLink to="/login"  style={styles.appLogout}>Login</NavLink>        
                                         </li>
-                                        <li>
-                                            <NavLink to="/signup"  style={styles.appLogout}>Signup</NavLink>        
-                                        </li>
                                     </ul>
                                 )}
                         </nav>
