@@ -9,5 +9,5 @@ import lombok.*;
 @AllArgsConstructor
 public class LoginResponse {
     private String accessToken;
-    private String tokenType = "Bearer";
+    private final String tokenType = "Bearer";
 }
