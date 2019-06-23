@@ -11,6 +11,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class StackRequestContext {
-    private Stack stack;
-    private User  user;
+    private Stack  stack;
+    private User   user;
+    private String stackId;
 }

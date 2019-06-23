@@ -1,7 +1,6 @@
 package com.stack.taskservice.services;
 
 import com.stack.taskservice.context.StackRequestContext;
-import com.stack.taskservice.handler.StackHandler;
 import com.stack.taskservice.handler.TaskHandler;
 import com.stack.taskservice.model.Stack;
 import com.stack.taskservice.model.Task;
@@ -13,13 +12,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @Component
 public class StackService {
@@ -32,15 +26,11 @@ public class StackService {
     @Autowired
     TaskHandler taskHandler;
 
-    @Autowired
-    StackHandler stackHandler;
-
     @Resource(name = "stackRequestContext")
     StackRequestContext stackRequestContext;
 
     public Stack createStack(Stack stack) {
-        stackHandler.initStack(stack);
-        return stackRepository.save(stack);
+        return stackRepository.saveStack(stack);
     }
 
     public void deleteStack(String stackId) {
@@ -55,117 +45,67 @@ public class StackService {
         return stackRepository.findByUserId(userId);
     }
 
-    public Map<String, Task> getTasks(String stackId) {
-        Stack stack = stackRequestContext.getStack();
-        return stack.getTasks();
-    }
-
     public Map<String, Task> getTasks(
-            String stackId,
             Boolean isDeleted,
-            Boolean isMoved,
+            Boolean isPushed,
             Boolean isCompleted,
             Boolean isToDo) {
         Stack stack = stackRequestContext.getStack();
-        AtomicInteger i = new AtomicInteger(0);
-        Predicate<Task> predicate = (task -> true);
         if (isDeleted) {
-            predicate = (task -> task.getDeletedTimeStamp() != null);
-        } else if (isMoved) {
-            predicate = (task -> task.getMovedTimeStamp() != null);
+            return stackRepository.fetchDeletedTasks(stack);
+        } else if (isPushed) {
+            return stackRepository.fetchPushedTasks(stack);
         } else if (isCompleted) {
-            predicate = (task -> task.getCompletedTimeStamp() != null &&
-                                 task.getDeletedTimeStamp() == null);
+            return stackRepository.fetchCompletedTasks(stack);
         } else if (isToDo) {
-            predicate =
-                    (task -> task.getDeletedTimeStamp() == null &&
-                             task.getCompletedTimeStamp() == null &&
-                             task.getMovedTimeStamp() == null);
+            return stackRepository.fetchToDoTasks(stack);
         }
-        return stack.getTasks().values()
-                    .stream()
-                    .filter(predicate)
-                    .collect(Collectors.toMap(
-                            n -> i.incrementAndGet() + "",
-                            t -> t,
-                            (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+        return stackRepository.fetchAllTasks(stack);
     }
 
-    public Task getTask(String stackId, UUID taskId) {
+    public Task getTask(UUID taskId) {
         Stack stack = stackRequestContext.getStack();
-        Optional<Task> optionalTask = taskHandler.getTask(taskId, stack);
-        return optionalTask.orElse(null);
+        return stackRepository.findTaskById(taskId, stack);
     }
 
     public Task createTask(Task task) {
         Stack stack = stackRequestContext.getStack();
-        if (stack == null) {
-            //Stack is not in context as stackId not part of URI
-            stack = getStackByUserId(task.getUserId());
-        }
+        Task createdTask = stackRepository.saveTaskToStack(task, stack);
         if (!task.getUserId().equals(stack.getUserId())) {
-            stack = createStack(Stack.builder().userId(task.getUserId()).build());
+            return pushTask(createdTask.getId(), task.getUserId());
         }
-        taskHandler.initTask(task, stack);
-        stack.getTasks().put(String.valueOf(task.getId()), task);
-        stackHandler.reorderTasks(stack);
-        Stack savedStack = stackRepository.save(stack);
-        return taskHandler.getTask(task.getId(), savedStack).orElse(null);
+        return createdTask;
     }
 
-    public Task completeTask(String stackId, UUID taskId, boolean markCompleted) {
+    public Task pushTask(UUID taskId, String toUserId) {
         Stack stack = stackRequestContext.getStack();
-        Optional<Task> optionalTask = taskHandler.getTask(taskId, stack);
-        optionalTask.ifPresent(x -> {
-            taskHandler.touchCompleted(x, markCompleted);
-        });
-        stackHandler.reorderTasks(stack);
-        stackRepository.save(stack);
-        return getTask(stackId, taskId);
-    }
-
-    public Task moveTask(String stackId, UUID taskId, String toUserId) {
-        Stack stack = stackRequestContext.getStack();
-        Task task = taskHandler.getTask(taskId, stack).orElse(null);
+        Task task = stackRepository.findTaskById(taskId, stack);
         if (toUserId != null) {
-            Stack moveToStack = stackRepository.findByUserId(toUserId);
-            if (moveToStack == null) {
-                moveToStack = createStack(Stack.builder().userId(toUserId).build());
+            Stack pushStack = stackRepository.findByUserId(toUserId);
+            if (pushStack == null) {
+                pushStack = createStack(Stack.builder().userId(toUserId).build());
             }
-            Task newTask = taskHandler.cloneTask(task, moveToStack);
-            taskHandler.touchMoved(task);
-            moveToStack.getTasks().put(
-                    String.valueOf(newTask.getId()),
-                    newTask);
-            stackHandler.reorderTasks(moveToStack);
-            stackRepository.save(moveToStack);
+            stackRepository.saveTaskToStack(task.clone(), pushStack);
+            stackRepository.saveTaskAsPushed(taskId, stack);
         }
+        return task;
+    }
 
-        stackHandler.reorderTasks(stack);
-        stackRepository.save(stack);
-        return getTask(stackId, taskId);
-
+    public Task completeTask(UUID taskId, boolean markCompleted) {
+        Stack stack = stackRequestContext.getStack();
+        return stackRepository.saveTaskAsCompleted(markCompleted, taskId, stack);
     }
 
     public Task modifyTask(
-            String stackId, UUID taskId,
+            UUID taskId,
             @Valid Task task) {
         Stack stack = stackRequestContext.getStack();
-        Optional<Task> optionalTask = taskHandler.getTask(taskId, stack);
-        optionalTask.ifPresent(x -> {
-            taskHandler.updateTaskDetails(x, task);
-        });
-        stackHandler.reorderTasks(stack);
-        stackRepository.save(stack);
-        return getTask(stackId, taskId);
+        return stackRepository.saveTaskAsModified(task, taskId, stack);
     }
 
-    public Task deleteTask(String stackId, UUID taskId) {
+    public Task deleteTask(UUID taskId) {
         Stack stack = stackRequestContext.getStack();
-        taskHandler.touchDeleted(taskId, stack);
-        stackHandler.reorderTasks(stack);
-        stackRepository.save(stack);
-        return taskHandler.getTask(taskId, stack).orElse(null);
+        return stackRepository.saveTaskAsDeleted(taskId, stack);
     }
 
 }

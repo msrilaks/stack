@@ -83,14 +83,14 @@ public class StackController {
             @PathVariable("stackId") String stackId,
             @RequestParam(name = "isDeleted", required = false, defaultValue =
                     "false") Boolean isDeleted,
-            @RequestParam(name = "isMoved", required = false, defaultValue =
-                    "false") Boolean isMoved,
+            @RequestParam(name = "isPushed", required = false, defaultValue =
+                    "false") Boolean isPushed,
             @RequestParam(name = "isCompleted", required = false, defaultValue =
                     "false") Boolean isCompleted,
             @RequestParam(name = "isToDo", required = false, defaultValue =
                     "false") Boolean isToDo) {
-        return ResponseEntity.ok(stackService.getTasks(stackId, isDeleted,
-                                                       isMoved, isCompleted, isToDo));
+        return ResponseEntity.ok(stackService.getTasks(isDeleted,
+                                                       isPushed, isCompleted, isToDo));
     }
 
     @GetMapping(path = "/stack/{stackId}/tasks/{taskId}", consumes = "application/json",
@@ -99,7 +99,7 @@ public class StackController {
     public ResponseEntity<Task> getTaskOfStack(
             @PathVariable("stackId") String stackId,
             @PathVariable("taskId") UUID taskId) {
-        return ResponseEntity.ok(stackService.getTask(stackId, taskId));
+        return ResponseEntity.ok(stackService.getTask(taskId));
     }
 
     @PostMapping(path = "/stack/{stackId}/tasks", consumes = "application/json",
@@ -119,7 +119,7 @@ public class StackController {
             @PathVariable("stackId") String stackId,
             @PathVariable("taskId") UUID taskId,
             @RequestBody @Valid Task task) {
-        return ResponseEntity.ok(stackService.modifyTask(stackId, taskId, task));
+        return ResponseEntity.ok(stackService.modifyTask(taskId, task));
     }
 
     @DeleteMapping(path = "/stack/{stackId}/tasks/{taskId}",
@@ -129,7 +129,7 @@ public class StackController {
     public ResponseEntity<Task> deleteTask(
             @PathVariable("stackId") String stackId,
             @PathVariable("taskId") UUID taskId) {
-        Task task = stackService.deleteTask(stackId, taskId);
+        Task task = stackService.deleteTask(taskId);
         return ResponseEntity.ok(task);
     }
 
@@ -140,20 +140,19 @@ public class StackController {
     public ResponseEntity<Task> patchTask(
             @PathVariable("stackId") String stackId,
             @PathVariable("taskId") UUID taskId,
-            @RequestParam(name = "isMoved", required = false, defaultValue =
-                    "false") Boolean isMoved,
+            @RequestParam(name = "isPushed", required = false, defaultValue =
+                    "false") Boolean isPushed,
             @RequestParam(name = "isCompleted", required = false, defaultValue =
                     "false") Boolean isCompleted,
             @RequestParam(name = "isToDo", required = false, defaultValue =
                     "false") Boolean isToDo,
             @RequestBody @Valid Task task) {
         if (isCompleted) {
-            return ResponseEntity.ok(stackService.completeTask(stackId, taskId, true));
+            return ResponseEntity.ok(stackService.completeTask(taskId, true));
         } else if (isToDo) {
-            return ResponseEntity.ok(stackService.completeTask(stackId, taskId, false));
-        } else if (isMoved) {
-            return ResponseEntity.ok(stackService.moveTask(stackId, taskId,
-                                                           task.getUserId()));
+            return ResponseEntity.ok(stackService.completeTask(taskId, false));
+        } else if (isPushed) {
+            return ResponseEntity.ok(stackService.pushTask(taskId, task.getUserId()));
         } else {
             return ResponseEntity.ok(task);
         }

@@ -34,6 +34,7 @@ public class StackInterceptor extends HandlerInterceptorAdapter {
                 .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
         if (pathVariables != null && pathVariables.get("stackId") != null) {
             final String stackId = String.valueOf(pathVariables.get("stackId"));
+            stackRequestContext.setStackId(stackId);
             Stack stack = stackService.getStack(stackId);
             stackRequestContext.setStack(stack);
             LOGGER.info("Interceptor populates: " + stack);

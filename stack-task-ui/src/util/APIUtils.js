@@ -180,7 +180,7 @@ export function getMovedTasks(stackId) {
     }
 
     return request({
-        url: API_BASE_URL + "/stack/"+stackId+"/tasks?isMoved=true",
+        url: API_BASE_URL + "/stack/"+stackId+"/tasks?isPushed=true",
         method: 'GET'
     });
 } 
