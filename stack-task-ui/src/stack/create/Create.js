@@ -21,7 +21,8 @@ class Create extends Component {
             category: '',
             label: '',
             description: '',
-            userId: ''
+            userId: '',
+            createdByUserId:''
             }
         };
         this.state = { newTaskAdded: false };
@@ -33,7 +34,10 @@ class Create extends Component {
         this.setState({
             task:{
                 ...this.state.task,
-            stackId:this.props.stack.id}
+            stackId:this.props.stack.id,
+            userId:this.props.stack.userId,
+            createdByUserId:this.props.stack.userId
+    }
         },function () {
             console.log(this.state.task.stackId);
         });
