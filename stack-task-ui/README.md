@@ -2,7 +2,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 docker build -t srilakshmi29/stack-task-ui .
 docker build -f Dockerfile-prod -t srilakshmi29/stack-task-ui:prod .
-docker run -it -p 80:80 --rm srilakshmi29/stack-task-ui:prod
+docker run -p 80:80 -e NODE_ENV=production --name stack-task-ui -d srilakshmi29/stack-task-ui:prod
+
 docker-compose -f docker-compose-prod.yml up -d --build
 
 npm start .env.production
