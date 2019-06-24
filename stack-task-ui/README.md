@@ -1,10 +1,14 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-docker build -t srilakshmi29/stack-task-ui .
+
+##Production
 docker build -f Dockerfile-prod -t srilakshmi29/stack-task-ui:prod .
-docker run -p 80:80 -e NODE_ENV=production --name stack-task-ui -d srilakshmi29/stack-task-ui:prod
+docker push srilakshmi29/stack-task-ui:prod
+docker run -p 8082:80 -e NODE_ENV=production --name stack-task-ui -d srilakshmi29/stack-task-ui:prod
 
 docker-compose -f docker-compose-prod.yml up -d --build
+
+##Dev
+docker build -t srilakshmi29/stack-task-ui .
 
 npm start .env.production
 set "NODE_ENV=production" && npm start
