@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+
+  stack-task-ui-prod:
+    container_name: stack-task-ui-prod
+    image: srilakshmi29/stack-task-ui:prod
+    build:
+      context: .
+      dockerfile: Dockerfile-prod
+    ports:
+      - '80:80'
+    environment:
+      - NODE_ENV=production
