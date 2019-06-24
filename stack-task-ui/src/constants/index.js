@@ -6,7 +6,7 @@ export const API_BASE_URL=API_BASE_URL_INT;
 
 //export const OAUTH2_REDIRECT_URI = 'http://localhost:3000/oauth2/redirect'
 const OAUTH2_REDIRECT_URI_INT = process.env.REACT_APP_STAGE  === 'production' ?
-'http://35.233.233.97:3000/oauth2/redirect' : 'http://localhost:3000/oauth2/redirect';
+'http://35.233.233.97:8082/oauth2/redirect' : 'http://localhost:3000/oauth2/redirect';
 export const OAUTH2_REDIRECT_URI=OAUTH2_REDIRECT_URI_INT;
 
 export const ACCESS_TOKEN = 'accessToken';
