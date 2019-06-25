@@ -3,8 +3,8 @@
 ##Production
 docker build -f Dockerfile-prod -t srilakshmi29/stack-task-ui:prod .
 docker push srilakshmi29/stack-task-ui:prod
-docker run -p 8082:80 -e NODE_ENV=production --name stack-task-ui -d srilakshmi29/stack-task-ui:prod
 
+docker run -p 8082:80 -e REACT_APP_STAGE=production --name stack-task-ui -d srilakshmi29/stack-task-ui:prod
 docker-compose -f docker-compose-prod.yml up -d --build
 
 ##Dev

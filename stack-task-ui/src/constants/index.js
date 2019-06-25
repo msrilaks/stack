@@ -1,12 +1,12 @@
 // export const API_BASE_URL = 'http://localhost:8080';
 
-const API_BASE_URL_INT = process.env.REACT_APP_STAGE  === 'production' ?
-'http://35.233.233.97:8080' : 'http://localhost:8080';
+const API_BASE_URL_INT = process.env.REACT_APP_STAGE  === 'development' ?
+'http://localhost:8080' : 'http://35.233.233.97:8080';
 export const API_BASE_URL=API_BASE_URL_INT;
 
 //export const OAUTH2_REDIRECT_URI = 'http://localhost:3000/oauth2/redirect'
-const OAUTH2_REDIRECT_URI_INT = process.env.REACT_APP_STAGE  === 'production' ?
-'http://35.233.233.97:8082/oauth2/redirect' : 'http://localhost:3000/oauth2/redirect';
+const OAUTH2_REDIRECT_URI_INT = process.env.REACT_APP_STAGE  === 'development' ?
+'http://localhost:3000/oauth2/redirect' : 'http://stackitdown.com/oauth2/redirect';
 export const OAUTH2_REDIRECT_URI=OAUTH2_REDIRECT_URI_INT;
 
 export const ACCESS_TOKEN = 'accessToken';

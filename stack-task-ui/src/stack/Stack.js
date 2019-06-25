@@ -131,7 +131,6 @@ class Stack extends Component {
     }
 
     render() {
-        
         return (
            <div>
             <Paper>

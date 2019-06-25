@@ -1,6 +1,7 @@
 import { API_BASE_URL, ACCESS_TOKEN } from '../constants';
 
 const request = (options) => {
+    console.log("REACT Environment is : "+process.env.REACT_APP_STAGE);
     const headers = new Headers({
         'Content-Type': 'application/json',
     })
