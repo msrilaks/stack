@@ -15,12 +15,12 @@ import NotFound from '../common/NotFound';
 import LoadingIndicator from '../common/LoadingIndicator';
 import { getCurrentUser } from '../util/APIUtils';
 import { getStack } from '../util/APIUtils';
-import { ACCESS_TOKEN } from '../constants';
 import PrivateRoute from '../common/PrivateRoute';
 import Alert from 'react-s-alert';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/slide.css';
 import './App.css';
+import  {config}  from '../constants';
 
 class App extends Component {
   constructor(props) {
@@ -76,7 +76,7 @@ class App extends Component {
   }
 
   handleLogout() {
-    localStorage.removeItem(ACCESS_TOKEN);
+    localStorage.removeItem(config.ACCESS_TOKEN);
     this.setState({
       authenticated: false,
       currentUser: null

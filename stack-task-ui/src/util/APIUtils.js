@@ -1,13 +1,16 @@
-import { API_BASE_URL, ACCESS_TOKEN } from '../constants';
+// import { config.API_BASE_URL, config.ACCESS_TOKEN, config.OAUTH2_REDIRECT_URI } from '../constants';
+import { config } from '../constants';
 
 const request = (options) => {
     console.log("REACT Environment is : "+process.env.REACT_APP_STAGE);
+    console.log("config.API_BASE_URL : "+config.API_BASE_URL);
+    console.log("config.OAUTH2_REDIRECT_URI: " + +config.OAUTH2_REDIRECT_URI);
     const headers = new Headers({
         'Content-Type': 'application/json',
     })
     
-    if(localStorage.getItem(ACCESS_TOKEN)) {
-        headers.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
+    if(localStorage.getItem(config.ACCESS_TOKEN)) {
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem(config.ACCESS_TOKEN))
     }
 
     const defaults = {headers: headers};
@@ -64,54 +67,54 @@ export const styles = {
   };
 
 export function getCurrentUser() {
-    if(!localStorage.getItem(ACCESS_TOKEN)) {
+    if(!localStorage.getItem(config.ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }
 
     return request({
-        url: API_BASE_URL + "/user/me",
+        url: config.API_BASE_URL + "/user/me",
         method: 'GET'
     });
 }
 
 export function getStack() {
-    if(!localStorage.getItem(ACCESS_TOKEN)) {
+    if(!localStorage.getItem(config.ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }
 
     return request({
-        url: API_BASE_URL + "/stack",
+        url: config.API_BASE_URL + "/stack",
         method: 'GET'
     });
 }
 
 export function login(loginRequest) {
     return request({
-        url: API_BASE_URL + "/auth/login",
+        url: config.API_BASE_URL + "/auth/login",
         method: 'POST',
         body: JSON.stringify(loginRequest)
     });
 }
 
 export function createTask(createTaskRequest) {
-    if(!localStorage.getItem(ACCESS_TOKEN)) {
+    if(!localStorage.getItem(config.ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }
 
     return request({
-        url: API_BASE_URL + "/stack/"+createTaskRequest.stackId+"/tasks",
+        url: config.API_BASE_URL + "/stack/"+createTaskRequest.stackId+"/tasks",
         method: 'POST',
         body: JSON.stringify(createTaskRequest)
     });
 }
 
 export function deleteTask(deleteTaskRequest) {
-    if(!localStorage.getItem(ACCESS_TOKEN)) {
+    if(!localStorage.getItem(config.ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }
 
     return request({
-        url: API_BASE_URL + "/stack/"+deleteTaskRequest.stackId+"/tasks/"+deleteTaskRequest.id,
+        url: config.API_BASE_URL + "/stack/"+deleteTaskRequest.stackId+"/tasks/"+deleteTaskRequest.id,
         method: 'DELETE',
         body: JSON.stringify(deleteTaskRequest)
     });
@@ -119,7 +122,7 @@ export function deleteTask(deleteTaskRequest) {
 
 
 export function getProfilePic(userName){
-    if(!localStorage.getItem(ACCESS_TOKEN)) {
+    if(!localStorage.getItem(config.ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }
     userName = 'gajanan.mudaliar@gmail.com'; 
@@ -130,12 +133,12 @@ export function getProfilePic(userName){
  
 }
 export function patchTask(patchTaskRequest, patchAction) {
-    if(!localStorage.getItem(ACCESS_TOKEN)) {
+    if(!localStorage.getItem(config.ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }
 
     return request({
-        url: API_BASE_URL + "/stack/"+patchTaskRequest.stackId+"/tasks/"+patchTaskRequest.id
+        url: config.API_BASE_URL + "/stack/"+patchTaskRequest.stackId+"/tasks/"+patchTaskRequest.id
         +"?"+patchAction,
         method: 'PATCH',
         body: JSON.stringify(patchTaskRequest)
@@ -143,74 +146,74 @@ export function patchTask(patchTaskRequest, patchAction) {
 }
 
 export function getTasks(stackId) {
-    if(!localStorage.getItem(ACCESS_TOKEN)) {
+    if(!localStorage.getItem(config.ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }
 
     return request({
-        url: API_BASE_URL + "/stack/"+stackId+"/tasks",
+        url: config.API_BASE_URL + "/stack/"+stackId+"/tasks",
         method: 'GET'
     });
 } 
 
 export function getTodoTasks(stackId) {
-    if(!localStorage.getItem(ACCESS_TOKEN)) {
+    if(!localStorage.getItem(config.ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }
 
     return request({
-        url: API_BASE_URL + "/stack/"+stackId+"/tasks?isToDo=true",
+        url: config.API_BASE_URL + "/stack/"+stackId+"/tasks?isToDo=true",
         method: 'GET'
     });
 } 
 
 export function getDeletedTasks(stackId) {
-    if(!localStorage.getItem(ACCESS_TOKEN)) {
+    if(!localStorage.getItem(config.ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }
 
     return request({
-        url: API_BASE_URL + "/stack/"+stackId+"/tasks?isDeleted=true",
+        url: config.API_BASE_URL + "/stack/"+stackId+"/tasks?isDeleted=true",
         method: 'GET'
     });
 } 
 
 export function getMovedTasks(stackId) {
-    if(!localStorage.getItem(ACCESS_TOKEN)) {
+    if(!localStorage.getItem(config.ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }
 
     return request({
-        url: API_BASE_URL + "/stack/"+stackId+"/tasks?isPushed=true",
+        url: config.API_BASE_URL + "/stack/"+stackId+"/tasks?isPushed=true",
         method: 'GET'
     });
 } 
 
 export function getCompletedTasks(stackId) {
-    if(!localStorage.getItem(ACCESS_TOKEN)) {
+    if(!localStorage.getItem(config.ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }
 
     return request({
-        url: API_BASE_URL + "/stack/"+stackId+"/tasks?isCompleted=true",
+        url: config.API_BASE_URL + "/stack/"+stackId+"/tasks?isCompleted=true",
         method: 'GET'
     });
 } 
 
 export function getTask(stackId, taskId) {
-    if(!localStorage.getItem(ACCESS_TOKEN)) {
+    if(!localStorage.getItem(config.ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }
 
     return request({
-        url: API_BASE_URL + "/stack/"+stackId+"/tasks/"+taskId,
+        url: config.API_BASE_URL + "/stack/"+stackId+"/tasks/"+taskId,
         method: 'GET'
     });
 } 
 
 export function signup(signupRequest) {
     return request({
-        url: API_BASE_URL + "/auth/signup",
+        url: config.API_BASE_URL + "/auth/signup",
         method: 'POST',
         body: JSON.stringify(signupRequest)
     });
