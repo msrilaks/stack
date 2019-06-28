@@ -110,7 +110,8 @@ public class StackCustomRepositoryImpl implements StackCustomRepository {
 
     @Override
     public Map<String, Task> fetchPushedTasks(Stack stack) {
-        Predicate<Task> predicate = (task -> task.getPushedTimeStamp() != null);
+        Predicate<Task> predicate = (task -> task.getPushedTimeStamp() != null &&
+                                             task.getDeletedTimeStamp() == null );
         return fetchTasks(stack, predicate);
     }
 
@@ -138,7 +139,6 @@ public class StackCustomRepositoryImpl implements StackCustomRepository {
                             t -> t,
                             (oldValue, newValue) -> oldValue, LinkedHashMap::new));
     }
-
 
     private void reorderTasks(Stack stack) {
         if (stack.getTasks() == null || stack.getTasks().isEmpty()) {
