@@ -29,7 +29,7 @@ class App extends Component {
       authenticated: false,
       currentUser: null,
       loading: false,
-      stack: ''
+      stack: null
     }
 
     this.loadCurrentlyLoggedInUser = this.loadCurrentlyLoggedInUser.bind(this);
@@ -46,13 +46,10 @@ class App extends Component {
     .then(response => {
       this.setState({
         currentUser: response,
-        authenticated: true,
-        loading: false
+        authenticated: true
       });
     }).catch(error => {
-      this.setState({
-        loading: false
-      });  
+
     });    
   }
 

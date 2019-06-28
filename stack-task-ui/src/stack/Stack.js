@@ -49,7 +49,7 @@ class Stack extends Component {
 
     componentDidMount() {
           this.setState({
-            tasks:this.props.stack.tasks,
+           // tasks:this.props.stack.tasks,
             
          },function () {
             console.log("stackTasks : "+ this.state.tasks)

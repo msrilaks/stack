@@ -42,7 +42,7 @@ class TaskList extends Component {
             {
             (this.props.tasks && Object.keys(this.props.tasks).length > 0) ? (
             Object.entries(this.props.tasks).map(([key, item])=>(
-                <div>
+                <div key={item.id}>
                          <div name={item.id}>
                             <Task  authenticated={this.props.authenticated} 
                             currentUser={this.props.currentUser} 
