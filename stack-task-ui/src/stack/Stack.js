@@ -33,7 +33,7 @@ class Stack extends Component {
             showCreateTask: false,
             value: 0,
         }
-        
+
         this.handleChange = this.handleChange.bind(this);
         this.onButtonCreateTaskClicked = this.onButtonCreateTaskClicked.bind(this);
         this.onButtonClearTasksClicked = this.onButtonClearTasksClicked.bind(this);
@@ -44,7 +44,10 @@ class Stack extends Component {
 
          
     handleChange(event, newValue) {
-        this.setState({value:newValue});
+        this.setState({value:newValue},function(){
+            this.reloadTasks();
+        });
+        
       }
 
     componentDidMount() {
@@ -58,6 +61,8 @@ class Stack extends Component {
        }
 
     reloadTasks() {
+        if(this.state.value == 0){
+
         getTodoTasks(this.props.stack.id)
         .then(response => {
             this.setState({
@@ -71,18 +76,7 @@ class Stack extends Component {
             Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
         }); 
         
-        getDeletedTasks(this.props.stack.id)
-        .then(response => {
-            this.setState({
-                deletedTasks: response, 
-                showCreateTask:false,
-                
-                },function () {
-                    console.log("deletedTasks : "+ this.state.deletedTasks)
-                });
-          }).catch(error => {
-            Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
-        }); 
+    }else if(this.state.value == 1) {
 
         getMovedTasks(this.props.stack.id)
         .then(response => {
@@ -96,7 +90,10 @@ class Stack extends Component {
           }).catch(error => {
             Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
         }); 
+      
 
+    }else if(this.state.value == 2){
+   
         getCompletedTasks(this.props.stack.id)
         .then(response => {
             this.setState({
@@ -109,6 +106,21 @@ class Stack extends Component {
           }).catch(error => {
             Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
         }); 
+    
+    }else if(this.state.value == 3) {
+        getDeletedTasks(this.props.stack.id)
+        .then(response => {
+            this.setState({
+                deletedTasks: response, 
+                showCreateTask:false,
+                
+                },function () {
+                    console.log("deletedTasks : "+ this.state.deletedTasks)
+                });
+          }).catch(error => {
+            Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
+        }); 
+    }
     }
 
 
@@ -157,7 +169,8 @@ class Stack extends Component {
                             <Create  authenticated={this.props.authenticated} 
                                     currentUser={this.props.currentUser} 
                                     stack={this.props.stack} 
-                                    reloadTasksFunc={this.reloadTasks}/>
+                                    reloadTasksFunc={this.reloadTasks}
+                                    taskProfile='created'/>
                                     :null}
                     </div>
                    <TaskList tasks={this.state.todoTasks} reloadTasks={this.reloadTasks}

@@ -120,6 +120,17 @@ export function deleteTask(deleteTaskRequest) {
     });
 }
 
+export function modifyTask(modifyTaskRequest, patchAction) {
+    if(!localStorage.getItem(config.ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: config.API_BASE_URL + "/stack/"+modifyTaskRequest.stackId+"/tasks/"+modifyTaskRequest.id,
+        method: 'PUT',
+        body: JSON.stringify(modifyTaskRequest)
+    });
+}
 
 export function getProfilePic(userName){
     if(!localStorage.getItem(config.ACCESS_TOKEN)) {

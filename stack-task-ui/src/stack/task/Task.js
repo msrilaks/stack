@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Task.css';
+import Create from '../create/Create';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -11,20 +12,31 @@ import { deleteTask, patchTask, styles } from '../../util/APIUtils';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ShareIcon from '@material-ui/icons/Share';
+import EditIcon from '@material-ui/icons/Edit';
 import DoneIcon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
 import UndoIcon from '@material-ui/icons/Undo';
 import Paper from '@material-ui/core/Paper';
 import AlarmIcon from '@material-ui/icons/Alarm';
+import { create } from 'domain';
   
 class Task extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            isModifyClicked: false,
+        }
         this.onButtonDeleteTaskClicked = this.onButtonDeleteTaskClicked.bind(this);
         this.onButtonCompleteTaskClicked = this.onButtonCompleteTaskClicked.bind(this);
         this.onButtonTodoTaskClicked = this.onButtonTodoTaskClicked.bind(this);
+        this.onButtonModifyTaskClicked = this.onButtonModifyTaskClicked.bind(this);
+        this.reloadTask = this.reloadTask.bind(this);
     }
-
+    componentDidMount() {
+        this.setState({
+            isModifyClicked: false,
+        });
+       }
     onButtonTodoTaskClicked() {
         const completeTaskRequest = Object.assign({}, this.props.task);
         console.log(completeTaskRequest);
@@ -72,7 +84,20 @@ class Task extends Component {
             Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
         });
     }
-
+    onButtonModifyTaskClicked() {
+        this.setState({
+            isModifyClicked: true,
+        },function () {
+            console.log("onButtonModifyTaskClicked "+this.state.isModifyClicked);
+        });
+    }
+    reloadTask() {
+        this.setState({
+            isModifyClicked: false,
+        },function () {
+            console.log("reloadTask "+this.state.isModifyClicked);
+        });
+    }
     render() {
         let TaskButtonPanel;
         if(this.props.taskProfile == 'todo') {
@@ -80,8 +105,8 @@ class Task extends Component {
                <IconButton aria-label="Complete" onClick={this.onButtonCompleteTaskClicked}>
                     <DoneIcon style={styles.taskIcon}/>
                 </IconButton>
-                <IconButton aria-label="Push">
-                    <ShareIcon style={styles.taskIcon}/>
+                <IconButton aria-label="Modify">
+                    <EditIcon style={styles.taskIcon} onClick={this.onButtonModifyTaskClicked}/>
                 </IconButton>
                 <IconButton aria-label="Delete" onClick={this.onButtonDeleteTaskClicked}>
                     <DeleteIcon style={styles.taskIcon}/>
@@ -113,6 +138,16 @@ class Task extends Component {
          </div>
         }
         return (
+            <div>
+            {this.state.isModifyClicked ?
+                <Create  authenticated={this.props.authenticated} 
+                            currentUser={this.props.currentUser} 
+                            stack={this.props.stack}
+                            taskProfile='pushed'
+                            reloadTasksFunc={this.props.reloadTasksFunc}
+                            reloadTaskDetail={this.reloadTask}
+                            task={this.props.task}/>
+                        :
             <Paper>
             <Card className="task-container" style={styles.taskCard}>
                 <CardActionArea >
@@ -128,6 +163,8 @@ class Task extends Component {
                 </CardActions>
             </Card>
             </Paper>
+            }
+            </div>
         );
     }
 }

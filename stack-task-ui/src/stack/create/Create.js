@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Create.css';
-import { createTask, styles } from '../../util/APIUtils';
+import { createTask, modifyTask, styles } from '../../util/APIUtils';
 import Alert from 'react-s-alert';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -17,6 +17,7 @@ class Create extends Component {
         super(props);
         this.state = {
             task:{
+            id:'',
             stackId: '',
             category: '',
             label: '',
@@ -31,16 +32,32 @@ class Create extends Component {
     }
 
     componentWillMount() {
-        this.setState({
-            task:{
-                ...this.state.task,
-            stackId:this.props.stack.id,
-            userId:this.props.stack.userId,
-            createdByUserId:this.props.stack.userId
-    }
-        },function () {
-            console.log(this.state.task.stackId);
-        });
+
+        if(this.props.task!=null){
+            this.setState({
+                task:{
+                    ...this.state.task,
+                id:this.props.task.id,
+                stackId:this.props.stack.id,
+                userId:this.props.stack.userId,
+                createdByUserId:this.props.stack.userId,
+                description:this.props.task.description,
+        }
+            },function () {
+                console.log(this.state.task.stackId);
+            });
+        } else {
+            this.setState({
+                task:{
+                    ...this.state.task,
+                stackId:this.props.stack.id,
+                userId:this.props.stack.userId,
+                createdByUserId:this.props.stack.userId
+        }
+            },function () {
+                console.log(this.state.task.stackId);
+            });
+        }
        }
 
     handleInputChange(event) {
@@ -63,6 +80,17 @@ class Create extends Component {
 
         const createTaskRequest = Object.assign({}, this.state.task);
         console.log(createTaskRequest);
+        console.log(this.props.taskProfile);
+        if(this.props.taskProfile == 'pushed') {
+            modifyTask(createTaskRequest)
+            .then((response) => {
+                Alert.success("Task modified successfully!");
+                 this.props.reloadTasksFunc();
+                 this.props.reloadTaskDetail();
+            }).catch(error => {
+                Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
+            });
+        } else {
         createTask(createTaskRequest)
         .then(response => {
             Alert.success("Task created successfully!");
@@ -70,7 +98,7 @@ class Create extends Component {
         }).catch(error => {
             Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
         });
-     
+    }
     }
 
     render() {
