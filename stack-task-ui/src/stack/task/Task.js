@@ -99,6 +99,14 @@ class Task extends Component {
         });
     }
     render() {
+        let PushedUserPanel;
+        if(this.props.taskProfile == 'pushed'){
+            PushedUserPanel = <div>
+            <Typography color="textSecondary" gutterBottom>
+                <span className="task-description"> { this.props.task.userId }</span>
+             </Typography>
+         </div>
+        }
         let TaskButtonPanel;
         if(this.props.taskProfile == 'todo') {
            TaskButtonPanel = <div>
@@ -152,6 +160,7 @@ class Task extends Component {
             <Card className="task-container" style={styles.taskCard}>
                 <CardActionArea >
                 <CardContent>
+                    {PushedUserPanel}
                     <Typography gutterBottom variant="h5" component="h2" >
                         {this.props.task.label }<span className="task-description"> { this.props.task.description }</span>
                     </Typography>

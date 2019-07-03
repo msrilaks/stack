@@ -62,6 +62,17 @@ export const styles = {
     },
     taskCard: {
         background:'#F5F5F5',
+    },
+    taskAvatar: {
+        display: 'inline-block',
+        verticalAlign: 'middle',
+        backgroundSize: '32px 32px',
+        borderRadius: '50%',
+        margin: 0,
+        overflow: 'hidden',
+        position: 'relative',
+        height: '32px',
+        width: '32px'
     }
    
   };
