@@ -1,11 +1,13 @@
 package com.stack.taskservice.security.service;
 
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.stack.taskservice.exception.OAuth2AuthenticationProcessingException;
 import com.stack.taskservice.model.AuthProvider;
 import com.stack.taskservice.model.User;
 import com.stack.taskservice.repository.UserRepository;
 import com.stack.taskservice.security.UserPrincipal;
+import com.stack.taskservice.security.google.GoogleCredentialManager;
 import com.stack.taskservice.security.user.OAuth2UserInfo;
 import com.stack.taskservice.security.user.OAuth2UserInfoFactory;
 import org.slf4j.Logger;
@@ -29,6 +31,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private GoogleCredentialManager googleCredentialManager;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws
@@ -61,6 +66,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         Optional<User> userOptional = userRepository.findByEmail(
                 oAuth2UserInfo.getEmail());
+        GoogleCredential credential =
+                new GoogleCredential().setAccessToken(
+                        oAuth2UserRequest.getAccessToken().getTokenValue());
+        googleCredentialManager.saveCredential(oAuth2UserInfo.getEmail(), credential);
         User user;
         if (userOptional.isPresent()) {
             user = userOptional.get();

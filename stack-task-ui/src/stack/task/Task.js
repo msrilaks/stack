@@ -11,7 +11,7 @@ import Alert from 'react-s-alert';
 import { deleteTask, patchTask, styles } from '../../util/APIUtils';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-import ShareIcon from '@material-ui/icons/Share';
+import CalendarIcon from '@material-ui/icons/CalendarToday';
 import EditIcon from '@material-ui/icons/Edit';
 import DoneIcon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
@@ -110,6 +110,9 @@ class Task extends Component {
         let TaskButtonPanel;
         if(this.props.taskProfile == 'todo') {
            TaskButtonPanel = <div>
+               <IconButton aria-label="Calendar" onClick={this.onButtonCompleteTaskClicked}>
+                    <CalendarIcon style={styles.taskIcon}/>
+                </IconButton>
                <IconButton aria-label="Complete" onClick={this.onButtonCompleteTaskClicked}>
                     <DoneIcon style={styles.taskIcon}/>
                 </IconButton>

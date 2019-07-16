@@ -100,9 +100,10 @@ public class StackService {
             UUID taskId,
             @Valid Task task) {
         Stack stack = stackRequestContext.getStack();
-        Task toModifyTask = stackRepository.findTaskById(taskId,stack);
+        Task toModifyTask = stackRepository.findTaskById(taskId, stack);
         if (!task.getUserId().equals(stack.getUserId()) ||
-            (task.getUserId().equals(stack.getUserId()) && !toModifyTask.getUserId().equals(task.getUserId()))) {
+            (task.getUserId().equals(stack.getUserId()) &&
+             !toModifyTask.getUserId().equals(task.getUserId()))) {
             stackRepository.saveTaskAsModified(task, taskId, stack);
             return pushTask(taskId, task.getUserId());
         }

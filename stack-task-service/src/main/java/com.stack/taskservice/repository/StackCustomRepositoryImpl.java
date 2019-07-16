@@ -111,7 +111,7 @@ public class StackCustomRepositoryImpl implements StackCustomRepository {
     @Override
     public Map<String, Task> fetchPushedTasks(Stack stack) {
         Predicate<Task> predicate = (task -> task.getPushedTimeStamp() != null &&
-                                             task.getDeletedTimeStamp() == null );
+                                             task.getDeletedTimeStamp() == null);
         return fetchTasks(stack, predicate);
     }
 
