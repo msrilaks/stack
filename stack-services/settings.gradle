@@ -1,0 +1,5 @@
+rootProject.name = 'stack-services'
+
+include 'stack-library'
+include 'stack-task-service'
+include 'stack-backend-service'
