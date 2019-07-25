@@ -1,19 +1,23 @@
 package com.stack.email.service;
 
+import com.stack.email.model.EmailRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
+
+import javax.validation.Valid;
 
 @Component
 public class StackEmailService {
     @Autowired
     private JavaMailSender javaMailSender;
 
-    void sendEmail() {
+    public void sendEmail(
+            @Valid EmailRequest emailRequest) {
 
         SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setTo("to_1@gmail.com", "to_2@gmail.com", "to_3@yahoo.com");
+        msg.setTo("srilakshmi.mudaliar@gmail.com", "srilakshmi29@hotmail.com");
 
         msg.setSubject("Testing from Spring Boot");
         msg.setText("Hello World \n Spring Boot Email");
