@@ -1,6 +1,6 @@
 package com.stack.email.service;
 
-import com.stack.email.model.EmailRequest;
+import com.stack.library.model.email.EmailRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;

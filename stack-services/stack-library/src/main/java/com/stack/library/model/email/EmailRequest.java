@@ -1,4 +1,4 @@
-package com.stack.email.model;
+package com.stack.library.model.email;
 
 import lombok.*;
 

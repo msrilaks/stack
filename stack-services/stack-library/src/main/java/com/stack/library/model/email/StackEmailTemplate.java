@@ -1,6 +1,6 @@
-package com.stack.email.model;
+package com.stack.library.model.email;
 
-import static com.stack.email.util.StackEmailConstants.*;
+import static com.stack.library.constants.StackEmailConstants.*;
 
 public enum StackEmailTemplate {
     STACK_CREATED(STACK_CREATED_TOPIC,STACK_CREATED_SUBJECT,STACK_CREATED_MESSAGE);

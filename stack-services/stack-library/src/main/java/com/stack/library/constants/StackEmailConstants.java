@@ -1,4 +1,4 @@
-package com.stack.email.util;
+package com.stack.library.constants;
 
 public class StackEmailConstants {
     public static final String STACK_CREATED_TOPIC="STACK_CREATED";
