@@ -6,6 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
 @PropertySource("classpath:application-${spring.profiles.active}.properties")
+@PropertySource("classpath:client_secrets_${spring.profiles.active}.json")
 public class Application {
 
     public static void main(String[] args) {
