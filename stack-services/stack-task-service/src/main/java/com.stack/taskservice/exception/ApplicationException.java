@@ -1,6 +1,6 @@
 package com.stack.taskservice.exception;
 
-import com.stack.taskservice.model.Error;
+import com.stack.library.model.error.Error;
 
 public class ApplicationException extends RuntimeException {
     private Error error;

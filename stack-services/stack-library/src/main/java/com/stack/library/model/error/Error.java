@@ -1,4 +1,4 @@
-package com.stack.taskservice.model;
+package com.stack.library.model.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

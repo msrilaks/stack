@@ -1,7 +1,7 @@
 package com.stack.taskservice.security;
 
 import com.stack.taskservice.context.StackRequestContext;
-import com.stack.taskservice.error.ErrorCodes;
+import com.stack.library.model.error.ErrorCodes;
 import com.stack.taskservice.repository.UserRepository;
 import com.stack.taskservice.security.service.CustomUserDetailsService;
 import org.slf4j.Logger;

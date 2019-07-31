@@ -1,9 +1,9 @@
 package com.stack.taskservice.advice;
 
-import com.stack.taskservice.error.ErrorCodes;
+import com.stack.library.model.error.ErrorCodes;
 import com.stack.taskservice.exception.StackException;
 import com.stack.taskservice.exception.TaskException;
-import com.stack.taskservice.model.Error;
+import com.stack.library.model.error.Error;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

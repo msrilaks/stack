@@ -1,8 +1,6 @@
-package com.stack.taskservice.error;
+package com.stack.library.model.error;
 
-import com.stack.taskservice.model.Error;
-
-import static com.stack.taskservice.error.ErrorConstants.*;
+import static com.stack.library.model.error.ErrorConstants.*;
 
 public enum ErrorCodes {
     APPLICATION_ERROR(100, APP_ERR_MSG, APP_ERR_MSG),

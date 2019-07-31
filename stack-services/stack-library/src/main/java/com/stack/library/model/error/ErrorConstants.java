@@ -1,4 +1,4 @@
-package com.stack.taskservice.error;
+package com.stack.library.model.error;
 
 public class ErrorConstants {
     public static String APP_ERR_MSG                             =

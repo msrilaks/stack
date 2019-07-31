@@ -1,6 +1,6 @@
 package com.stack.taskservice.validator;
 
-import com.stack.taskservice.error.ErrorCodes;
+import com.stack.library.model.error.ErrorCodes;
 import com.stack.taskservice.exception.TaskException;
 import com.stack.taskservice.model.Task;
 
