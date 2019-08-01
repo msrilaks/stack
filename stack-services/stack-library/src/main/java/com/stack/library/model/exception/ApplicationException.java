@@ -1,4 +1,4 @@
-package com.stack.taskservice.exception;
+package com.stack.library.model.exception;
 
 import com.stack.library.model.error.Error;
 

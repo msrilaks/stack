@@ -1,8 +1,8 @@
 package com.stack.taskservice.advice;
 
 import com.stack.library.model.error.ErrorCodes;
-import com.stack.taskservice.exception.StackException;
-import com.stack.taskservice.exception.TaskException;
+import com.stack.library.model.exception.StackException;
+import com.stack.library.model.exception.TaskException;
 import com.stack.library.model.error.Error;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
