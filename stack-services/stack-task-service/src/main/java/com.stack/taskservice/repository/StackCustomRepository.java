@@ -1,7 +1,7 @@
 package com.stack.taskservice.repository;
 
-import com.stack.taskservice.model.Stack;
-import com.stack.taskservice.model.Task;
+import com.stack.library.model.stack.Stack;
+import com.stack.library.model.stack.Task;
 
 import java.util.Map;
 import java.util.UUID;

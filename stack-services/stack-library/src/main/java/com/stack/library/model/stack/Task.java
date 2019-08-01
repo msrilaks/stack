@@ -1,6 +1,6 @@
-package com.stack.taskservice.model;
+package com.stack.library.model.stack;
 
-import com.stack.taskservice.validator.TaskConstraint;
+import com.stack.library.validator.TaskConstraint;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -12,6 +12,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @Builder(toBuilder = true)
 @TaskConstraint

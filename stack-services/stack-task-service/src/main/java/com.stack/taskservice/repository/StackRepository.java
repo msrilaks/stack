@@ -1,6 +1,6 @@
 package com.stack.taskservice.repository;
 
-import com.stack.taskservice.model.Stack;
+import com.stack.library.model.stack.Stack;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface StackRepository

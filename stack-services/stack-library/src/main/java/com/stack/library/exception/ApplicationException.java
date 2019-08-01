@@ -1,4 +1,4 @@
-package com.stack.library.model.exception;
+package com.stack.library.exception;
 
 import com.stack.library.model.error.Error;
 

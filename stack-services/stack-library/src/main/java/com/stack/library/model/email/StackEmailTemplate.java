@@ -8,6 +8,7 @@ public enum StackEmailTemplate {
     private String topic;
     private String subject;
     private String message;
+
     StackEmailTemplate(String topic, String subject, String message) {
         this.topic = topic;
         this.message = message;

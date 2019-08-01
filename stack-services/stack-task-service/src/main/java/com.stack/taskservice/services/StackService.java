@@ -1,9 +1,9 @@
 package com.stack.taskservice.services;
 
+import com.stack.library.model.stack.Stack;
+import com.stack.library.model.stack.Task;
 import com.stack.taskservice.context.StackRequestContext;
 import com.stack.taskservice.handler.TaskHandler;
-import com.stack.taskservice.model.Stack;
-import com.stack.taskservice.model.Task;
 import com.stack.taskservice.repository.StackRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

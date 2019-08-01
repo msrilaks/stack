@@ -1,9 +1,9 @@
 package com.stack.taskservice.repository;
 
 import com.stack.library.model.error.ErrorCodes;
-import com.stack.library.model.exception.TaskException;
-import com.stack.taskservice.model.Stack;
-import com.stack.taskservice.model.Task;
+import com.stack.library.exception.TaskException;
+import com.stack.library.model.stack.Stack;
+import com.stack.library.model.stack.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 

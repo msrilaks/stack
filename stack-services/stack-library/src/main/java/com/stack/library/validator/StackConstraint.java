@@ -1,4 +1,4 @@
-package com.stack.taskservice.validator;
+package com.stack.library.validator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -7,11 +7,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = TaskValidator.class)
+@Constraint(validatedBy = StackValidator.class)
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface TaskConstraint {
-    String message() default "Invalid Task";
+public @interface StackConstraint {
+    String message() default "Invalid Stack";
 
     Class<?>[] groups() default {};
 

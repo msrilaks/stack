@@ -1,7 +1,7 @@
 package com.stack.taskservice.interceptor;
 
+import com.stack.library.model.stack.Stack;
 import com.stack.taskservice.context.StackRequestContext;
-import com.stack.taskservice.model.Stack;
 import com.stack.taskservice.services.StackService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

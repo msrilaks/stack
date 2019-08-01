@@ -1,6 +1,6 @@
 package com.stack.taskservice.controller;
 
-import com.stack.taskservice.model.Task;
+import com.stack.library.model.stack.Task;
 import com.stack.taskservice.services.StackService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
