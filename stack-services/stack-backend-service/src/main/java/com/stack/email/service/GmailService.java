@@ -89,7 +89,6 @@ public class GmailService {
             // If we don't, prompt them to get one.
             if (credential == null) {
                 String url = flow.newAuthorizationUrl()
-                                 //.setRedirectUri("http://localhost")
                                  .setRedirectUri(GoogleOAuthConstants.OOB_REDIRECT_URI)
                                  .build();
                 System.out.println("Please open the following URL in your browser then "

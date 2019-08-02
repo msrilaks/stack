@@ -4,6 +4,7 @@ import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
 import com.google.api.services.gmail.model.Message;
 import com.stack.email.repository.StackRepository;
 import com.stack.library.model.email.EmailRequest;
+import com.stack.library.model.stack.Stack;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,15 +30,14 @@ public class StackEmailService {
             @Valid EmailRequest emailRequest) {
 
         try {
-            //            Stack stack =
-            //                    stackRepository.findById(emailRequest.getStackId())
-            //                    .orElse(null);
-            //            if(stack == null) {
-            //                return;
-            //            }
+            Stack stack =
+                    stackRepository.findById(emailRequest.getStackId())
+                                   .orElse(null);
+            if (stack == null) {
+                return;
+            }
 
-            MimeMessage emailContent = createEmail("srilakshmi.mudaliar@gmail.com",//stack
-                                                   // .getUserId(),
+            MimeMessage emailContent = createEmail(stack.getUserId(),
                                                    "stackitdown",
                                                    "Welcome to StackItDown!",
                                                    "Now stay on top of your tasks..");
