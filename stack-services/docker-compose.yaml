@@ -1,24 +1,24 @@
 version: '3'
 services:
-  stack-backend-service:
-    container_name: stack-backend-service
-    build: ./stack-backend-service
-    stdin_open: true
-    tty: true
-    ports:
-      - "8082:8082"
-    environment:
-      - MONGO_HOST=mongo
-      - MONGO_PORT=27017
-      - LOG_DIR=logs
-      - SPRING_PROFILES_ACTIVE=develop
-      - CRED_DIR=C:/Users/MSRILAKS/stackCred
-      - CRED_FILE=stackCredential
-    links:
-      - mongo
+#  stack-backend-service:
+#    container_name: stack-backend-service
+#    build: ./stack-backend-service
+#    stdin_open: true
+#    tty: true
+#    ports:
+#      - "8082:8082"
+#    environment:
+#      - MONGO_HOST=mongo
+#      - MONGO_PORT=27017
+#      - LOG_DIR=logs
+#      - SPRING_PROFILES_ACTIVE=develop
+#      - CRED_DIR=C:/Users/MSRILAKS/stackCred
+#      - CRED_FILE=stackCredential
+#    links:
+#      - mongo
   stack-task-service:
     container_name: stack-task-service
-    build: .
+    build: ./stack-task-service
     ports:
       - "8080:8080"
     environment:
