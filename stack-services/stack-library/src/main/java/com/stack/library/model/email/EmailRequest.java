@@ -7,6 +7,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @Builder(toBuilder = true)
 public class EmailRequest {

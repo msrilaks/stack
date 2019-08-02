@@ -10,20 +10,23 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.Charsets;
 import com.google.api.client.util.store.DataStore;
-import com.google.api.client.util.store.MemoryDataStoreFactory;
+import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.Profile;
-import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.CharSource;
 import com.google.common.io.Resources;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -36,11 +39,19 @@ public class GmailService {
     private        DataStore<StoredCredential> dataStore;
     private        Gmail                       gmail;
 
-    private GmailService() {
+    @Autowired
+    public GmailService(
+            @Value("${credential.file}") String credentialFile,
+            @Value("${credential.dir}") String credentialDir) {
         String APPLICATION_NAME = "STACK_GMAIL";
         try {
-            dataStore = MemoryDataStoreFactory.getDefaultInstance().getDataStore(
-                    "credentialDatastore");
+            //            dataStore = MemoryDataStoreFactory.getDefaultInstance()
+            //            .getDataStore(
+            //                    "credentialDatastore");
+            FileDataStoreFactory dataStoreFactory =
+                    new FileDataStoreFactory(new File(credentialDir));
+            dataStore = dataStoreFactory.getDataStore(credentialFile);
+
         } catch (IOException e) {
             throw new RuntimeException("Unable to create in memory credential datastore",
                                        e);
@@ -116,7 +127,30 @@ public class GmailService {
         }
     }
 
+
+    //
+    //            HttpTransport httpTransport = GoogleNetHttpTransport
+    //            .newTrustedTransport();
+    //            JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+    //
+    //            URL resource = Resources.getResource("Stack.p12");
+    //            GoogleCredential credential = new GoogleCredential.Builder()
+    //                    .setTransport(httpTransport)
+    //                    .setJsonFactory(jsonFactory)
+    //                    .setServiceAccountId("stackadmin@stack-of-tasks.iam
+    //                    .gserviceaccount.com")
+    //                    .setServiceAccountPrivateKeyFromP12File(new File(resource
+    //                    .getFile()))
+    //                    .setServiceAccountScopes(
+    //                            ImmutableList.of(
+    //                                    GmailScopes.GMAIL_MODIFY,
+    //                                    GmailScopes.GMAIL_READONLY))
+    //                    .setServiceAccountUser("stackadmin@stack-of-tasks.com")
+    //                    .build();
+
+
     public Gmail getGmail() {
         return gmail;
     }
+
 }
