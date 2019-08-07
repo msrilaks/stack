@@ -4,6 +4,7 @@ import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
 import com.google.api.services.gmail.model.Message;
 import com.stack.email.repository.StackRepository;
 import com.stack.library.model.email.EmailRequest;
+import com.stack.library.model.email.StackEmailTemplate;
 import com.stack.library.model.stack.Stack;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,11 +37,12 @@ public class StackEmailService {
             if (stack == null) {
                 return;
             }
-
+            StackEmailTemplate stackEmailTemplate =
+                    StackEmailTemplate.get(emailRequest.getTopic());
             MimeMessage emailContent = createEmail(stack.getUserId(),
                                                    "stackitdown",
-                                                   "Welcome to StackItDown!",
-                                                   "Now stay on top of your tasks..");
+                                                   stackEmailTemplate.getSubject(),
+                                                   stackEmailTemplate.getMessage());
             Message message = createMessageWithEmail(emailContent);
             message =
                     gmailService.getGmail().users().messages().send("me", message)
