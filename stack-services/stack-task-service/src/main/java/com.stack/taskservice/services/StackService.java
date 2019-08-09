@@ -3,7 +3,7 @@ package com.stack.taskservice.services;
 import com.stack.library.model.stack.Stack;
 import com.stack.library.model.stack.Task;
 import com.stack.taskservice.context.StackRequestContext;
-import com.stack.taskservice.handler.TaskHandler;
+import com.stack.taskservice.handler.EmailHandler;
 import com.stack.taskservice.repository.StackRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,13 +24,15 @@ public class StackService {
     StackRepository stackRepository;
 
     @Autowired
-    TaskHandler taskHandler;
+    EmailHandler emailHandler;
 
     @Resource(name = "stackRequestContext")
     StackRequestContext stackRequestContext;
 
     public Stack createStack(Stack stack) {
-        return stackRepository.saveStack(stack);
+        stack = stackRepository.saveStack(stack);
+        emailHandler.postStackCreated(stack);
+        return stack;
     }
 
     public void deleteStack(String stackId) {
@@ -85,7 +87,9 @@ public class StackService {
             if (pushStack == null) {
                 pushStack = createStack(Stack.builder().userId(toUserId).build());
             }
-            stackRepository.saveTaskToStack(task.clone(), pushStack);
+            Task pushTask = task.clone();
+            stackRepository.saveTaskToStack(pushTask, pushStack);
+            emailHandler.postTaskPushed(pushStack, pushTask);
             stackRepository.saveTaskAsPushed(taskId, stack);
         }
         return task;
