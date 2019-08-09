@@ -3,9 +3,11 @@ package com.stack.email.service;
 import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
 import com.google.api.services.gmail.model.Message;
 import com.stack.email.repository.StackRepository;
+import com.stack.email.repository.UserRepository;
 import com.stack.library.model.email.EmailRequest;
 import com.stack.library.model.email.StackEmailTemplate;
 import com.stack.library.model.stack.Stack;
+import com.stack.library.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +29,9 @@ public class StackEmailService {
     @Autowired
     private StackRepository stackRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public void sendEmail(
             @Valid EmailRequest emailRequest) {
 
@@ -39,10 +44,14 @@ public class StackEmailService {
             }
             StackEmailTemplate stackEmailTemplate =
                     StackEmailTemplate.get(emailRequest.getTopic());
+            User user = userRepository.findByEmail(stack.getUserId()).orElse(null);
+
             MimeMessage emailContent = createEmail(stack.getUserId(),
                                                    "stackitdown",
                                                    stackEmailTemplate.getSubject(),
-                                                   stackEmailTemplate.getMessage());
+                                                   stackEmailTemplate.getMessage(user,
+                                                                                 stack,
+                                                                                 emailRequest));
             Message message = createMessageWithEmail(emailContent);
             message =
                     gmailService.getGmail().users().messages().send("me", message)

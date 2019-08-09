@@ -4,7 +4,7 @@ public class StackEmailConstants {
     public static final String STACK_CREATED_TOPIC   = "STACK_CREATED";
     public static final String STACK_CREATED_SUBJECT = "Welcome to StackItDown!";
     public static final String STACK_CREATED_MESSAGE =
-            "Hello! \n Welcome to www.stackitdown" +
+            "Hello {0}! \nWelcome to www.stackitdown" +
             ".com!\n" +
             "Now always stay on top of your " +
             "things-to-do.\n";
