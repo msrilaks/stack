@@ -1,4 +1,4 @@
-package com.stack.taskservice.repository;
+package com.stack.email.repository;
 
 import com.stack.library.model.user.User;
 import org.springframework.data.mongodb.repository.MongoRepository;

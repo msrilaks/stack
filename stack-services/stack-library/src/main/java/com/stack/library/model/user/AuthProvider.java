@@ -1,4 +1,4 @@
-package com.stack.taskservice.model;
+package com.stack.library.model.user;
 
 public enum AuthProvider {
     local,

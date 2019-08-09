@@ -3,8 +3,8 @@ package com.stack.taskservice.security.service;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.stack.taskservice.exception.OAuth2AuthenticationProcessingException;
-import com.stack.taskservice.model.AuthProvider;
-import com.stack.taskservice.model.User;
+import com.stack.library.model.user.AuthProvider;
+import com.stack.library.model.user.User;
 import com.stack.taskservice.repository.UserRepository;
 import com.stack.taskservice.security.UserPrincipal;
 import com.stack.taskservice.security.google.GoogleCredentialManager;

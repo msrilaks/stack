@@ -2,7 +2,7 @@ package com.stack.taskservice.context;
 
 
 import com.stack.library.model.stack.Stack;
-import com.stack.taskservice.model.User;
+import com.stack.library.model.user.User;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

@@ -1,7 +1,7 @@
 package com.stack.taskservice.controller;
 
 import com.stack.taskservice.exception.ResourceNotFoundException;
-import com.stack.taskservice.model.User;
+import com.stack.library.model.user.User;
 import com.stack.taskservice.repository.UserRepository;
 import com.stack.taskservice.security.CurrentUser;
 import com.stack.taskservice.security.UserPrincipal;

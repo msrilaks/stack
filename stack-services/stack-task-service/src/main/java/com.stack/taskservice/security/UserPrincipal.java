@@ -1,6 +1,6 @@
 package com.stack.taskservice.security;
 
-import com.stack.taskservice.model.User;
+import com.stack.library.model.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

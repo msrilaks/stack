@@ -1,5 +1,7 @@
 package com.stack.taskservice.controller;
 
+import com.stack.library.model.user.AuthProvider;
+import com.stack.library.model.user.User;
 import com.stack.taskservice.exception.BadRequestException;
 import com.stack.taskservice.model.*;
 import com.stack.taskservice.repository.UserRepository;
