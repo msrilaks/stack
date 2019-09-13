@@ -9,6 +9,7 @@ docker-compose -f docker-compose-prod.yml up -d --build
 
 ##Dev
 docker build -t srilakshmi29/stack-task-ui .
+set REACT_APP_STAGE=development&&npm start
 
 npm start .env.production
 set "NODE_ENV=production" && npm start
