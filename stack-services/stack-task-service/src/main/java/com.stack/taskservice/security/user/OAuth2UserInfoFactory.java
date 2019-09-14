@@ -1,7 +1,7 @@
 package com.stack.taskservice.security.user;
 
-import com.stack.taskservice.exception.OAuth2AuthenticationProcessingException;
 import com.stack.library.model.user.AuthProvider;
+import com.stack.taskservice.exception.OAuth2AuthenticationProcessingException;
 
 import java.util.Map;
 
