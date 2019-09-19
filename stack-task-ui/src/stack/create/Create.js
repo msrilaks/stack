@@ -11,6 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import SaveIcon from '@material-ui/icons/Save';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import Dropzone from 'react-dropzone'
 
 class Create extends Component {
     constructor(props) {
@@ -27,6 +28,12 @@ class Create extends Component {
             }
         };
         this.state = { newTaskAdded: false };
+        this.onDrop = (files) => {
+              this.setState({files})
+            };
+            this.state = {
+              files: []
+            };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -102,7 +109,11 @@ class Create extends Component {
     }
 
     render() {
-
+ const files = this.state.files.map(file => (
+      <li key={file.name}>
+        {file.name} - {file.size} bytes
+      </li>
+    ));
         return (
             <form onSubmit={this.handleSubmit}>
             <Card className="create-container" style={styles.taskCard}>
@@ -148,6 +159,22 @@ class Create extends Component {
                     margin="normal"
                     value={this.state.task.userId} onChange={this.handleInputChange} required
                 />
+
+<Dropzone onDrop={this.onDrop}>
+        {({getRootProps, getInputProps}) => (
+          <section className="container">
+            <div {...getRootProps({className: 'dropzone'})}>
+              <input {...getInputProps()} />
+              <p>Drag 'n' drop some files here, or click to select files</p>
+            </div>
+            <aside>
+              <h4>Files</h4>
+              <ul>{files}</ul>
+            </aside>
+          </section>
+        )}
+      </Dropzone>
+
               </CardContent>
             </CardActionArea>
             <CardActions className="create-button-panel">
