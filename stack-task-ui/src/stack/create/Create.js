@@ -137,6 +137,9 @@ class Create extends Component {
         } else {
         createTask(createTaskRequest)
         .then(response => {
+            this.setState({
+                    task: response,
+                  });
             Alert.success("Task created successfully!");
             this.props.reloadTasksFunc();
         }).catch(error => {
@@ -152,6 +155,7 @@ class Create extends Component {
             <div style={thumbInner}>
               <img
                 src={file.preview}
+                name={file.name}
                 style={img}
               />
             </div>
