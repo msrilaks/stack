@@ -13,6 +13,34 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Dropzone from 'react-dropzone'
 
+const thumbsContainer = {
+  display: 'flex',
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  marginTop: 16
+}
+const thumb = {
+  display: 'inline-flex',
+  borderRadius: 2,
+  border: '1px solid #eaeaea',
+  marginBottom: 8,
+  marginRight: 8,
+  width: 100,
+  height: 100,
+  padding: 4,
+  boxSizing: 'border-box'
+}
+const thumbInner = {
+  display: 'flex',
+  minWidth: 0,
+  overflow: 'hidden'
+}
+const img = {
+  display: 'block',
+  width: 'auto',
+  height: '100%'
+}
+
 class Create extends Component {
     constructor(props) {
         super(props);
@@ -28,12 +56,21 @@ class Create extends Component {
             }
         };
         this.state = { newTaskAdded: false };
-        this.onDrop = (files) => {
-              this.setState({files})
-            };
-            this.state = {
-              files: []
-            };
+        this.onDrop = (newfiles) => {
+
+              console.log("##SRI " + newfiles)
+               newfiles: newfiles.map(file => Object.assign(file, {
+                                                preview: URL.createObjectURL(file)
+                                              }))
+               this.setState(({ files }) => ({
+                 files: files.concat(newfiles)
+               }))
+        };
+        this.state = {
+          files: []
+        };
+
+
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -109,11 +146,17 @@ class Create extends Component {
     }
 
     render() {
- const files = this.state.files.map(file => (
-      <li key={file.name}>
-        {file.name} - {file.size} bytes
-      </li>
-    ));
+
+        const files = this.state.files.map(file => (
+            <div style={thumb} key={file.name}>
+            <div style={thumbInner}>
+              <img
+                src={file.preview}
+                style={img}
+              />
+            </div>
+            </div>
+        ))
         return (
             <form onSubmit={this.handleSubmit}>
             <Card className="create-container" style={styles.taskCard}>
@@ -160,22 +203,22 @@ class Create extends Component {
                     value={this.state.task.userId} onChange={this.handleInputChange} required
                 />
 
-<Dropzone onDrop={this.onDrop}>
-        {({getRootProps, getInputProps}) => (
-          <section className="container">
-            <div {...getRootProps({className: 'dropzone'})}>
-              <input {...getInputProps()} />
-              <p>Drag 'n' drop some files here, or click to select files</p>
-            </div>
-            <aside>
-              <h4>Files</h4>
-              <ul>{files}</ul>
-            </aside>
-          </section>
-        )}
-      </Dropzone>
+            <Dropzone onDrop={this.onDrop}>
+                {({getRootProps, getInputProps}) => (
+                    <section className="container">
+                    <div {...getRootProps({className: 'dropzone'})}>
+                      <input {...getInputProps()} />
+                      <p>Drag 'n' drop some files here, or click to select files</p>
+                    </div>
+                    <aside style={thumbsContainer}>
+                        <h4>Files</h4>
+                        {files}
+                    </aside>
+                    </section>
+                )}
+            </Dropzone>
 
-              </CardContent>
+             </CardContent>
             </CardActionArea>
             <CardActions className="create-button-panel">
               <IconButton type="submit" aria-label="Assign">
