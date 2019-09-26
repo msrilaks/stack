@@ -8,19 +8,23 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Base64;
 
+
 //https://www.baeldung.com/spring-boot-mongodb-upload-file
 @Document(collection = "photos")
 public class Photo {
     @Id
     @Getter
     private String id;
-
+    private String stackId;
+    private String   taskId;
     @Getter
     private String title;
 
     private Binary image;
 
-    public Photo(String title) {
+    public Photo(String stackId, String taskId, String title) {
+        this.stackId = stackId;
+        this.taskId = taskId;
         this.title = title;
     }
 

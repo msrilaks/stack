@@ -27,6 +27,30 @@ const request = (options) => {
     );
 };
 
+const requestUpload = (options) => {
+    console.log("REACT Environment is : "+process.env.REACT_APP_STAGE);
+    console.log("config.API_BASE_URL : "+config.API_BASE_URL);
+    console.log("config.OAUTH2_REDIRECT_URI: " + +config.OAUTH2_REDIRECT_URI);
+    const headers = new Headers({
+    })
+    if(localStorage.getItem(config.ACCESS_TOKEN)) {
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem(config.ACCESS_TOKEN))
+    }
+
+    const defaults = {headers: headers};
+    options = Object.assign({}, defaults, options);
+
+    return fetch(options.url, options)
+    .then(response =>
+        response.json().then(json => {
+            if(!response.ok) {
+                return Promise.reject(json);
+            }
+            return json;
+        })
+    );
+};
+
 export const styles = {
     appTitle: {
         color:'#0050ef',
@@ -116,6 +140,20 @@ export function createTask(createTaskRequest) {
         url: config.API_BASE_URL + "/stack/"+createTaskRequest.stackId+"/tasks",
         method: 'POST',
         body: JSON.stringify(createTaskRequest)
+    });
+}
+
+export function uploadPhoto(stackId, taskId, filename, file) {
+    if(!localStorage.getItem(config.ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+    const formData = new FormData()
+    formData.append('image', file, filename)
+    return requestUpload({
+        url: config.API_BASE_URL +
+        "/stack/"+stackId+"/tasks/"+taskId+"/photos?title="+filename,
+        method: 'POST',
+        body: formData
     });
 }
 

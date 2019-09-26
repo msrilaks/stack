@@ -29,7 +29,7 @@ public class PhotoController {
             @RequestParam("title") String title,
             @RequestParam("image") MultipartFile image)
             throws IOException {
-        String id = photoService.addPhoto(title, image);
+        String id = photoService.addPhoto(stackId, taskId, title, image);
         return ResponseEntity.ok(id);
     }
 

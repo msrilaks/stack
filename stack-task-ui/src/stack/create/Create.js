@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Create.css';
-import { createTask, modifyTask, styles } from '../../util/APIUtils';
+import { createTask, uploadPhoto, modifyTask, styles } from '../../util/APIUtils';
 import Alert from 'react-s-alert';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -137,9 +137,12 @@ class Create extends Component {
         } else {
         createTask(createTaskRequest)
         .then(response => {
-            this.setState({
+                this.setState({
                     task: response,
-                  });
+                });
+                this.state.files.forEach((file, i) => {
+                uploadPhoto(this.state.task.stackId, this.state.task.id, file.name, file);
+            })
             Alert.success("Task created successfully!");
             this.props.reloadTasksFunc();
         }).catch(error => {
