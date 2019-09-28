@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class PhotoService {
@@ -17,7 +18,8 @@ public class PhotoService {
     private PhotoRepository photoRepo;
 
     public String addPhoto(
-            String stackId, String taskId, String title, MultipartFile file) throws IOException {
+            String stackId, String taskId, String title, MultipartFile file)
+            throws IOException {
         Photo photo = new Photo(stackId, taskId, title);
         photo.setImage(
                 new Binary(BsonBinarySubType.BINARY, file.getBytes()));
@@ -27,5 +29,13 @@ public class PhotoService {
 
     public Photo getPhoto(String id) {
         return photoRepo.findById(id).get();
+    }
+
+    public List<Photo> getPhotos(String stackId, String taskId) {
+        return photoRepo.findByStackIdAndTaskId(stackId, taskId);
+    }
+
+    public void deletePhoto(String photoId) {
+        photoRepo.deleteById(photoId);
     }
 }
