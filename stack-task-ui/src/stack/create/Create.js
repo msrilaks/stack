@@ -13,34 +13,6 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Dropzone from 'react-dropzone'
 
-const thumbsContainer = {
-  display: 'flex',
-  flexDirection: 'row',
-  flexWrap: 'wrap',
-  marginTop: 16
-}
-const thumb = {
-  display: 'inline-flex',
-  borderRadius: 2,
-  border: '1px solid #eaeaea',
-  marginBottom: 8,
-  marginRight: 8,
-  width: 100,
-  height: 100,
-  padding: 4,
-  boxSizing: 'border-box'
-}
-const thumbInner = {
-  display: 'flex',
-  minWidth: 0,
-  overflow: 'hidden'
-}
-const img = {
-  display: 'block',
-  width: 'auto',
-  height: '100%'
-}
-
 class Create extends Component {
     constructor(props) {
         super(props);
@@ -154,12 +126,12 @@ class Create extends Component {
     render() {
 
         const files = this.state.files.map(file => (
-            <div style={thumb} key={file.name}>
-            <div style={thumbInner}>
+            <div style={styles.thumb} key={file.name}>
+            <div style={styles.thumbInner}>
               <img
                 src={file.preview}
                 name={file.name}
-                style={img}
+                style={styles.img}
               />
             </div>
             </div>
@@ -217,7 +189,7 @@ class Create extends Component {
                       <input {...getInputProps()} />
                       <p>Drag 'n' drop some files here, or click to select files</p>
                     </div>
-                    <aside style={thumbsContainer}>
+                    <aside style={styles.thumbsContainer}>
                         <h4>Files</h4>
                         {files}
                     </aside>
