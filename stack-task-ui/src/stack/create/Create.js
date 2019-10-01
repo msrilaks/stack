@@ -45,6 +45,7 @@ class Create extends Component {
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.removeFile = this.removeFile.bind(this);
     }
 
     componentWillMount() {
@@ -75,6 +76,15 @@ class Create extends Component {
             });
         }
        }
+
+    removeFile(file) {
+        this.setState(state => {
+        const index = state.files.indexOf(file);
+        const files = state.files.slice(0);
+        files.splice(index, 1);
+        return {files};
+        });
+    }
 
     handleInputChange(event) {
         const target = event.target;
@@ -127,12 +137,14 @@ class Create extends Component {
 
         const files = this.state.files.map(file => (
             <div style={styles.thumb} key={file.name}>
+            <div onClick={() => this.removeFile(file)}>X</div>
             <div style={styles.thumbInner}>
               <img
                 src={file.preview}
                 name={file.name}
                 style={styles.img}
               />
+
             </div>
             </div>
         ))
