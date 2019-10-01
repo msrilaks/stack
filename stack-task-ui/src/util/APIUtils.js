@@ -183,6 +183,17 @@ export function uploadPhoto(stackId, taskId, filename, file) {
     });
 }
 
+export function getPhotos(stackId, taskId) {
+    if(!localStorage.getItem(config.ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+    return request({
+        url: config.API_BASE_URL +
+        "/stack/"+stackId+"/tasks/"+taskId+"/photos",
+        method: 'GET'
+    });
+}
+
 export function deleteTask(deleteTaskRequest) {
     if(!localStorage.getItem(config.ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
@@ -303,4 +314,25 @@ export function signup(signupRequest) {
         method: 'POST',
         body: JSON.stringify(signupRequest)
     });
+}
+
+export function base64toBlob(base64Data, contentType) {
+    contentType = contentType || '';
+    var sliceSize = 1024;
+    var byteCharacters = atob(base64Data);
+    var bytesLength = byteCharacters.length;
+    var slicesCount = Math.ceil(bytesLength / sliceSize);
+    var byteArrays = new Array(slicesCount);
+
+    for (var sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
+        var begin = sliceIndex * sliceSize;
+        var end = Math.min(begin + sliceSize, bytesLength);
+
+        var bytes = new Array(end - begin);
+        for (var offset = begin, i = 0; offset < end; ++i, ++offset) {
+           bytes[i] = byteCharacters[offset].charCodeAt(0);
+        }
+        byteArrays[sliceIndex] = new Uint8Array(bytes);
+    }
+    return new Blob(byteArrays, { type: contentType });
 }

@@ -8,7 +8,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Alert from 'react-s-alert';
-import { deleteTask, patchTask, styles } from '../../util/APIUtils';
+import { deleteTask, patchTask, getPhotos, base64toBlob, styles } from '../../util/APIUtils';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CalendarIcon from '@material-ui/icons/CalendarToday';
@@ -26,17 +26,36 @@ class Task extends Component {
         this.state = {
             isModifyClicked: false,
         }
+        this.state = {
+             files: []
+        };
         this.onButtonDeleteTaskClicked = this.onButtonDeleteTaskClicked.bind(this);
         this.onButtonCompleteTaskClicked = this.onButtonCompleteTaskClicked.bind(this);
         this.onButtonTodoTaskClicked = this.onButtonTodoTaskClicked.bind(this);
         this.onButtonModifyTaskClicked = this.onButtonModifyTaskClicked.bind(this);
         this.reloadTask = this.reloadTask.bind(this);
+        this.loadFiles = this.loadFiles.bind(this);
     }
     componentDidMount() {
         this.setState({
             isModifyClicked: false,
         });
-       }
+        this.loadFiles();
+    }
+
+    loadFiles() {
+        getPhotos(this.props.stack.id, this.props.task.id)
+        .then(response => {
+            this.setState({
+                files: response,
+                },function () {
+                    console.log("files : "+ this.state.files)
+                });
+          }).catch(error => {
+                Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
+        });
+    }
+
     onButtonTodoTaskClicked() {
         const completeTaskRequest = Object.assign({}, this.props.task);
         console.log(completeTaskRequest);
@@ -84,6 +103,7 @@ class Task extends Component {
             Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
         });
     }
+
     onButtonModifyTaskClicked() {
         this.setState({
             isModifyClicked: true,
@@ -91,6 +111,7 @@ class Task extends Component {
             console.log("onButtonModifyTaskClicked "+this.state.isModifyClicked);
         });
     }
+
     reloadTask() {
         this.setState({
             isModifyClicked: false,
@@ -98,7 +119,34 @@ class Task extends Component {
             console.log("reloadTask "+this.state.isModifyClicked);
         });
     }
+
     render() {
+        const prevfiles  =  (Object.entries(this.state.files).map(([key, file])=>(
+            Object.assign(file, { preview: URL.createObjectURL(base64toBlob(file,
+            ''))}))))
+        const files  =  (
+            Object.entries(prevfiles).map(([key, file])=>(
+
+            <div style={styles.thumb} key={file.name}>
+                <div style={styles.thumbInner}>
+                    <img
+                        src={file.preview}
+                        name={file.name}
+                        style={styles.img}
+                    />
+                </div>
+                </div>
+            )
+        ))
+
+        let UploadPanel = <aside style={styles.thumbsContainer}><h4>No Uploads</h4></aside>;
+        if(files && files.length >0) {
+            UploadPanel = <aside style={styles.thumbsContainer}>
+                <h4>Uploads</h4>
+                {files}
+            </aside>
+        }
+
         let PushedUserPanel;
         if(this.props.taskProfile == 'pushed'){
             PushedUserPanel = <div>
@@ -168,6 +216,7 @@ class Task extends Component {
                         {this.props.task.label }<span className="task-description"> { this.props.task.description }</span>
                     </Typography>
                     {/* <span className="task-label"> category:{this.props.task.category} </span> */}
+                    {UploadPanel}
                 </CardContent>
                 </CardActionArea>
                 <CardActions className="task-button-panel">
