@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Create.css';
-import { createTask, uploadPhoto, modifyTask, styles } from '../../util/APIUtils';
+import { createTask, uploadPhoto, modifyTask, base64toBlob, styles } from '../../util/APIUtils';
 import Alert from 'react-s-alert';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -49,8 +49,10 @@ class Create extends Component {
     }
 
     componentWillMount() {
-
         if(this.props.task!=null){
+            this.setState(({ files }) => ({
+                             files: files.concat(this.props.files)
+                           }));
             this.setState({
                 task:{
                     ...this.state.task,
@@ -108,11 +110,25 @@ class Create extends Component {
         console.log(createTaskRequest);
         console.log(this.props.taskProfile);
         if(this.props.taskProfile == 'pushed') {
+
             modifyTask(createTaskRequest)
             .then((response) => {
+                this.state.files.forEach((file, i) => {
+                        console.log("SRI File : " + file.id +"," +file.name);
+                            if(file.id == null) {
+                                uploadPhoto(this.state.task.stackId, this.state.task.id,
+                                 file.name, file).then(response => {
+                                  this.props.reloadPhotos();
+                                  console.log("File uploaded successfully!");
+                                 });
+                            } else {
+                                console.log("File already uploaded : " + file.id);
+                            }
+                })
                 Alert.success("Task modified successfully!");
-                 this.props.reloadTasksFunc();
-                 this.props.reloadTaskDetail();
+                this.props.reloadTaskDetail();
+                this.props.reloadTasksFunc();
+
             }).catch(error => {
                 Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
             });

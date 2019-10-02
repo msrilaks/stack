@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -23,14 +24,16 @@ public class PhotoController {
     //param title:srip
     //form-data image
     @PostMapping(path = "/stack/{stackId}/tasks/{taskId}/photos")
-    public ResponseEntity<String> addPhoto(
+    public ResponseEntity<Map<String, String>> addPhoto(
             @PathVariable("stackId") String stackId,
             @PathVariable("taskId") String taskId,
             @RequestParam("title") String title,
             @RequestParam("image") MultipartFile image)
             throws IOException {
         String id = photoService.addPhoto(stackId, taskId, title, image);
-        return ResponseEntity.ok(id);
+        Map<String, String> retMap =  new HashMap<>();
+        retMap.put("imageId", id);
+        return ResponseEntity.ok(retMap);
     }
 
     @GetMapping(path = "/stack/{stackId}/tasks/{taskId}/photos",

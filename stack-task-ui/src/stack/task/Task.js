@@ -46,10 +46,18 @@ class Task extends Component {
     loadFiles() {
         getPhotos(this.props.stack.id, this.props.task.id)
         .then(response => {
+        const responseFiles = (Object.entries(response).map(([key, file]) =>(
+                        Object.assign(file, {
+                        preview: URL.createObjectURL(base64toBlob(file,'')),
+                        id: key
+                        })
+                        )))
             this.setState({
-                files: response,
+                //files: response,
+                files:responseFiles,
                 },function () {
-                    console.log("files : "+ this.state.files)
+                    this.state.files.map(file => console.log("SRI "+ file.id
+                    +" , " +file.preview))
                 });
           }).catch(error => {
                 Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
@@ -118,6 +126,7 @@ class Task extends Component {
         },function () {
             console.log("reloadTask "+this.state.isModifyClicked);
         });
+
     }
 
     render() {
@@ -127,7 +136,7 @@ class Task extends Component {
         const files  =  (
             Object.entries(prevfiles).map(([key, file])=>(
 
-            <div style={styles.thumb} key={file.name}>
+            <div style={styles.thumb} key={file.id}>
                 <div style={styles.thumbInner}>
                     <img
                         src={file.preview}
@@ -202,9 +211,11 @@ class Task extends Component {
                 <Create  authenticated={this.props.authenticated} 
                             currentUser={this.props.currentUser} 
                             stack={this.props.stack}
+                            files={this.state.files}
                             taskProfile='pushed'
                             reloadTasksFunc={this.props.reloadTasksFunc}
                             reloadTaskDetail={this.reloadTask}
+                            reloadPhotos={this.loadFiles}
                             task={this.props.task}/>
                         :
             <Paper>
