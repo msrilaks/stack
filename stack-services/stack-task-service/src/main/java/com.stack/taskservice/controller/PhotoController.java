@@ -51,12 +51,12 @@ public class PhotoController {
     @DeleteMapping(path = "/stack/{stackId}/tasks/{taskId}/photos/{photoId}", consumes =
             "application/json",
                    produces = "application/json")
-    public ResponseEntity<Void> deletePhoto(
+    public ResponseEntity<Map<String, String>> deletePhoto(
             @PathVariable("stackId") String stackId,
             @PathVariable("taskId") String taskId,
             @PathVariable("photoId") String photoId) {
         photoService.deletePhoto(photoId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new HashMap<String, String>());
     }
 
     @GetMapping(path = "/stack/{stackId}/tasks/{taskId}/photos/{photoId}",

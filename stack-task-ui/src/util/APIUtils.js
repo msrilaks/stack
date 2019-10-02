@@ -194,6 +194,17 @@ export function getPhotos(stackId, taskId) {
     });
 }
 
+export function deletePhoto(stackId, taskId, photoId) {
+    if(!localStorage.getItem(config.ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+    return request({
+        url: config.API_BASE_URL +
+        "/stack/"+stackId+"/tasks/"+taskId+"/photos/"+photoId,
+        method: 'DELETE'
+    });
+}
+
 export function deleteTask(deleteTaskRequest) {
     if(!localStorage.getItem(config.ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");

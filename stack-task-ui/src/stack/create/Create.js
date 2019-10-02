@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Create.css';
-import { createTask, uploadPhoto, modifyTask, base64toBlob, styles } from '../../util/APIUtils';
+import { createTask, uploadPhoto, modifyTask, base64toBlob, deletePhoto, styles } from '../../util/APIUtils';
 import Alert from 'react-s-alert';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -80,6 +80,13 @@ class Create extends Component {
        }
 
     removeFile(file) {
+        if(file.id != null) {
+        deletePhoto(this.state.task.stackId, this.state.task.id, file.id)
+            .then((response) => {
+                this.props.reloadPhotos();
+                console.log("File deleted successfully : " + file.id);
+            })
+        }
         this.setState(state => {
         const index = state.files.indexOf(file);
         const files = state.files.slice(0);
