@@ -11,16 +11,16 @@ import com.stack.taskservice.security.google.GoogleCredentialManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.GeneralSecurityException;
 
 @Component
 public class GoogleCalendarService {
-    private static final Logger      LOGGER           = LoggerFactory.getLogger(
+    private static final Logger      LOGGER       = LoggerFactory.getLogger(
             GoogleCalendarService.class.getName());
-    private static final String      APPLICATION_NAME = "Stack";
-    private static final JsonFactory JSON_FACTORY     = JacksonFactory
+    private static final JsonFactory JSON_FACTORY = JacksonFactory
             .getDefaultInstance();
 
     @Autowired
@@ -28,6 +28,9 @@ public class GoogleCalendarService {
 
     @Autowired
     private GoogleCredentialManager googleCredentialManager;
+
+    @Value("${spring.application.name}")
+    private String appName;
 
     public void listCalendar() {
 
@@ -39,7 +42,7 @@ public class GoogleCalendarService {
                     GoogleNetHttpTransport.newTrustedTransport();
             Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY,
                                                     credential)
-                    .setApplicationName(APPLICATION_NAME)
+                    .setApplicationName(appName)
                     .build();
 
             LOGGER.info("## SRI Google calendar: " + service.calendarList());

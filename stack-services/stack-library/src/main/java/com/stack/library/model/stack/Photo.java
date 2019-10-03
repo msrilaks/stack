@@ -1,7 +1,6 @@
 package com.stack.library.model.stack;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -15,8 +14,10 @@ public class Photo {
     @Id
     @Getter
     private String id;
+    @Getter
     private String stackId;
-    private String   taskId;
+    @Getter
+    private String taskId;
     @Getter
     private String title;
 
@@ -28,11 +29,11 @@ public class Photo {
         this.title = title;
     }
 
-    public void setImage(Binary binary) {
-        this.image = binary;
-    }
-
     public String getImage() {
         return Base64.getEncoder().encodeToString(image.getData());
+    }
+
+    public void setImage(Binary binary) {
+        this.image = binary;
     }
 }

@@ -19,23 +19,23 @@ import java.util.UUID;
 @TaskConstraint
 public class Task implements Comparable<Task>, Cloneable {
     @Id
-    private UUID              id;
-    private String            stackId;
-    private String            userId;
-    private String            createdByUserId;
-    private String            origin;
-    private String            category;
-    private String            label;
-    private String            description;
+    private UUID                     id;
+    private String                   stackId;
+    private String                   userId;
+    private String                   createdByUserId;
+    private String                   origin;
+    private String                   category;
+    private String                   label;
+    private String                   description;
     private Map<String, TaskContent> taskContentMap;
-    private Long              completedTimeStamp;
-    private Long              pushedTimeStamp;
-    private Long              deletedTimeStamp;
-    private Long              completeByTimeStamp;
+    private Long                     completedTimeStamp;
+    private Long                     pushedTimeStamp;
+    private Long                     deletedTimeStamp;
+    private Long                     completeByTimeStamp;
     @CreatedDate
-    private Date              createdDate;
+    private Date                     createdDate;
     @LastModifiedDate
-    private Date              lastModifiedDate;
+    private Date                     lastModifiedDate;
 
     @Override
     public int compareTo(Task task) {

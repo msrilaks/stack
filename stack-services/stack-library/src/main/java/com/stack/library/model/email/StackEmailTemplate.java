@@ -44,7 +44,7 @@ public enum StackEmailTemplate {
             @Valid EmailRequest emailRequest) {
         switch (topic) {
             case StackEmailConstants.STACK_CREATED_TOPIC: {
-                String userName = (user == null)?"":user.getName();
+                String userName = (user == null) ? "" : user.getName();
                 return java.text.MessageFormat.format(message, userName);
             }
             case TASK_PUSHED_TOPIC:

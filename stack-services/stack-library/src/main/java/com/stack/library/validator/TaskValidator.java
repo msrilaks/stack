@@ -1,7 +1,7 @@
 package com.stack.library.validator;
 
-import com.stack.library.model.error.ErrorCodes;
 import com.stack.library.exception.TaskException;
+import com.stack.library.model.error.ErrorCodes;
 import com.stack.library.model.stack.Task;
 
 import javax.validation.ConstraintValidator;

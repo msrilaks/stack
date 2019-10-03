@@ -18,6 +18,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 import UndoIcon from '@material-ui/icons/Undo';
 import Paper from '@material-ui/core/Paper';
 import AlarmIcon from '@material-ui/icons/Alarm';
+import { Link } from "react-router-dom";
 import { create } from 'domain';
   
 class Task extends Component {
@@ -48,8 +49,10 @@ class Task extends Component {
         .then(response => {
         const responseFiles = (Object.entries(response).map(([key, file]) =>(
                         Object.assign(file, {
-                        preview: URL.createObjectURL(base64toBlob(file,'')),
-                        id: key
+                        preview: URL.createObjectURL(base64toBlob(file.image,'')
+                        ),
+                        id: key,
+                        title:file.title
                         })
                         )))
             this.setState({
@@ -131,8 +134,8 @@ class Task extends Component {
 
     render() {
         const prevfiles  =  (Object.entries(this.state.files).map(([key, file])=>(
-            Object.assign(file, { preview: URL.createObjectURL(base64toBlob(file,
-            ''))}))))
+            Object.assign(file, { preview: URL.createObjectURL(base64toBlob(file
+            .image,''))}))))
         const files  =  (
             Object.entries(prevfiles).map(([key, file])=>(
 
@@ -143,7 +146,11 @@ class Task extends Component {
                         name={file.name}
                         style={styles.img}
                     />
+
                 </div>
+                 <a href={file.preview}
+                    download="sri.png">Download
+                </a>
                 </div>
             )
         ))

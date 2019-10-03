@@ -1,6 +1,7 @@
 package com.stack.taskservice.services;
 
 import com.stack.library.model.stack.Photo;
+import com.stack.library.model.stack.PhotoResponse;
 import com.stack.taskservice.repository.PhotoRepository;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
@@ -10,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PhotoService {
@@ -33,6 +35,13 @@ public class PhotoService {
 
     public List<Photo> getPhotos(String stackId, String taskId) {
         return photoRepo.findByStackIdAndTaskId(stackId, taskId);
+    }
+
+    public List<PhotoResponse> getPhotosAsResponse(
+            String stackId,
+            String taskId) {
+        List<Photo> photos = getPhotos(stackId, taskId);
+        return photos.stream().map(PhotoResponse::new).collect(Collectors.toList());
     }
 
     public void deletePhoto(String photoId) {

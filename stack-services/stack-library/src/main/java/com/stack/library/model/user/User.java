@@ -1,7 +1,6 @@
 package com.stack.library.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.stack.library.model.user.AuthProvider;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 

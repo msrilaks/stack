@@ -1,6 +1,7 @@
 package com.stack.taskservice.controller;
 
 import com.stack.library.model.stack.Photo;
+import com.stack.library.model.stack.PhotoResponse;
 import com.stack.taskservice.services.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ public class PhotoController {
             @RequestParam("image") MultipartFile image)
             throws IOException {
         String id = photoService.addPhoto(stackId, taskId, title, image);
-        Map<String, String> retMap =  new HashMap<>();
+        Map<String, String> retMap = new HashMap<>();
         retMap.put("imageId", id);
         return ResponseEntity.ok(retMap);
     }
@@ -39,12 +40,12 @@ public class PhotoController {
     @GetMapping(path = "/stack/{stackId}/tasks/{taskId}/photos",
                 consumes = "application/json",
                 produces = "application/json")
-    public ResponseEntity<Map<String, String>> getPhotos(
+    public ResponseEntity<Map<String, PhotoResponse>> getPhotos(
             @PathVariable("stackId") String stackId,
             @PathVariable("taskId") String taskId) {
-        List<Photo> photos = photoService.getPhotos(stackId, taskId);
-        Map<String, String> retMap = photos.stream().collect(
-                Collectors.toMap(Photo::getId, Photo::getImage));
+        List<PhotoResponse> photos = photoService.getPhotosAsResponse(stackId, taskId);
+        Map<String, PhotoResponse> retMap = photos.stream().collect(
+                Collectors.toMap(x -> x.getId(), x -> x));
         return ResponseEntity.ok(retMap);
     }
 
