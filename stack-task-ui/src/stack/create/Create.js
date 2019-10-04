@@ -8,6 +8,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
@@ -160,7 +161,9 @@ class Create extends Component {
 
         const files = this.state.files.map(file => (
             <div style={styles.thumb} key={file.name}>
-            <div onClick={() => this.removeFile(file)}>X</div>
+            <div style={styles.thumbIcon} onClick={() => this.removeFile(file)}>
+              <DeleteIcon style={styles.taskIcon} />
+            </div>
             <div style={styles.thumbInner}>
               <img
                 src={file.preview}
@@ -171,6 +174,13 @@ class Create extends Component {
             </div>
             </div>
         ))
+                let UploadPanel = <aside style={styles.thumbsContainer}><h4>No Uploads</h4></aside>;
+                if(files && files.length >0) {
+                    UploadPanel = <aside style={styles.thumbsContainer}>
+                        <h4>Uploads</h4>
+                        {files}
+                    </aside>
+                }
         return (
             <form onSubmit={this.handleSubmit}>
             <Card className="create-container" style={styles.taskCard}>
@@ -224,14 +234,11 @@ class Create extends Component {
                       <input {...getInputProps()} />
                       <p>Drag 'n' drop some files here, or click to select files</p>
                     </div>
-                    <aside style={styles.thumbsContainer}>
-                        <h4>Files</h4>
-                        {files}
-                    </aside>
+
                     </section>
                 )}
             </Dropzone>
-
+            {UploadPanel}
              </CardContent>
             </CardActionArea>
             <CardActions className="create-button-panel">
@@ -240,7 +247,9 @@ class Create extends Component {
                 </IconButton>
             </CardActions>
           </Card>
-        </form>                 
+
+        </form>
+
         );
     }
 }

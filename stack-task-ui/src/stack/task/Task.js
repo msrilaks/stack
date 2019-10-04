@@ -12,6 +12,7 @@ import { deleteTask, patchTask, getPhotos, base64toBlob, styles } from '../../ut
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CalendarIcon from '@material-ui/icons/CalendarToday';
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import EditIcon from '@material-ui/icons/Edit';
 import DoneIcon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
@@ -140,18 +141,22 @@ class Task extends Component {
             Object.entries(prevfiles).map(([key, file])=>(
 
             <div style={styles.thumb} key={file.id}>
+                 <a href={file.preview} download={file.title} style={styles
+                        .thumbIcon}>
+                    <IconButton aria-label="CloudDownload" style={styles
+                    .photoButtonIcon}>
+                        <CloudDownloadIcon style={styles.taskIcon}/>
+                    </IconButton>
+                 </a>
                 <div style={styles.thumbInner}>
                     <img
                         src={file.preview}
-                        name={file.name}
+                        name={file.title}
                         style={styles.img}
                     />
+                </div>
 
-                </div>
-                 <a href={file.preview}
-                    download="sri.png">Download
-                </a>
-                </div>
+            </div>
             )
         ))
 

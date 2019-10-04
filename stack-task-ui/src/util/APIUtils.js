@@ -116,7 +116,7 @@ export const styles = {
      boxSizing: 'border-box'
     },
    thumbInner: {
-     display: 'flex',
+     display: 'inline-block',
      minWidth: 0,
      overflow: 'hidden'
    },
@@ -124,6 +124,15 @@ export const styles = {
      display: 'block',
      width: 'auto',
      height: '100%'
+   },
+   thumbIcon: {
+     position: 'absolute',
+     opacity: 0.4,
+     transition: '.5s ease',
+     backgroundSize: '50%'
+   },
+   photoButtonIcon: {
+     padding: 0
    }
   };
 
