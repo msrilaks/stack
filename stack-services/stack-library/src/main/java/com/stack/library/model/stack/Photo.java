@@ -1,6 +1,6 @@
 package com.stack.library.model.stack;
 
-import lombok.Getter;
+import lombok.*;
 import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,15 +10,20 @@ import java.util.Base64;
 
 //https://www.baeldung.com/spring-boot-mongodb-upload-file
 @Document(collection = "photos")
-public class Photo {
+@ToString
+@Builder(toBuilder = true)
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class Photo implements Cloneable {
     @Id
-    @Getter
     private String id;
-    @Getter
+
     private String stackId;
-    @Getter
+
     private String taskId;
-    @Getter
+
     private String title;
 
     private Binary image;
@@ -29,11 +34,12 @@ public class Photo {
         this.title = title;
     }
 
-    public String getImage() {
-        return Base64.getEncoder().encodeToString(image.getData());
-    }
 
-    public void setImage(Binary binary) {
-        this.image = binary;
+    @Override
+    public Photo clone() {
+        Photo photo = Photo.builder().build();
+        photo.setImage(getImage());
+        photo.setTitle(getTitle());
+        return photo;
     }
 }

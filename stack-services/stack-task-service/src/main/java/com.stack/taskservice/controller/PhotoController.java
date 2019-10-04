@@ -67,7 +67,7 @@ public class PhotoController {
             @PathVariable("stackId") String stackId,
             @PathVariable("taskId") String taskId,
             @PathVariable("photoId") String photoId) {
-        Photo photo = photoService.getPhoto(photoId);
+        PhotoResponse photo = photoService.getPhotoAsResponse(photoId);
         String im = photo.getImage();
         return ResponseEntity.ok(im);
     }

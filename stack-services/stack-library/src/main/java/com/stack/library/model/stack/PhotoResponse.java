@@ -3,6 +3,8 @@ package com.stack.library.model.stack;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Base64;
+
 @Getter
 @Setter
 public class PhotoResponse {
@@ -17,6 +19,6 @@ public class PhotoResponse {
         this.stackId = photo.getStackId();
         this.taskId = photo.getTaskId();
         this.title = photo.getTitle();
-        this.image = photo.getImage();
+        this.image = Base64.getEncoder().encodeToString(photo.getImage().getData());
     }
 }

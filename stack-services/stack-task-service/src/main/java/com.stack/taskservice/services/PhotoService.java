@@ -33,8 +33,26 @@ public class PhotoService {
         return photoRepo.findById(id).get();
     }
 
+    public PhotoResponse getPhotoAsResponse(String id) {
+        return new PhotoResponse(photoRepo.findById(id).get());
+    }
+
     public List<Photo> getPhotos(String stackId, String taskId) {
         return photoRepo.findByStackIdAndTaskId(stackId, taskId);
+    }
+
+    public List<Photo> copyPhotos(String srcStackId, String srcTaskId,String destStackId,
+                                  String destTaskId) {
+        List<Photo> photos = photoRepo.findByStackIdAndTaskId(srcStackId, srcTaskId);
+        List<Photo> clonedPhotos =
+                photos.stream().map(p ->
+                                    {Photo c =p.clone();
+                                        c.setStackId(destStackId);
+                                        c.setTaskId(destTaskId);
+                                        photoRepo.insert(c);
+                                        return c;
+                                    }).collect(Collectors.toList());
+        return clonedPhotos;
     }
 
     public List<PhotoResponse> getPhotosAsResponse(
