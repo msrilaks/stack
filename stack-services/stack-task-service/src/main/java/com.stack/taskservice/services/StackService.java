@@ -91,9 +91,8 @@ public class StackService {
                 pushStack = createStack(Stack.builder().userId(toUserId).build());
             }
             Task pushTask = task.clone();
-            pushTask.setUserId(toUserId);
             stackRepository.saveTaskToStack(pushTask, pushStack);
-            photoService.copyPhotos(stack.getId(),taskId.toString(),pushStack.getId(),
+            photoService.movePhotos(stack.getId(),taskId.toString(),pushStack.getId(),
                                     pushTask.getId().toString());
             emailHandler.postTaskPushed(pushStack, pushTask);
             stackRepository.saveTaskAsPushed(taskId, stack);

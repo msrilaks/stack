@@ -27,11 +27,13 @@ public class StackCustomRepositoryImpl implements StackCustomRepository {
         Task taskFromStack = stack.getTasks().values().stream()
                                   .filter(x -> x.getId().equals(task.getId()))
                                   .findAny().orElse(null);
+        task.setStackId(stack.getId());
+        task.setUserId(stack.getUserId());
         if (taskFromStack == null) {
             task.setCreatedDate(new Date());
-            task.setStackId(stack.getId());
             stack.getTasks().put((stack.getTasks().size() + 1) + "", task);
         }
+
         return updateTaskToStack(task, stack);
     }
 

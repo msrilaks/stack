@@ -5,6 +5,8 @@ import com.stack.library.model.stack.PhotoResponse;
 import com.stack.taskservice.repository.PhotoRepository;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,9 +17,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class PhotoService {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+            PhotoService.class.getName());
     @Autowired
-    private PhotoRepository photoRepo;
+    private              PhotoRepository photoRepo;
 
     public String addPhoto(
             String stackId, String taskId, String title, MultipartFile file)
@@ -41,18 +44,18 @@ public class PhotoService {
         return photoRepo.findByStackIdAndTaskId(stackId, taskId);
     }
 
-    public List<Photo> copyPhotos(String srcStackId, String srcTaskId,String destStackId,
+    public void movePhotos(String srcStackId, String srcTaskId,String destStackId,
                                   String destTaskId) {
-        List<Photo> photos = photoRepo.findByStackIdAndTaskId(srcStackId, srcTaskId);
-        List<Photo> clonedPhotos =
-                photos.stream().map(p ->
-                                    {Photo c =p.clone();
-                                        c.setStackId(destStackId);
-                                        c.setTaskId(destTaskId);
-                                        photoRepo.insert(c);
-                                        return c;
-                                    }).collect(Collectors.toList());
-        return clonedPhotos;
+        List<Photo> srcPhotos = photoRepo.findByStackIdAndTaskId(srcStackId, srcTaskId);
+        List<Photo> destPhotos = photoRepo.findByStackIdAndTaskId(destStackId, destTaskId);
+        deletePhotos(destPhotos);
+        srcPhotos.forEach(photo -> {
+            Photo c = photo.clone();
+            c.setStackId(destStackId);
+            c.setTaskId(destTaskId);
+            photoRepo.save(c);
+            LOGGER.info("## SRI Saved photo : " + c.getId());
+        });
     }
 
     public List<PhotoResponse> getPhotosAsResponse(
@@ -64,5 +67,11 @@ public class PhotoService {
 
     public void deletePhoto(String photoId) {
         photoRepo.deleteById(photoId);
+    }
+
+    public List<Photo> deletePhotos(List<Photo> photos) {
+        photos.forEach(photo -> {photoRepo.deleteById(photo.getId());
+            LOGGER.info("## SRI Delete photo : " + photo.getId());});
+        return photos;
     }
 }
