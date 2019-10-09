@@ -149,6 +149,7 @@ class Stack extends Component {
                 <Tabs value={this.state.value}
                     onChange={this.handleChange}
                     variant="fullWidth"
+                    indicatorColor="primary"
                     style={styles.stackTab}>
                 <Tab icon={<CreateIcon />} label="To Do"></Tab>
                 <Tab icon={<ShareIcon />} label="Pushed"/>

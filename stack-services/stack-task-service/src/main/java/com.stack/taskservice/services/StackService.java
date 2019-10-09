@@ -90,9 +90,18 @@ public class StackService {
             if (pushStack == null) {
                 pushStack = createStack(Stack.builder().userId(toUserId).build());
             }
-            Task pushTask = task.clone();
+            Task pushTask = null;
+            try {
+                pushTask = stackRepository.findTaskById(taskId, pushStack);
+                pushTask.resetTimeStamps();
+            } catch (Exception e) {
+                LOGGER.info("Task not found", e);
+            }
+            if (pushTask == null) {
+                pushTask = task.clone();
+            }
             stackRepository.saveTaskToStack(pushTask, pushStack);
-            photoService.movePhotos(stack.getId(),taskId.toString(),pushStack.getId(),
+            photoService.movePhotos(stack.getId(), taskId.toString(), pushStack.getId(),
                                     pushTask.getId().toString());
             emailHandler.postTaskPushed(pushStack, pushTask);
             stackRepository.saveTaskAsPushed(taskId, stack);

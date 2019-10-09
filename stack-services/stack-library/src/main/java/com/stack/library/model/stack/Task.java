@@ -52,9 +52,13 @@ public class Task implements Comparable<Task>, Cloneable {
         task.setUserId(getUserId());
         task.setCreatedByUserId(getCreatedByUserId());
         task.setCreatedDate(getCreatedDate());
-        task.setDeletedTimeStamp(null);
-        task.setCompletedTimeStamp(null);
-        task.setPushedTimeStamp(null);
+        task.resetTimeStamps();
         return task;
+    }
+
+    public void resetTimeStamps() {
+        setDeletedTimeStamp(null);
+        setCompletedTimeStamp(null);
+        setPushedTimeStamp(null);
     }
 }
