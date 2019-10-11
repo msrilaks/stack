@@ -21,8 +21,7 @@ class Create extends Component {
             task:{
             id:'',
             stackId: '',
-            category: '',
-            label: '',
+            tags: '',
             description: '',
             userId: '',
             createdByUserId:''
@@ -192,28 +191,7 @@ class Create extends Component {
                     style={styles.taskTextField}
                     value={this.state.task.label} onChange={this.handleInputChange} required
                     margin="normal"
-                /> */}
-                <TextField
-                    id="standard-required"
-                    label="category"
-                    name="category"
-                    defaultValue="default"
-                    style={styles.taskTextField}
-                    value={this.state.task.category} onChange={this.handleInputChange} required
-                    margin="normal"
                 />
-                <Typography variant="body2" component="p">
-                    <TextField
-                        id="standard-multiline-flexible"
-                        label="details"
-                        multiline
-                        fullWidth
-                        rowsMax="4"
-                        name="description"
-                        value={this.state.task.description} onChange={this.handleInputChange} required
-                        margin="normal"
-                    />
-                </Typography>
                 <TextField
                     id="email-input"
                     label="push to"
@@ -225,13 +203,35 @@ class Create extends Component {
                     margin="normal"
                     value={this.state.task.userId} onChange={this.handleInputChange} required
                 />
+                */}
+                <TextField
+                    id="standard-required"
+                    label="tags"
+                    name="tags"
+                    defaultValue="default"
+                    style={styles.taskTextField}
+                    value={this.state.task.category} onChange={this.handleInputChange} required
+                    margin="normal"
+                />
 
+                <Typography variant="body2" component="p">
+                    <TextField
+                        id="standard-multiline-flexible"
+                        label="description"
+                        multiline
+                        fullWidth
+                        rowsMax="4"
+                        name="description"
+                        value={this.state.task.description} onChange={this.handleInputChange} required
+                        margin="normal"
+                    />
+                </Typography>
             <Dropzone onDrop={this.onDrop}>
                 {({getRootProps, getInputProps}) => (
                     <section className="container">
                     <div {...getRootProps({className: 'dropzone'})}>
                       <input {...getInputProps()} />
-                      <p>Drag 'n' drop some files here, or click to select files</p>
+                      <p>Drag 'n' drop files here, or click to select files</p>
                     </div>
 
                     </section>

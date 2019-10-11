@@ -61,9 +61,8 @@ public class StackCustomRepositoryImpl implements StackCustomRepository {
     public Task saveTaskAsModified(
             Task copyFrom, UUID taskId, Stack stack) {
         Task task = findTaskById(taskId, stack);
-        task.setCategory(copyFrom.getCategory());
-        task.setLabel(copyFrom.getLabel());
         task.setDescription(copyFrom.getDescription());
+        task.setTags(copyFrom.getTags());
         return updateTaskToStack(task, stack);
     }
 

@@ -24,9 +24,8 @@ public class Task implements Comparable<Task>, Cloneable {
     private String                   userId;
     private String                   createdByUserId;
     private String                   origin;
-    private String                   category;
-    private String                   label;
     private String                   description;
+    private String                   tags;
     private Map<String, TaskContent> taskContentMap;
     private Long                     completedTimeStamp;
     private Long                     pushedTimeStamp;
@@ -46,8 +45,7 @@ public class Task implements Comparable<Task>, Cloneable {
     public Task clone() {
         Task task = Task.builder().build();
         task.setId(getId());
-        task.setLabel(getLabel());
-        task.setCategory(getCategory());
+        task.setTags(getTags());
         task.setDescription(getDescription());
         task.setUserId(getUserId());
         task.setCreatedByUserId(getCreatedByUserId());
