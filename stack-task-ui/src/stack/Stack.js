@@ -148,13 +148,13 @@ class Stack extends Component {
             <Paper>
                 <Tabs value={this.state.value}
                     onChange={this.handleChange}
-                    variant="fullWidth"
+                    centered
                     indicatorColor="primary"
                     style={styles.stackTab}>
-                <Tab icon={<CreateIcon />} label="To Do"></Tab>
-                <Tab icon={<ShareIcon />} label="Pushed"/>
-                <Tab icon={<DoneIcon />} label="Completed"/>
-                <Tab icon={<DeleteIcon />} label="Deleted"/>
+                <Tab icon={<CreateIcon style={styles.taskIcon}/>} label="To Do"></Tab>
+                <Tab icon={<ShareIcon style={styles.taskIcon}/>} label="Pushed"/>
+                <Tab icon={<DoneIcon style={styles.taskIcon}/>} label="Completed"/>
+                <Tab icon={<DeleteIcon style={styles.taskIcon}/>} label="Deleted"/>
                 </Tabs>
             </Paper>
              <div className="stack-container">

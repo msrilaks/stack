@@ -163,7 +163,6 @@ class Task extends Component {
         let UploadPanel = <aside style={styles.thumbsContainer}><h4>No Uploads</h4></aside>;
         if(files && files.length >0) {
             UploadPanel = <aside style={styles.thumbsContainer}>
-                <h4>Uploads</h4>
                 {files}
             </aside>
         }

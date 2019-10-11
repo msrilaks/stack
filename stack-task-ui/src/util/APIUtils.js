@@ -53,33 +53,35 @@ const requestUpload = (options) => {
 
 export const styles = {
     appTitle: {
-        color:'#3ed3de',
+        color:'#1ea5ae',
         fontFamily: 'Montserrat, sans-serif',
         
     },
     appLogout: {
-        color:'#3ed3de',
+        color:'#1ea5ae',
         fontFamily: 'Montserrat, sans-serif',
     },
     appHeader: {
-        background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+        background: 'linear-gradient(45deg, #e9fafc 30%, #d2f5f9 90%)',
+        borderBottomStyle: 'solid',
+         borderBottomColor: 'grey',
         
     },
     stackIcon: {
     //   background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-    color:'#3ed3de',
+    color:'#1ea5ae',
     },
     stackTab: {
-        indicatorColor:'#3ed3de',
+        indicatorColor:'#1ea5ae',
         textColor:'#5D5A58',
         color:'#5D5A58',
         background:'#F5F5F5',
     },
     taskIcon: {
-        color:'#3ed3de',
+        color:'#1ea5ae',
     },
     taskEmpty: {
-        color:'#3ed3de',
+        color:'#1ea5ae',
     },
     taskTextField: {
         marginRight: '10px',
