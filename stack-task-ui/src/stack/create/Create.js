@@ -256,13 +256,19 @@ class Create extends Component {
 
                 <ChipInput
                   value={defaultTags}
-                  placeholder="tags"
+                  placeholder="#tags"
+                  fullWidth
+                  alwaysShowPlaceholder='true'
                   onAdd={(chips) => this.handleChangeChips(chips)}
                   onDelete={(chips, index) => this.handleChipDelete(chips,
                   index)}
-                  inputProps={{ 'allowDuplicates': 'false',
-                  'font': 'sans-serif',
-                  'fontFamily': 'sans-serif'}}
+                  inputProps={{
+                  'allowDuplicates': 'false',
+                  }}
+                  inputLabelProps={{
+                     'font': 'sans-serif',
+                     'fontFamily': 'sans-serif'
+                  }}
                  />
 
                 <Typography variant="body2" component="p">

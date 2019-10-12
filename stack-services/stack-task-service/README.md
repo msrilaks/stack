@@ -20,3 +20,6 @@ docker run -it -p 8082:8082 -v C:/Users/MSRILAKS/stackCred:/stackCred -e CRED_FI
 
 
 #ME_CONFIG_MONGODB_SERVER=localhost
+
+Swagger: https://localhost:8080/v2/api-docs
+Swagger UI: https://localhost:8080/swagger-ui.html
