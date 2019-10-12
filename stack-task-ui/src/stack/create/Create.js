@@ -12,7 +12,9 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import Dropzone from 'react-dropzone'
+import Dropzone from 'react-dropzone';
+import Chip from '@material-ui/core/Chip';
+import ChipInput from 'material-ui-chip-input'
 
 class Create extends Component {
     constructor(props) {
@@ -42,6 +44,8 @@ class Create extends Component {
           files: []
         };
 
+        this.handleChipDelete = this.handleChipDelete.bind(this);
+        this.handleChangeChips = this.handleChangeChips.bind(this);
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -59,6 +63,7 @@ class Create extends Component {
                 id:this.props.task.id,
                 stackId:this.props.stack.id,
                 userId:this.props.stack.userId,
+                tags:this.props.task.tags,
                 createdByUserId:this.props.stack.userId,
                 description:this.props.task.description,
         }
@@ -70,6 +75,7 @@ class Create extends Component {
                 task:{
                     ...this.state.task,
                 stackId:this.props.stack.id,
+                tags:'',
                 userId:this.props.stack.userId,
                 createdByUserId:this.props.stack.userId
         }
@@ -78,6 +84,7 @@ class Create extends Component {
             });
         }
        }
+
 
     removeFile(file) {
         if(file.id != null) {
@@ -95,10 +102,52 @@ class Create extends Component {
         });
     }
 
+    handleChipDelete(chip, index) {
+        var newTagsArr = this.state.task.tags.split(',');
+        newTagsArr.splice(index, 1);
+        var newTags = newTagsArr.toString()
+        this.setState({
+                task:{
+                    ...this.state.task,
+                tags : newTags
+                }
+            },function () {
+                console.log("Task tags - deleted tag:" +chip+" , tags:"+
+                this.state.task.tags);
+        });
+    }
+
+    handleChangeChips(chips) {
+        if(this.state.task.tags.trim!=""
+        && this.state.task.tags.trim().length>0) {
+             var newTags = this.state.task.tags +','+ chips +'';
+             this.setState({
+                                task:{
+                                    ...this.state.task,
+                                tags : newTags
+                                }
+                            },function () {
+                                console.log("Task tags - add to existing" +
+                                this.state.task.tags);
+                        });
+        } else {
+            var newTags = chips +'';
+            this.setState({
+                    task:{
+                        ...this.state.task,
+                    tags : newTags
+                    }
+                },function () {
+                    console.log("Task tags - add first and new "
+                    + this.state.task.tags);
+            });
+        }
+    }
     handleInputChange(event) {
         const target = event.target;
         const inputName = target.name;        
-        const inputValue = target.value;
+        let inputValue = target.value;
+
 
         this.setState({
             task:{
@@ -173,25 +222,25 @@ class Create extends Component {
             </div>
             </div>
         ))
-                let UploadPanel = <aside style={styles.thumbsContainer}></aside>;
-                if(files && files.length >0) {
-                    UploadPanel = <aside style={styles.thumbsContainer}>
-                        {files}
-                    </aside>
-                }
+        let UploadPanel = <aside style={styles.thumbsContainer}></aside>;
+        if(files && files.length >0) {
+            UploadPanel = <aside style={styles.thumbsContainer}>
+                {files}
+            </aside>
+        }
+        let defaultTags=[];
+        if(this.state.task.tags.trim() !=""
+             && this.state.task.tags.trim().length > 0
+             && this.state.task.tags.split(',').length>0 ){
+                defaultTags = this.state.task.tags.split(',')
+        }
+
         return (
             <form onSubmit={this.handleSubmit}>
             <Card className="create-container" style={styles.taskCard}>
             <CardActionArea>
               <CardContent>
-                {/* <TextField
-                    id="standard-name"
-                    label="label"
-                    name="label"
-                    style={styles.taskTextField}
-                    value={this.state.task.label} onChange={this.handleInputChange} required
-                    margin="normal"
-                />
+                {/*
                 <TextField
                     id="email-input"
                     label="push to"
@@ -204,15 +253,17 @@ class Create extends Component {
                     value={this.state.task.userId} onChange={this.handleInputChange} required
                 />
                 */}
-                <TextField
-                    id="standard-required"
-                    label="tags"
-                    name="tags"
-                    defaultValue="default"
-                    style={styles.taskTextField}
-                    value={this.state.task.category} onChange={this.handleInputChange} required
-                    margin="normal"
-                />
+
+                <ChipInput
+                  value={defaultTags}
+                  placeholder="tags"
+                  onAdd={(chips) => this.handleChangeChips(chips)}
+                  onDelete={(chips, index) => this.handleChipDelete(chips,
+                  index)}
+                  inputProps={{ 'allowDuplicates': 'false',
+                  'font': 'sans-serif',
+                  'fontFamily': 'sans-serif'}}
+                 />
 
                 <Typography variant="body2" component="p">
                     <TextField
