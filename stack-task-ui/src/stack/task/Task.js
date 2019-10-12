@@ -21,7 +21,43 @@ import Paper from '@material-ui/core/Paper';
 import AlarmIcon from '@material-ui/icons/Alarm';
 import { Link } from "react-router-dom";
 import { create } from 'domain';
-  
+import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
+import CardHeader from '@material-ui/core/CardHeader';
+import Collapse from '@material-ui/core/Collapse';
+import Avatar from '@material-ui/core/Avatar';
+import { red } from '@material-ui/core/colors';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import ShareIcon from '@material-ui/icons/Share';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+
+const useStyles = makeStyles(theme => ({
+  card: {
+    maxWidth: 345,
+    marginBottom:30,
+  },
+  media: {
+    height: 0,
+    paddingTop: '56.25%', // 16:9
+  },
+  expand: {
+    transform: 'rotate(0deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+  },
+  expandOpen: {
+    transform: 'rotate(180deg)',
+  },
+  avatar: {
+    backgroundColor: red[500],
+  },
+}));
+
+
+
 class Task extends Component {
     constructor(props) {
         super(props);
@@ -37,6 +73,7 @@ class Task extends Component {
         this.onButtonModifyTaskClicked = this.onButtonModifyTaskClicked.bind(this);
         this.reloadTask = this.reloadTask.bind(this);
         this.loadFiles = this.loadFiles.bind(this);
+        this.StackTaskCard = this.StackTaskCard.bind(this);
     }
     componentDidMount() {
         this.setState({
@@ -133,30 +170,35 @@ class Task extends Component {
 
     }
 
-    render() {
+    StackTaskCard() {
+        const classes = useStyles();
+        const [expanded, setExpanded] = React.useState(false);
+
+        const handleExpandClick = () => {
+            setExpanded(!expanded);
+        };
+
         const prevfiles  =  (Object.entries(this.state.files).map(([key, file])=>(
             Object.assign(file, { preview: URL.createObjectURL(base64toBlob(file
             .image,''))}))))
         const files  =  (
             Object.entries(prevfiles).map(([key, file])=>(
-
-            <div style={styles.thumb} key={file.id}>
-                 <a href={file.preview} download={file.title} style={styles
-                        .thumbIcon}>
-                    <IconButton aria-label="CloudDownload" style={styles
-                    .photoButtonIcon}>
-                        <CloudDownloadIcon style={styles.taskIcon}/>
-                    </IconButton>
-                 </a>
-                <div style={styles.thumbInner}>
-                    <img
-                        src={file.preview}
-                        name={file.title}
-                        style={styles.img}
-                    />
+                <div style={styles.thumb} key={file.id}>
+                     <a href={file.preview} download={file.title} style={styles
+                            .thumbIcon}>
+                        <IconButton aria-label="CloudDownload" style={styles
+                        .photoButtonIcon}>
+                            <CloudDownloadIcon style={styles.taskIcon}/>
+                        </IconButton>
+                     </a>
+                    <div style={styles.thumbInner}>
+                        <img
+                            src={file.preview}
+                            name={file.title}
+                            style={styles.img}
+                        />
+                    </div>
                 </div>
-
-            </div>
             )
         ))
 
@@ -175,52 +217,100 @@ class Task extends Component {
              </Typography>
          </div>
         }
+
         let TaskButtonPanel;
         if(this.props.taskProfile == 'todo') {
            TaskButtonPanel = <div>
                <IconButton aria-label="Calendar" onClick={this.onButtonCompleteTaskClicked}>
-                    <CalendarIcon style={styles.taskIcon}/>
+                    <CalendarIcon/>
                 </IconButton>
-                <br/>
                <IconButton aria-label="Complete" onClick={this.onButtonCompleteTaskClicked}>
-                    <DoneIcon style={styles.taskIcon}/>
+                    <DoneIcon/>
                 </IconButton>
-                <br/>
                 <IconButton aria-label="Modify">
-                    <EditIcon style={styles.taskIcon} onClick={this.onButtonModifyTaskClicked}/>
+                    <EditIcon onClick={this.onButtonModifyTaskClicked}/>
                 </IconButton>
-                <br/>
                 <IconButton aria-label="Delete" onClick={this.onButtonDeleteTaskClicked}>
-                    <DeleteIcon style={styles.taskIcon}/>
+                    <DeleteIcon/>
                 </IconButton>
             </div>
         } else if(this.props.taskProfile == 'deleted'){
             TaskButtonPanel = <div>
             <IconButton aria-label="Clear">
-                 <ClearIcon style={styles.taskIcon}/>
+                 <ClearIcon/>
              </IconButton>
          </div>
         } else if(this.props.taskProfile == 'pushed'){
             TaskButtonPanel = <div>
             <IconButton aria-label="Remind">
-                <AlarmIcon style={styles.taskIcon}/>
+                <AlarmIcon />
             </IconButton>
-            <br/>
             <IconButton aria-label="Delete" onClick={this.onButtonDeleteTaskClicked}>
-                <DeleteIcon style={styles.taskIcon}/>
+                <DeleteIcon />
             </IconButton>
          </div>
         }else if(this.props.taskProfile == 'completed'){
             TaskButtonPanel = <div>
             <IconButton aria-label="Undo" onClick={this.onButtonTodoTaskClicked}>
-                 <UndoIcon style={styles.taskIcon}/>
+                 <UndoIcon />
              </IconButton>
-             <br/>
              <IconButton aria-label="Delete" onClick={this.onButtonDeleteTaskClicked}>
-                    <DeleteIcon style={styles.taskIcon}/>
+                    <DeleteIcon/>
             </IconButton>
          </div>
         }
+
+        return (
+            <Card className={classes.card}>
+                <CardHeader
+                    avatar={
+                        <Avatar aria-label="task"
+                            className={classes.avatar}
+                            src={this.props.currentUser.imageUrl}
+                            alt={this.props.currentUser.name}>
+                        </Avatar>
+                    }
+                    action={
+                        <IconButton aria-label="settings">
+                            <MoreVertIcon />
+                        </IconButton>
+                    }
+                    title={this.props.task.description}
+                    subheader={this.props.task.createdDate}/>
+
+                <CardMedia
+                    className={classes.media} >
+                </CardMedia>
+                <CardContent>
+                    <Typography variant="body2" color="textSecondary" component="p">
+                        { this.props.task.description }
+                    </Typography>
+                </CardContent>
+                <CardActions disableSpacing>
+                    {TaskButtonPanel}
+                    <IconButton
+                        className={clsx(classes.expand, {
+                            [classes.expandOpen]: expanded,
+                            })}
+                        onClick={handleExpandClick}
+                        aria-expanded={expanded}
+                        aria-label="show more">
+                        <ExpandMoreIcon />
+                    </IconButton>
+                </CardActions>
+                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                    <CardContent>
+                        <Typography paragraph>Uploads</Typography>
+                        {UploadPanel}
+                    </CardContent>
+                </Collapse>
+            </Card>
+        );
+    }
+
+
+
+    render() {
         return (
             <div>
             {this.state.isModifyClicked ?
@@ -234,27 +324,9 @@ class Task extends Component {
                             reloadPhotos={this.loadFiles}
                             task={this.props.task}/>
                         :
-            <Paper>
-            <Card className="task-container" style={styles.taskCard}>
-                <CardActionArea >
-                <CardContent>
-                    {PushedUserPanel}
-                    <Typography gutterBottom variant="h5" component="h2" >
-                        {this.props.task.label }<span className="task-description"> { this.props.task.description }</span>
-                    </Typography>
-                    {/* <span className="task-label"> category:{this.props.task.category} </span> */}
-                    {UploadPanel}
-                </CardContent>
-                </CardActionArea>
-                <CardActions className="task-button-panel">
-                    {TaskButtonPanel}
-                </CardActions>
-
-
-
-            </Card>
-
-            </Paper>
+            <div>
+            <this.StackTaskCard/>
+            </div>
             }
             </div>
         );
