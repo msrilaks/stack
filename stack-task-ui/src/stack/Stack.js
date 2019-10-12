@@ -148,6 +148,7 @@ class Stack extends Component {
                         backgroundColor: 'white',
                         border: 'none',
                         borderBottomColor: 'white',
+                        height: '50px',
                     },
                     '& span': {
                         color: '#1a9099',
@@ -163,10 +164,10 @@ class Stack extends Component {
                     centered
                     indicatorColor="primary"
                     style={styles.stackTab}>
-                <Tab icon={<CreateIcon style={styles.taskIcon}/>} label="To Do"></Tab>
-                <Tab icon={<ShareIcon style={styles.taskIcon}/>} label="Pushed"/>
-                <Tab icon={<DoneIcon style={styles.taskIcon}/>} label="Completed"/>
-                <Tab icon={<DeleteIcon style={styles.taskIcon}/>} label="Deleted"/>
+                <Tab label="To Do"></Tab>
+                <Tab label="Pushed"/>
+                <Tab label="Completed"/>
+                <Tab label="Deleted"/>
                 </StackTabs>
             </Paper>
              <div className="stack-container">
