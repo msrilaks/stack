@@ -65,7 +65,7 @@ export const styles = {
         //background: 'linear-gradient(45deg, #e9fafc 30%, #d2f5f9 90%)',
         background: 'white',
         borderBottomStyle: 'solid',
-         borderBottomColor: 'grey',
+        borderBottomColor: 'grey',
         
     },
     stackIcon: {
@@ -109,7 +109,7 @@ export const styles = {
      display: 'flex',
      flexDirection: 'row',
      flexWrap: 'wrap',
-     marginTop: 16
+     marginTop: 16,
     },
     thumb: {
      display: 'inline-flex',
@@ -117,8 +117,8 @@ export const styles = {
      border: '1px solid #eaeaea',
      marginBottom: 8,
      marginRight: 8,
-     width: 100,
-     height: 100,
+     width: 50,
+     height: 50,
      padding: 4,
      boxSizing: 'border-box'
     },

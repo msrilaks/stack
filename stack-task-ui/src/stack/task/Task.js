@@ -160,7 +160,7 @@ class Task extends Component {
             )
         ))
 
-        let UploadPanel = <aside style={styles.thumbsContainer}><h4>No Uploads</h4></aside>;
+        let UploadPanel = <aside style={styles.thumbsContainer}></aside>;
         if(files && files.length >0) {
             UploadPanel = <aside style={styles.thumbsContainer}>
                 {files}
@@ -181,12 +181,15 @@ class Task extends Component {
                <IconButton aria-label="Calendar" onClick={this.onButtonCompleteTaskClicked}>
                     <CalendarIcon style={styles.taskIcon}/>
                 </IconButton>
+                <br/>
                <IconButton aria-label="Complete" onClick={this.onButtonCompleteTaskClicked}>
                     <DoneIcon style={styles.taskIcon}/>
                 </IconButton>
+                <br/>
                 <IconButton aria-label="Modify">
                     <EditIcon style={styles.taskIcon} onClick={this.onButtonModifyTaskClicked}/>
                 </IconButton>
+                <br/>
                 <IconButton aria-label="Delete" onClick={this.onButtonDeleteTaskClicked}>
                     <DeleteIcon style={styles.taskIcon}/>
                 </IconButton>
@@ -202,6 +205,7 @@ class Task extends Component {
             <IconButton aria-label="Remind">
                 <AlarmIcon style={styles.taskIcon}/>
             </IconButton>
+            <br/>
             <IconButton aria-label="Delete" onClick={this.onButtonDeleteTaskClicked}>
                 <DeleteIcon style={styles.taskIcon}/>
             </IconButton>
@@ -211,6 +215,7 @@ class Task extends Component {
             <IconButton aria-label="Undo" onClick={this.onButtonTodoTaskClicked}>
                  <UndoIcon style={styles.taskIcon}/>
              </IconButton>
+             <br/>
              <IconButton aria-label="Delete" onClick={this.onButtonDeleteTaskClicked}>
                     <DeleteIcon style={styles.taskIcon}/>
             </IconButton>
@@ -244,7 +249,11 @@ class Task extends Component {
                 <CardActions className="task-button-panel">
                     {TaskButtonPanel}
                 </CardActions>
+
+
+
             </Card>
+
             </Paper>
             }
             </div>
