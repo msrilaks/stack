@@ -34,12 +34,12 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 const useStyles = makeStyles(theme => ({
   card: {
-    maxWidth: 345,
+    maxWidth: 600,
     marginBottom:30,
   },
   media: {
     height: 0,
-    paddingTop: '56.25%', // 16:9
+    paddingTop: '20%', // 16:9
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -73,6 +73,7 @@ class Task extends Component {
         this.onButtonModifyTaskClicked = this.onButtonModifyTaskClicked.bind(this);
         this.reloadTask = this.reloadTask.bind(this);
         this.loadFiles = this.loadFiles.bind(this);
+        this.truncate = this.truncate.bind(this);
         this.StackTaskCard = this.StackTaskCard.bind(this);
     }
     componentDidMount() {
@@ -170,6 +171,10 @@ class Task extends Component {
 
     }
 
+    truncate(str) {
+        return str.length > 125 ? str.substring(0, 125) + "..." : str;
+    }
+
     StackTaskCard() {
         const classes = useStyles();
         const [expanded, setExpanded] = React.useState(false);
@@ -181,6 +186,7 @@ class Task extends Component {
         const prevfiles  =  (Object.entries(this.state.files).map(([key, file])=>(
             Object.assign(file, { preview: URL.createObjectURL(base64toBlob(file
             .image,''))}))))
+
         const files  =  (
             Object.entries(prevfiles).map(([key, file])=>(
                 <div style={styles.thumb} key={file.id}>
@@ -275,7 +281,11 @@ class Task extends Component {
                             <MoreVertIcon />
                         </IconButton>
                     }
-                    title={this.props.task.description}
+
+                    title={<span style={{overflow: 'hidden', textOverflow:
+                    'ellipsis'}}>
+                                                  {this.truncate(this.props.task.description)}
+                                              </span>}
                     subheader={this.props.task.createdDate}/>
 
                 <CardMedia
