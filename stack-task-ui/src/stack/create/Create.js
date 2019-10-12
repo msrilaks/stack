@@ -15,6 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import Dropzone from 'react-dropzone';
 import Chip from '@material-ui/core/Chip';
 import ChipInput from 'material-ui-chip-input'
+import { styled } from '@material-ui/styles';
 
 class Create extends Component {
     constructor(props) {
@@ -206,7 +207,16 @@ class Create extends Component {
     }
 
     render() {
-
+        const StackChipInput = styled(ChipInput)({
+            '& input': {
+                fontSize: '15px',
+                fontFamily: "Sans Serif",
+            },
+            '& span': {
+                color: '#1a9099',
+                fontWeight: '300',
+            }
+        });
         const files = this.state.files.map(file => (
             <div style={styles.thumb} key={file.name}>
             <div style={styles.thumbIcon} onClick={() => this.removeFile(file)}>
@@ -254,7 +264,7 @@ class Create extends Component {
                 />
                 */}
 
-                <ChipInput
+                <StackChipInput
                   value={defaultTags}
                   placeholder="#tags"
                   fullWidth
