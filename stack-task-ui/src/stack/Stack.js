@@ -16,7 +16,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 import AlarmIcon from '@material-ui/icons/Alarm';
 import { If, Then, ElseIf, Else } from 'react-if-elseif-else-render';
 import IconButton from '@material-ui/core/IconButton';
-
+import { styled } from '@material-ui/styles';
 
 
 class Stack extends Component {
@@ -143,10 +143,22 @@ class Stack extends Component {
     }
 
     render() {
+        const StackTabs = styled(Tabs)({
+                    '& div': {
+                        backgroundColor: 'white',
+                        border: 'none',
+                        borderBottomColor: 'white',
+                    },
+                    '& span': {
+                        color: '#1a9099',
+                        fontWeight: '300',
+                    }
+                });
         return (
            <div>
-            <Paper>
-                <Tabs value={this.state.value}
+            <Paper
+                elevation='0'>
+                <StackTabs value={this.state.value}
                     onChange={this.handleChange}
                     centered
                     indicatorColor="primary"
@@ -155,10 +167,10 @@ class Stack extends Component {
                 <Tab icon={<ShareIcon style={styles.taskIcon}/>} label="Pushed"/>
                 <Tab icon={<DoneIcon style={styles.taskIcon}/>} label="Completed"/>
                 <Tab icon={<DeleteIcon style={styles.taskIcon}/>} label="Deleted"/>
-                </Tabs>
+                </StackTabs>
             </Paper>
              <div className="stack-container">
-            <div className="stack-task-container">
+            <div className="stack-task-container" style={styles.stackTaskContainer}>
             {              
                 <If condition={this.state.value === 0}>
                    <Then>

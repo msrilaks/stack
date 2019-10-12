@@ -62,7 +62,8 @@ export const styles = {
         fontFamily: 'Montserrat, sans-serif',
     },
     appHeader: {
-        background: 'linear-gradient(45deg, #e9fafc 30%, #d2f5f9 90%)',
+        //background: 'linear-gradient(45deg, #e9fafc 30%, #d2f5f9 90%)',
+        background: 'white',
         borderBottomStyle: 'solid',
          borderBottomColor: 'grey',
         
@@ -76,6 +77,10 @@ export const styles = {
         textColor:'#5D5A58',
         color:'#5D5A58',
         background:'#F5F5F5',
+    },
+    stackTaskContainer: {
+        paddingLeft: '50px',
+        paddingRight: '50px',
     },
     taskIcon: {
         color:'#1ea5ae',
