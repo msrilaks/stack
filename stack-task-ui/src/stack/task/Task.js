@@ -31,6 +31,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Chip from '@material-ui/core/Chip';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -54,6 +55,14 @@ const useStyles = makeStyles(theme => ({
   avatar: {
     backgroundColor: red[500],
   },
+  chipContainer: {
+          display: 'flex',
+          justifyContent: 'left',
+          flexWrap: 'wrap',
+          '& > *': {
+            margin: theme.spacing(0.5),
+          },
+        },
 }));
 
 
@@ -74,6 +83,7 @@ class Task extends Component {
         this.reloadTask = this.reloadTask.bind(this);
         this.loadFiles = this.loadFiles.bind(this);
         this.truncate = this.truncate.bind(this);
+        this.tagChips = this.tagChips.bind(this);
         this.StackTaskCard = this.StackTaskCard.bind(this);
     }
     componentDidMount() {
@@ -174,7 +184,23 @@ class Task extends Component {
     truncate(str) {
         return str.length > 125 ? str.substring(0, 125) + "..." : str;
     }
-
+    tagChips() {
+    const classes = useStyles();
+            return <div className={classes.chipContainer}>
+                    {
+                        this.props.task.tags
+                        && this.props.task.tags.trim() !== ""
+                        && this.props.task.tags.length>0
+                        && this.props.task.tags.split(',').map(data => {
+                        return (
+                            <Chip
+                                key={data}
+                                label={data}
+                                color="primary"/>
+                        );
+                    })}
+                </div>
+    }
     StackTaskCard() {
         const classes = useStyles();
         const [expanded, setExpanded] = React.useState(false);
@@ -266,6 +292,7 @@ class Task extends Component {
          </div>
         }
 
+
         return (
             <Card className={classes.card}>
                 <CardHeader
@@ -286,12 +313,17 @@ class Task extends Component {
                     'ellipsis'}}>
                                                   {this.truncate(this.props.task.description)}
                                               </span>}
-                    subheader={this.props.task.createdDate}/>
+                    subheader={this.props.task.createdDate}>
 
+                    </CardHeader>
+                    <CardContent>
+                    <this.tagChips/>
+                    </CardContent>
                 <CardMedia
                     className={classes.media} >
                 </CardMedia>
                 <CardContent>
+
                     <Typography variant="body2" color="textSecondary" component="p">
                         { this.props.task.description }
                     </Typography>
