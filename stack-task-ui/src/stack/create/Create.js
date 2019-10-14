@@ -16,6 +16,40 @@ import Dropzone from 'react-dropzone';
 import Chip from '@material-ui/core/Chip';
 import ChipInput from 'material-ui-chip-input'
 import { styled } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
+import CardHeader from '@material-ui/core/CardHeader';
+import Collapse from '@material-ui/core/Collapse';
+import Avatar from '@material-ui/core/Avatar';
+import { red } from '@material-ui/core/colors';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import ShareIcon from '@material-ui/icons/Share';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+
+const useStyles = makeStyles(theme => ({
+  card: {
+    maxWidth: 600,
+    marginBottom:30,
+  },
+  media: {
+    height: 0,
+    paddingTop: '20%', // 16:9
+  },
+  expand: {
+    transform: 'rotate(0deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+  },
+  expandOpen: {
+    transform: 'rotate(180deg)',
+  },
+  avatar: {
+    backgroundColor: red[500],
+  },
+}));
 
 class Create extends Component {
     constructor(props) {
@@ -51,6 +85,8 @@ class Create extends Component {
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.removeFile = this.removeFile.bind(this);
+        this.StackCreateCard = this.StackCreateCard.bind(this);
+        this.truncate = this.truncate.bind(this);
     }
 
     componentWillMount() {
@@ -206,7 +242,19 @@ class Create extends Component {
     }
     }
 
-    render() {
+
+    truncate(str) {
+        return str.length > 125 ? str.substring(0, 125) + "..." : str;
+    }
+
+    StackCreateCard() {
+        const classes = useStyles();
+        const [expanded, setExpanded] = React.useState(false);
+
+        const handleExpandClick = () => {
+            setExpanded(!expanded);
+        };
+
         const StackChipInput = styled(ChipInput)({
             '& input': {
                 fontSize: '15px',
@@ -219,17 +267,15 @@ class Create extends Component {
         });
         const files = this.state.files.map(file => (
             <div style={styles.thumb} key={file.name}>
-            <div style={styles.thumbIcon} onClick={() => this.removeFile(file)}>
-              <DeleteIcon style={styles.taskIcon} />
-            </div>
-            <div style={styles.thumbInner}>
-              <img
-                src={file.preview}
-                name={file.name}
-                style={styles.img}
-              />
-
-            </div>
+                <div style={styles.thumbIcon} onClick={() => this.removeFile(file)}>
+                   <DeleteIcon style={styles.taskIcon} />
+                </div>
+                <div style={styles.thumbInner}>
+                    <img
+                    src={file.preview}
+                    name={file.name}
+                    style={styles.img}/>
+                </div>
             </div>
         ))
         let UploadPanel = <aside style={styles.thumbsContainer}></aside>;
@@ -240,82 +286,123 @@ class Create extends Component {
         }
         let defaultTags=[];
         if(this.state.task.tags.trim() !=""
-             && this.state.task.tags.trim().length > 0
-             && this.state.task.tags.split(',').length>0 ){
+            && this.state.task.tags.trim().length > 0
+            && this.state.task.tags.split(',').length>0 ){
                 defaultTags = this.state.task.tags.split(',')
         }
 
+
         return (
-            <form onSubmit={this.handleSubmit}>
-            <Card className="create-container" style={styles.taskCard}>
-            <CardActionArea>
-              <CardContent>
-                {/*
-                <TextField
-                    id="email-input"
-                    label="push to"
-                    type="email"
-                    name="userId"
-                    fullWidth
-                    defaultValue={this.props.currentUser.email}
-                    autoComplete="email"
-                    margin="normal"
-                    value={this.state.task.userId} onChange={this.handleInputChange} required
-                />
-                */}
 
-                <StackChipInput
-                  value={defaultTags}
-                  placeholder="#tags"
-                  fullWidth
-                  alwaysShowPlaceholder='true'
-                  onAdd={(chips) => this.handleChangeChips(chips)}
-                  onDelete={(chips, index) => this.handleChipDelete(chips,
-                  index)}
-                  inputProps={{
-                  'allowDuplicates': 'false',
-                  }}
-                  inputLabelProps={{
-                     'font': 'sans-serif',
-                     'fontFamily': 'sans-serif'
-                  }}
-                 />
+        <Card className={classes.card}>
+            <CardHeader
+                avatar={
+                    <Avatar aria-label="task"
+                        className={classes.avatar}
+                        src={this.props.currentUser.imageUrl}
+                        alt={this.props.currentUser.name}>
+                    </Avatar>
+                }
+                action={
+                    <IconButton aria-label="settings">
+                    <MoreVertIcon />
+                    </IconButton>
+                }
 
-                <Typography variant="body2" component="p">
-                    <TextField
-                        id="standard-multiline-flexible"
-                        label="description"
-                        multiline
-                        fullWidth
-                        rowsMax="4"
-                        name="description"
-                        value={this.state.task.description} onChange={this.handleInputChange} required
-                        margin="normal"
-                    />
-                </Typography>
+                title={<span style={{overflow: 'hidden', textOverflow:
+                    'ellipsis'}}>
+                    {this.truncate(this.props.task.description)}
+                    </span>}
+                subheader={this.props.task.createdDate}>
+            </CardHeader>
+        <CardContent>
+            {/*
+            <TextField
+            id="email-input"
+            label="push to"
+            type="email"
+            name="userId"
+            fullWidth
+            defaultValue={this.props.currentUser.email}
+            autoComplete="email"
+            margin="normal"
+            value={this.state.task.userId} onChange={this.handleInputChange} required
+            />
+            */}
+
+            <StackChipInput
+                value={defaultTags}
+                placeholder="#tags"
+                fullWidth
+                alwaysShowPlaceholder='true'
+                onAdd={(chips) => this.handleChangeChips(chips)}
+                onDelete={(chips, index) => this.handleChipDelete(chips,
+                    index)}
+                inputProps={{
+                    'allowDuplicates': 'false',
+                }}
+                inputLabelProps={{
+                    'font': 'sans-serif',
+                    'fontFamily': 'sans-serif'
+                }}
+            />
+        </CardContent>
+        <CardContent>
             <Dropzone onDrop={this.onDrop}>
                 {({getRootProps, getInputProps}) => (
-                    <section className="container">
+                <section className="container">
                     <div {...getRootProps({className: 'dropzone'})}>
-                      <input {...getInputProps()} />
-                      <p>Drag 'n' drop files here, or click to select files</p>
+                        <input {...getInputProps()} />
+                        <p>Drag 'n' drop files here, or click to select files</p>
                     </div>
-
-                    </section>
+                </section>
                 )}
             </Dropzone>
             {UploadPanel}
-             </CardContent>
-            </CardActionArea>
-            <CardActions className="create-button-panel">
-              <IconButton type="submit" aria-label="Assign">
-                    <SaveIcon style={styles.taskIcon}/>
-                </IconButton>
-            </CardActions>
-          </Card>
+        </CardContent>
+        <CardContent>
+            <Typography variant="body2" component="p">
+                    <TextField
+                    id="standard-multiline-flexible"
+                    label="description"
+                    multiline
+                    fullWidth
+                    rowsMax="4"
+                    name="description"
+                    value={this.state.task.description} onChange={this.handleInputChange} required
+                    margin="normal"
+                    />
+            </Typography>
+        </CardContent>
+        <CardActions disableSpacing>
+            <IconButton type="submit" aria-label="Assign">
+                <SaveIcon style={styles.taskIcon}/>
+            </IconButton>
+            <IconButton
+                className={clsx(classes.expand, {
+                [classes.expandOpen]: expanded,
+                })}
+                onClick={handleExpandClick}
+                aria-expanded={expanded}
+                aria-label="show more">
+                <ExpandMoreIcon />
+            </IconButton>
+        </CardActions>
+            <Collapse in={expanded} timeout="auto" unmountOnExit>
+                <CardContent>
+                    <Typography paragraph>Uploads</Typography>
+                    {UploadPanel}
+                </CardContent>
+            </Collapse>
+        </Card>
+        );
+    }
 
-        </form>
-
+    render() {
+        return (
+            <form onSubmit={this.handleSubmit}>
+                <this.StackCreateCard/>
+            </form>
         );
     }
 }
