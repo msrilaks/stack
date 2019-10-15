@@ -37,15 +37,16 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import TextField from '@material-ui/core/TextField';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import InfoIcon from '@material-ui/icons/Info';
 
 const useStyles = makeStyles(theme => ({
   card: {
-    maxWidth: 600,
+    maxWidth: 700,
     marginBottom:30,
-  },
-  media: {
-    height: 0,
-    paddingTop: '20%', // 16:9
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -61,12 +62,12 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: red[500],
   },
   chipContainer: {
-          display: 'flex',
-          justifyContent: 'left',
-          flexWrap: 'wrap',
-          '& > *': {
-            margin: theme.spacing(0.5),
-          },
+        display: 'flex',
+        justifyContent: 'left',
+        flexWrap: 'wrap',
+        '& > *': {
+        margin: theme.spacing(0.5),
+        },
     },
     modal: {
         display: 'flex',
@@ -78,6 +79,27 @@ const useStyles = makeStyles(theme => ({
       border: '2px solid #000',
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
+    },
+    grid: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'left',
+        overflow: 'hidden',
+        backgroundColor: theme.palette.background.paper,
+    },
+    gridList: {
+        width: 500,
+        height: 220,
+    },
+    gridIcon: {
+        color: 'rgba(255, 255, 255, 0.54)',
+    },
+    title: {
+      color: theme.palette.primary,
+    },
+    titleBar: {
+      background:
+        'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
     },
 }));
 
@@ -263,33 +285,41 @@ class Task extends Component {
             Object.assign(file, { preview: URL.createObjectURL(base64toBlob(file
             .image,''))}))))
 
-        const files  =  (
-            Object.entries(prevfiles).map(([key, file])=>(
-                <div style={styles.thumb} key={file.id}>
-                     <a href={file.preview} download={file.title} style={styles
-                            .thumbIcon}>
-                        <IconButton aria-label="CloudDownload" style={styles
-                        .photoButtonIcon}>
-                            <CloudDownloadIcon style={styles.taskIcon}/>
-                        </IconButton>
-                     </a>
-                    <div style={styles.thumbInner}>
-                        <img
-                            src={file.preview}
-                            name={file.title}
-                            style={styles.img}
-                        />
-                    </div>
-                </div>
-            )
-        ))
+        let UploadPanel  =  (
+            <div className={classes.grid}>
+                <GridList cellHeight={160} className={classes
+                .gridList}>
+                    <GridListTile key="Subheader" cols={2} style={{ height:
+                    'auto' }}>
+                        <ListSubheader component="div">Uploads</ListSubheader>
+                    </GridListTile>
+                    {Object.entries(prevfiles).map(([key, file])=>(
+                        <GridListTile key={file.id} style={{ padding: '2px' }}
+                        cols={1}>
+                            <img src={file.preview} alt={file.title}
+                            height='180px'/>
+                            <GridListTileBar
+                                title={file.title}
+                                classes={{
+                                                root: classes.titleBar,
+                                                title: classes.title,
+                                              }}
+                                actionIcon={
+                                    <a href={file.preview} download={file.title} >
+                                        <IconButton aria-label={`download ${file.id}`}
+                                        className={classes.gridIcon}>
+                                            <CloudDownloadIcon />
+                                        </IconButton>
+                                    </a>
+                                }
+                            />
+                        </GridListTile>
+                    )
+                )}
+                </GridList>
+            </div>
+        )
 
-        let UploadPanel = <aside style={styles.thumbsContainer}></aside>;
-        if(files && files.length >0) {
-            UploadPanel = <aside style={styles.thumbsContainer}>
-                {files}
-            </aside>
-        }
 
         let PushedUserPanel;
         if(this.props.taskProfile == 'pushed'){
@@ -380,11 +410,10 @@ class Task extends Component {
                     <CardContent>
                     <this.tagChips/>
                     </CardContent>
-                <CardMedia
-                    className={classes.media} >
-                </CardMedia>
+                <CardContent >
+                    {UploadPanel}
+                </CardContent>
                 <CardContent>
-
                     <Typography variant="body2" color="textSecondary" component="p">
                         { this.props.task.description }
                     </Typography>
@@ -403,8 +432,6 @@ class Task extends Component {
                 </CardActions>
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <CardContent>
-                        <Typography paragraph>Uploads</Typography>
-                        {UploadPanel}
                     </CardContent>
                 </Collapse>
             </Card>
