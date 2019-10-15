@@ -32,6 +32,11 @@ import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Chip from '@material-ui/core/Chip';
+import Tooltip from '@material-ui/core/Tooltip';
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
+import TextField from '@material-ui/core/TextField';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -62,7 +67,18 @@ const useStyles = makeStyles(theme => ({
           '& > *': {
             margin: theme.spacing(0.5),
           },
-        },
+    },
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+  },
+    modalPaper: {
+      backgroundColor: theme.palette.background.paper,
+      border: '2px solid #000',
+      boxShadow: theme.shadows[5],
+      padding: theme.spacing(2, 4, 3),
+    },
 }));
 
 
@@ -72,19 +88,25 @@ class Task extends Component {
         super(props);
         this.state = {
             isModifyClicked: false,
+            userId: ''
         }
         this.state = {
              files: []
         };
+
+
         this.onButtonDeleteTaskClicked = this.onButtonDeleteTaskClicked.bind(this);
         this.onButtonCompleteTaskClicked = this.onButtonCompleteTaskClicked.bind(this);
         this.onButtonTodoTaskClicked = this.onButtonTodoTaskClicked.bind(this);
         this.onButtonModifyTaskClicked = this.onButtonModifyTaskClicked.bind(this);
+        this.onButtonPushTaskClicked = this.onButtonPushTaskClicked.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
         this.reloadTask = this.reloadTask.bind(this);
         this.loadFiles = this.loadFiles.bind(this);
         this.truncate = this.truncate.bind(this);
         this.tagChips = this.tagChips.bind(this);
         this.StackTaskCard = this.StackTaskCard.bind(this);
+        this.PushModal = this.PushModal.bind(this);
     }
     componentDidMount() {
         this.setState({
@@ -131,6 +153,34 @@ class Task extends Component {
             Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
         });
     }
+
+    handleInputChange(event) {
+        const target = event.target;
+        const inputName = target.name;
+        let inputValue = target.value;
+        this.setState({
+            userId:{inputValue}
+        },function () {
+            console.log("### SRI " + this.state.userId);
+        });
+    }
+
+        onButtonPushTaskClicked(event) {
+            const pushTaskRequest = Object.assign({}, this.props.task);
+            pushTaskRequest.userId = this.state.userId;
+            console.log(pushTaskRequest);
+            patchTask(pushTaskRequest,"isPushed=true")
+            .then((response) => {
+                this.setState({
+                    },function () {
+                        console.log("PatchTaskRequest "+this.state.task);
+                    });
+                Alert.success("Task pushed out of your stack successfully!");
+                this.props.reloadTasksFunc();
+            }).catch(error => {
+                Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
+            });
+        }
 
     onButtonCompleteTaskClicked() {
         const completeTaskRequest = Object.assign({}, this.props.task);
@@ -253,42 +303,55 @@ class Task extends Component {
         let TaskButtonPanel;
         if(this.props.taskProfile == 'todo') {
            TaskButtonPanel = <div>
-               <IconButton aria-label="Calendar" onClick={this.onButtonCompleteTaskClicked}>
-                    <CalendarIcon/>
-                </IconButton>
-               <IconButton aria-label="Complete" onClick={this.onButtonCompleteTaskClicked}>
-                    <DoneIcon/>
-                </IconButton>
-                <IconButton aria-label="Modify">
-                    <EditIcon onClick={this.onButtonModifyTaskClicked}/>
-                </IconButton>
-                <IconButton aria-label="Delete" onClick={this.onButtonDeleteTaskClicked}>
-                    <DeleteIcon/>
-                </IconButton>
+                <Tooltip title="Add to Google Calender" placement="bottom">
+                   <IconButton aria-label="Calendar" onClick={this.onButtonCompleteTaskClicked}>
+                        <CalendarIcon/>
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Mark as Completed" placement="bottom">
+                   <IconButton aria-label="Complete" onClick={this.onButtonCompleteTaskClicked}>
+                        <DoneIcon/>
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Modify" placement="bottom">
+                    <IconButton aria-label="Modify">
+                        <EditIcon onClick={this.onButtonModifyTaskClicked}/>
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Delete" placement="bottom">
+                    <IconButton aria-label="Delete" onClick={this.onButtonDeleteTaskClicked}>
+                        <DeleteIcon/>
+                    </IconButton>
+                </Tooltip>
             </div>
         } else if(this.props.taskProfile == 'deleted'){
             TaskButtonPanel = <div>
-            <IconButton aria-label="Clear">
-                 <ClearIcon/>
-             </IconButton>
          </div>
         } else if(this.props.taskProfile == 'pushed'){
             TaskButtonPanel = <div>
-            <IconButton aria-label="Remind">
-                <AlarmIcon />
-            </IconButton>
-            <IconButton aria-label="Delete" onClick={this.onButtonDeleteTaskClicked}>
-                <DeleteIcon />
-            </IconButton>
+            <Tooltip title="Nudge" placement="bottom">
+                <IconButton aria-label="Remind">
+                    <AlarmIcon />
+                </IconButton>
+            </Tooltip>
+            <Tooltip title="Delete" placement="bottom">
+                <IconButton aria-label="Delete" onClick={this.onButtonDeleteTaskClicked}>
+                    <DeleteIcon />
+                </IconButton>
+            </Tooltip>
          </div>
         }else if(this.props.taskProfile == 'completed'){
             TaskButtonPanel = <div>
-            <IconButton aria-label="Undo" onClick={this.onButtonTodoTaskClicked}>
-                 <UndoIcon />
-             </IconButton>
-             <IconButton aria-label="Delete" onClick={this.onButtonDeleteTaskClicked}>
-                    <DeleteIcon/>
-            </IconButton>
+            <Tooltip title="Mark as TODO" placement="bottom">
+                <IconButton aria-label="Undo" onClick={this.onButtonTodoTaskClicked}>
+                     <UndoIcon />
+                 </IconButton>
+            </Tooltip>
+            <Tooltip title="Delete" placement="bottom">
+                 <IconButton aria-label="Delete" onClick={this.onButtonDeleteTaskClicked}>
+                        <DeleteIcon/>
+                </IconButton>
+           </Tooltip>
          </div>
         }
 
@@ -304,9 +367,7 @@ class Task extends Component {
                         </Avatar>
                     }
                     action={
-                        <IconButton aria-label="settings">
-                            <MoreVertIcon />
-                        </IconButton>
+                        <this.PushModal/>
                     }
 
                     title={<span style={{overflow: 'hidden', textOverflow:
@@ -350,7 +411,58 @@ class Task extends Component {
         );
     }
 
+ PushModal() {
+      const classes = useStyles();
+      const [open, setOpen] = React.useState(false);
 
+      const handleOpen = () => {
+        setOpen(true);
+      };
+
+      const handleClose = () => {
+        setOpen(false);
+      };
+
+      return (
+        <div>
+            <Tooltip title="Push" placement="bottom">
+               <IconButton aria-label="Push" onClick={handleOpen}>
+                    <ShareIcon/>
+                </IconButton>
+            </Tooltip>
+          <Modal
+            aria-labelledby="transition-modal-title"
+            aria-describedby="transition-modal-description"
+            className={classes.modal}
+            open={open}
+            onClose={handleClose}
+            closeAfterTransition
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+              timeout: 500,
+            }}
+          >
+            <Fade in={open}>
+              <div className={classes.modalPaper}>
+                <h2 id="push-modal-title">Push to</h2>
+                            <TextField
+                            id="email-input"
+                            label="push to"
+                            type="email"
+                            name="userId"
+                            fullWidth
+                            defaultValue={this.props.task.userId}
+                            autoComplete="email"
+                            margin="normal"
+                            value={this.props.task.userId} onChange={this
+                            .handleInputChange} required
+                />
+              </div>
+            </Fade>
+          </Modal>
+        </div>
+      );
+    }
 
     render() {
         return (

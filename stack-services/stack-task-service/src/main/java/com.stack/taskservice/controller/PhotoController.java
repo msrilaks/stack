@@ -1,6 +1,5 @@
 package com.stack.taskservice.controller;
 
-import com.stack.library.model.stack.Photo;
 import com.stack.library.model.stack.PhotoResponse;
 import com.stack.taskservice.services.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;

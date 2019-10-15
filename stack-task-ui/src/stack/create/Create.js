@@ -61,7 +61,8 @@ class Create extends Component {
             tags: '',
             description: '',
             userId: '',
-            createdByUserId:''
+            createdByUserId:'',
+            createdDate: ''
             }
         };
         this.state = { newTaskAdded: false };
@@ -113,6 +114,8 @@ class Create extends Component {
                     ...this.state.task,
                 stackId:this.props.stack.id,
                 tags:'',
+                description:'',
+                createdDate:'',
                 userId:this.props.stack.userId,
                 createdByUserId:this.props.stack.userId
         }
@@ -155,7 +158,7 @@ class Create extends Component {
     }
 
     handleChangeChips(chips) {
-        if(this.state.task.tags.trim!=""
+        if(this.state.task.tags && this.state.task.tags.trim!=""
         && this.state.task.tags.trim().length>0) {
              var newTags = this.state.task.tags +','+ chips +'';
              this.setState({
@@ -285,7 +288,7 @@ class Create extends Component {
             </aside>
         }
         let defaultTags=[];
-        if(this.state.task.tags.trim() !=""
+        if(this.state.task.tags && this.state.task.tags.trim() !=""
             && this.state.task.tags.trim().length > 0
             && this.state.task.tags.split(',').length>0 ){
                 defaultTags = this.state.task.tags.split(',')
@@ -311,24 +314,24 @@ class Create extends Component {
 
                 title={<span style={{overflow: 'hidden', textOverflow:
                     'ellipsis'}}>
-                    {this.truncate(this.props.task.description)}
+                    {this.truncate(this.state.task.description)}
                     </span>}
-                subheader={this.props.task.createdDate}>
+                subheader={this.state.task.createdDate}>
             </CardHeader>
         <CardContent>
-            {/*
+
             <TextField
             id="email-input"
             label="push to"
             type="email"
             name="userId"
             fullWidth
-            defaultValue={this.props.currentUser.email}
+            defaultValue={this.state.task.userId}
             autoComplete="email"
             margin="normal"
             value={this.state.task.userId} onChange={this.handleInputChange} required
             />
-            */}
+
 
             <StackChipInput
                 value={defaultTags}
@@ -375,8 +378,8 @@ class Create extends Component {
             </Typography>
         </CardContent>
         <CardActions disableSpacing>
-            <IconButton type="submit" aria-label="Assign">
-                <SaveIcon style={styles.taskIcon}/>
+            <IconButton type="submit" aria-label="Submit">
+                <SaveIcon/>
             </IconButton>
             <IconButton
                 className={clsx(classes.expand, {
