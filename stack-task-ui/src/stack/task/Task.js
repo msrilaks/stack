@@ -63,7 +63,7 @@ const useStyles = makeStyles(theme => ({
   },
   chipContainer: {
         display: 'flex',
-        justifyContent: 'left',
+        float: 'right',
         flexWrap: 'wrap',
         '& > *': {
         margin: theme.spacing(0.5),
