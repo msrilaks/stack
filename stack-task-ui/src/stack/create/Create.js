@@ -65,16 +65,17 @@ const useStyles = makeStyles(theme => ({
         width: '100%',
         height: 'auto',
     },
-      gridIcon: {
-          color: 'rgba(255, 255, 255, 0.54)',
-      },
-      title: {
-        color: theme.palette.primary,
-      },
-      titleBar: {
+    gridIcon: {
+         color: 'white',
+     },
+     title: {
+       color: theme.palette.primary,
+     },
+     titleBar: {
         background:
-          'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-      },
+             'linear-gradient(to top, rgba(0,0,0,0.5) 0%, ' +
+             'rgba(0,0,0,0.2) 70%, rgba(0,0,0,0) 100%)',
+     },
 }));
 
 class Create extends Component {
@@ -323,7 +324,7 @@ class Create extends Component {
                             <GridListTile key={file.id} style={{ padding: '2px' }}
                             cols={1}>
                                 <img src={file.preview} alt={file.title}
-                                height='120px' width='120px'/>
+                                height='120px' width='145px'/>
                                 <GridListTileBar
                                     title={file.title}
                                     classes={{
