@@ -26,6 +26,11 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar';
+import ListSubheader from '@material-ui/core/ListSubheader';
+
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -49,6 +54,27 @@ const useStyles = makeStyles(theme => ({
   avatar: {
     backgroundColor: red[500],
   },
+  grid: {
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'left',
+          overflow: 'visible',
+          backgroundColor: theme.palette.background.paper,
+      },
+      gridList: {
+          width: 500,
+          height: 'auto',
+      },
+      gridIcon: {
+          color: 'rgba(255, 255, 255, 0.54)',
+      },
+      title: {
+        color: theme.palette.primary,
+      },
+      titleBar: {
+        background:
+          'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+      },
 }));
 
 class Create extends Component {
@@ -268,25 +294,44 @@ class Create extends Component {
                 fontWeight: '300',
             }
         });
-        const files = this.state.files.map(file => (
-            <div style={styles.thumb} key={file.name}>
-                <div style={styles.thumbIcon} onClick={() => this.removeFile(file)}>
-                   <DeleteIcon style={styles.taskIcon} />
+
+
+    let UploadPanel  =  (
+                <div className={classes.grid}>
+                    <GridList cellHeight={160} className={classes
+                    .gridList}>
+                        <GridListTile key="Subheader" cols={2} style={{ height:
+                        'auto'}}>
+                            <ListSubheader component="div"
+                            style={{paddingLeft: '0px'}}>Uploads</ListSubheader>
+                        </GridListTile>
+                        {this.state.files.map(file =>(
+                            <GridListTile key={file.id} style={{ padding: '2px' }}
+                            cols={1}>
+                                <img src={file.preview} alt={file.title}
+                                height='180px'/>
+                                <GridListTileBar
+                                    title={file.title}
+                                    classes={{
+                                                    root: classes.titleBar,
+                                                    title: classes.title,
+                                                  }}
+                                    actionIcon={
+                                            <IconButton aria-label={`download ${file.id}`}
+                                             onClick={() => this.removeFile
+                                             (file)}
+                                            className={classes.gridIcon}>
+                                                <DeleteIcon />
+                                            </IconButton>
+                                    }
+                                />
+                            </GridListTile>
+                        )
+                    )}
+                    </GridList>
                 </div>
-                <div style={styles.thumbInner}>
-                    <img
-                    src={file.preview}
-                    name={file.name}
-                    style={styles.img}/>
-                </div>
-            </div>
-        ))
-        let UploadPanel = <aside style={styles.thumbsContainer}></aside>;
-        if(files && files.length >0) {
-            UploadPanel = <aside style={styles.thumbsContainer}>
-                {files}
-            </aside>
-        }
+            )
+
         let defaultTags=[];
         if(this.state.task.tags && this.state.task.tags.trim() !=""
             && this.state.task.tags.trim().length > 0

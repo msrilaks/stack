@@ -41,7 +41,7 @@ import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import InfoIcon from '@material-ui/icons/Info';
+
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -89,7 +89,8 @@ const useStyles = makeStyles(theme => ({
     },
     gridList: {
         width: 500,
-        height: 220,
+        height: 'auto',
+        maxHeight: 220,
     },
     gridIcon: {
         color: 'rgba(255, 255, 255, 0.54)',
@@ -290,8 +291,9 @@ class Task extends Component {
                 <GridList cellHeight={160} className={classes
                 .gridList}>
                     <GridListTile key="Subheader" cols={2} style={{ height:
-                    'auto' }}>
-                        <ListSubheader component="div">Uploads</ListSubheader>
+                    'auto'}}>
+                        <ListSubheader component="div"
+                        style={{paddingLeft: '0px'}}>Uploads</ListSubheader>
                     </GridListTile>
                     {Object.entries(prevfiles).map(([key, file])=>(
                         <GridListTile key={file.id} style={{ padding: '2px' }}
@@ -410,13 +412,14 @@ class Task extends Component {
                     <CardContent>
                     <this.tagChips/>
                     </CardContent>
-                <CardContent >
-                    {UploadPanel}
-                </CardContent>
+
                 <CardContent>
                     <Typography variant="body2" color="textSecondary" component="p">
                         { this.props.task.description }
                     </Typography>
+                </CardContent>
+                <CardContent >
+                    {UploadPanel}
                 </CardContent>
                 <CardActions disableSpacing>
                     {TaskButtonPanel}
