@@ -305,6 +305,20 @@ class Create extends Component {
                             <ListSubheader component="div"
                             style={{paddingLeft: '0px'}}>Uploads</ListSubheader>
                         </GridListTile>
+                        <GridListTile key="dropzone" cols={4} style={{ height:
+                                                'auto'}}>
+                            <Dropzone onDrop={this.onDrop}>
+                                {({getRootProps, getInputProps}) => (
+                                <section className="container">
+                                    <div {...getRootProps({className: 'dropzone'})}>
+                                        <input {...getInputProps()} />
+                                        <p>Drag 'n' drop files here, or click to select files</p>
+                                    </div>
+                                </section>
+                                )}
+                            </Dropzone>
+                        </GridListTile>
+
                         {this.state.files.map(file =>(
                             <GridListTile key={file.id} style={{ padding: '2px' }}
                             cols={1}>
@@ -313,9 +327,9 @@ class Create extends Component {
                                 <GridListTileBar
                                     title={file.title}
                                     classes={{
-                                                    root: classes.titleBar,
-                                                    title: classes.title,
-                                                  }}
+                                        root: classes.titleBar,
+                                        title: classes.title,
+                                    }}
                                     actionIcon={
                                             <IconButton aria-label={`download ${file.id}`}
                                              onClick={() => this.removeFile
@@ -364,7 +378,6 @@ class Create extends Component {
                 subheader={this.state.task.createdDate}>
             </CardHeader>
         <CardContent>
-
             <TextField
             id="email-input"
             label="push to"
@@ -395,19 +408,7 @@ class Create extends Component {
                 }}
             />
         </CardContent>
-        <CardContent>
-            <Dropzone onDrop={this.onDrop}>
-                {({getRootProps, getInputProps}) => (
-                <section className="container">
-                    <div {...getRootProps({className: 'dropzone'})}>
-                        <input {...getInputProps()} />
-                        <p>Drag 'n' drop files here, or click to select files</p>
-                    </div>
-                </section>
-                )}
-            </Dropzone>
-            {UploadPanel}
-        </CardContent>
+
         <CardContent>
             <Typography variant="body2" component="p">
                     <TextField
@@ -421,6 +422,10 @@ class Create extends Component {
                     margin="normal"
                     />
             </Typography>
+        </CardContent>
+
+        <CardContent>
+            {UploadPanel}
         </CardContent>
         <CardActions disableSpacing>
             <IconButton type="submit" aria-label="Submit">
@@ -438,8 +443,6 @@ class Create extends Component {
         </CardActions>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent>
-                    <Typography paragraph>Uploads</Typography>
-                    {UploadPanel}
                 </CardContent>
             </Collapse>
         </Card>
