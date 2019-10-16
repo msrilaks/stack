@@ -31,7 +31,6 @@ import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import ListSubheader from '@material-ui/core/ListSubheader';
 
-
 const useStyles = makeStyles(theme => ({
   card: {
     maxWidth: 600,
@@ -390,12 +389,12 @@ class Create extends Component {
             margin="normal"
             value={this.state.task.userId} onChange={this.handleInputChange} required
             />
-
-
+        </CardContent>
+        <CardContent>
+        <div style={styles.tagContainer}>
             <StackChipInput
                 value={defaultTags}
                 placeholder="#tags"
-                fullWidth
                 alwaysShowPlaceholder='true'
                 onAdd={(chips) => this.handleChangeChips(chips)}
                 onDelete={(chips, index) => this.handleChipDelete(chips,
@@ -408,6 +407,7 @@ class Create extends Component {
                     'fontFamily': 'sans-serif'
                 }}
             />
+            </div>
         </CardContent>
 
         <CardContent>

@@ -41,7 +41,7 @@ import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import ListSubheader from '@material-ui/core/ListSubheader';
-
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -76,7 +76,6 @@ const useStyles = makeStyles(theme => ({
   },
     modalPaper: {
       backgroundColor: theme.palette.background.paper,
-      border: '2px solid #000',
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
     },
@@ -102,6 +101,10 @@ const useStyles = makeStyles(theme => ({
             'linear-gradient(to top, rgba(0,0,0,0.5) 0%, ' +
             'rgba(0,0,0,0.2) 70%, rgba(0,0,0,0) 100%)',
     },
+    pushButton: {
+        margin: theme.spacing(1),
+        float: 'right',
+      },
 }));
 
 
@@ -474,7 +477,6 @@ class Task extends Component {
           >
             <Fade in={open}>
               <div className={classes.modalPaper}>
-                <h2 id="push-modal-title">Push to</h2>
                             <TextField
                             id="email-input"
                             label="push to"
@@ -487,6 +489,11 @@ class Task extends Component {
                             value={this.props.task.userId} onChange={this
                             .handleInputChange} required
                 />
+                <Button variant="contained" color="primary"
+                className={classes.pushButton}
+                onClick={this.onButtonPushTaskClicked}>
+                     Push
+                 </Button>
               </div>
             </Fade>
           </Modal>

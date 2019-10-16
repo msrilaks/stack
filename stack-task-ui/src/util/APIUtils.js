@@ -105,28 +105,10 @@ export const styles = {
         height: '32px',
         width: '32px'
     },
-    thumbsContainer: {
-     display: 'flex',
-     flexDirection: 'row',
-     flexWrap: 'wrap',
-     marginTop: 16,
+    tagContainer: {
+        float: 'right',
+        maxWidth: '400px',
     },
-    thumb: {
-     display: 'inline-flex',
-     borderRadius: 2,
-     border: '1px solid #eaeaea',
-     marginBottom: 8,
-     marginRight: 8,
-     width: 50,
-     height: 50,
-     padding: 4,
-     boxSizing: 'border-box'
-    },
-   thumbInner: {
-     display: 'inline-block',
-     minWidth: 0,
-     overflow: 'hidden'
-   },
    img: {
      display: 'block',
      width: 'auto',
