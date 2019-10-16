@@ -61,10 +61,10 @@ const useStyles = makeStyles(theme => ({
           overflow: 'visible',
           backgroundColor: theme.palette.background.paper,
       },
-      gridList: {
-          width: 500,
-          height: 'auto',
-      },
+    gridList: {
+        width: '100%',
+        height: 'auto',
+    },
       gridIcon: {
           color: 'rgba(255, 255, 255, 0.54)',
       },
@@ -298,9 +298,9 @@ class Create extends Component {
 
     let UploadPanel  =  (
                 <div className={classes.grid}>
-                    <GridList cellHeight={160} className={classes
-                    .gridList}>
-                        <GridListTile key="Subheader" cols={2} style={{ height:
+                    <GridList cellHeight={'auto'} className={classes
+                    .gridList} cols={4}>
+                        <GridListTile key="Subheader" cols={4} style={{ height:
                         'auto'}}>
                             <ListSubheader component="div"
                             style={{paddingLeft: '0px'}}>Uploads</ListSubheader>
@@ -309,7 +309,7 @@ class Create extends Component {
                             <GridListTile key={file.id} style={{ padding: '2px' }}
                             cols={1}>
                                 <img src={file.preview} alt={file.title}
-                                height='180px'/>
+                                height='120px' width='120px'/>
                                 <GridListTileBar
                                     title={file.title}
                                     classes={{
