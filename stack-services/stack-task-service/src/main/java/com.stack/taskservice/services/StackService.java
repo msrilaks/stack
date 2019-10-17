@@ -75,10 +75,12 @@ public class StackService {
 
     public Task createTask(Task task) {
         Stack stack = stackRequestContext.getStack();
-        Task createdTask = stackRepository.saveTaskToStack(task, stack);
         if (!task.getUserId().equals(stack.getUserId())) {
-            return pushTask(createdTask.getId(), task.getUserId());
+            String pushUserId = task.getUserId();
+            Task createdTask = stackRepository.saveTaskToStack(task, stack);
+            return pushTask(createdTask.getId(), pushUserId);
         }
+        Task createdTask = stackRepository.saveTaskToStack(task, stack);
         return createdTask;
     }
 

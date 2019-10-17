@@ -33,7 +33,7 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 
 const useStyles = makeStyles(theme => ({
   card: {
-    maxWidth: 600,
+    maxWidth: 700,
     marginBottom:30,
   },
   media: {
@@ -273,7 +273,7 @@ class Create extends Component {
 
 
     truncate(str) {
-        return str.length > 125 ? str.substring(0, 125) + "..." : str;
+        return str.length > 75 ? str.substring(0, 75) + "..." : str;
     }
 
     StackCreateCard() {
@@ -378,19 +378,6 @@ class Create extends Component {
                 subheader={this.state.task.createdDate}>
             </CardHeader>
         <CardContent>
-            <TextField
-            id="email-input"
-            label="push to"
-            type="email"
-            name="userId"
-            fullWidth
-            defaultValue={this.state.task.userId}
-            autoComplete="email"
-            margin="normal"
-            value={this.state.task.userId} onChange={this.handleInputChange} required
-            />
-        </CardContent>
-        <CardContent>
         <div style={styles.tagContainer}>
             <StackChipInput
                 value={defaultTags}
@@ -409,7 +396,18 @@ class Create extends Component {
             />
             </div>
         </CardContent>
-
+        <CardContent>
+            <TextField
+            id="email-input"
+            label="push to"
+            type="email"
+            name="userId"
+            defaultValue={this.state.task.userId}
+            autoComplete="email"
+            margin="normal"
+            value={this.state.task.userId} onChange={this.handleInputChange} required
+            />
+        </CardContent>
         <CardContent>
             <Typography variant="body2" component="p">
                     <TextField

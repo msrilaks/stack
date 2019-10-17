@@ -114,7 +114,7 @@ class Task extends Component {
         super(props);
         this.state = {
             isModifyClicked: false,
-            userId: ''
+            pushUserId: ''
         }
         this.state = {
              files: []
@@ -137,6 +137,7 @@ class Task extends Component {
     componentDidMount() {
         this.setState({
             isModifyClicked: false,
+            pushUserId:this.props.task.userId,
         });
         this.loadFiles();
     }
@@ -185,15 +186,15 @@ class Task extends Component {
         const inputName = target.name;
         let inputValue = target.value;
         this.setState({
-            userId:{inputValue}
+            pushUserId:inputValue
         },function () {
-            console.log("### SRI " + this.state.userId);
+            console.log("### SRI " + this.state.pushUserId);
         });
     }
 
         onButtonPushTaskClicked(event) {
             const pushTaskRequest = Object.assign({}, this.props.task);
-            pushTaskRequest.userId = this.state.userId;
+            pushTaskRequest.userId = this.state.pushUserId;
             console.log(pushTaskRequest);
             patchTask(pushTaskRequest,"isPushed=true")
             .then((response) => {
@@ -258,8 +259,9 @@ class Task extends Component {
     }
 
     truncate(str) {
-        return str.length > 125 ? str.substring(0, 125) + "..." : str;
+        return str.length > 75 ? str.substring(0, 75) + "..." : str;
     }
+
     tagChips() {
     const classes = useStyles();
             return <div className={classes.chipContainer}>
@@ -289,7 +291,8 @@ class Task extends Component {
             Object.assign(file, { preview: URL.createObjectURL(base64toBlob(file
             .image,''))}))))
 
-        let UploadPanel  =  (
+        let UploadPanel;
+        if(prevfiles && prevfiles.length>0){ UploadPanel= (
             <div className={classes.grid}>
                 <GridList cellHeight={'auto'} className={classes
                 .gridList} cols={4}>
@@ -323,7 +326,7 @@ class Task extends Component {
                 )}
                 </GridList>
             </div>
-        )
+        )}
 
 
         let PushedUserPanel;
@@ -445,17 +448,20 @@ class Task extends Component {
     }
 
  PushModal() {
-      const classes = useStyles();
-      const [open, setOpen] = React.useState(false);
 
-      const handleOpen = () => {
+    const classes = useStyles();
+    const [open, setOpen] = React.useState(false);
+
+    const handleOpen = () => {
         setOpen(true);
-      };
+    };
 
-      const handleClose = () => {
+    const handleClose = () => {
         setOpen(false);
-      };
-
+    };
+    if(this.props.taskProfile !== 'todo') {
+        return(<div/>);
+    }
       return (
         <div>
             <Tooltip title="Push" placement="bottom">
@@ -481,13 +487,12 @@ class Task extends Component {
                             id="email-input"
                             label="push to"
                             type="email"
-                            name="userId"
+                            name="pushUserId"
                             fullWidth
-                            defaultValue={this.props.task.userId}
+                            defaultValue={this.state.pushUserId}
                             autoComplete="email"
                             margin="normal"
-                            value={this.props.task.userId} onChange={this
-                            .handleInputChange} required
+                            onChange={this.handleInputChange} required
                 />
                 <Button variant="contained" color="primary"
                 className={classes.pushButton}
@@ -497,6 +502,7 @@ class Task extends Component {
               </div>
             </Fade>
           </Modal>
+
         </div>
       );
     }
