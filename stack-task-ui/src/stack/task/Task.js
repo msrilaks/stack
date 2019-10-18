@@ -360,11 +360,6 @@ class Task extends Component {
             <div className={classes.grid}>
                 <GridList cellHeight={'auto'} className={classes
                 .gridList} cols={4}>
-                    <GridListTile key="Subheader" cols={4} style={{ height:
-                    'auto'}}>
-                        <ListSubheader component="div"
-                        style={{paddingLeft: '0px'}}>Uploads</ListSubheader>
-                    </GridListTile>
                     {Object.entries(prevfiles).map(([key, file])=>(
                         <GridListTile key={file.id} style={{ padding: '2px' }}
                         cols={1}>
@@ -503,6 +498,10 @@ class Task extends Component {
                                       { this.props.task.description }
                                   </Typography>
                             </GridListTile>
+                            <GridListTile key='taskDetail2'
+                                  style={{ padding:'2px' }} cols={2}>
+                                  {UploadPanel}
+                             </GridListTile>
                         </GridList>
                     </CardContent>
 
@@ -520,7 +519,7 @@ class Task extends Component {
                 </CardActions>
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <CardContent >
-                        {UploadPanel}
+
                     </CardContent>
                 </Collapse>
             </Card>
