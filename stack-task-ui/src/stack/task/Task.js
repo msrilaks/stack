@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './Task.css';
 import Create from '../create/Create';
+import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -42,6 +43,49 @@ import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import 'date-fns';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+
+const StyledMenu = withStyles({
+  paper: {
+    border: '1px solid #d3d4d5',
+  },
+})(props => (
+  <Menu
+    elevation={0}
+    getContentAnchorEl={null}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'center',
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'center',
+    }}
+    {...props}
+  />
+));
+
+const StyledMenuItem = withStyles(theme => ({
+  root: {
+    '&:focus': {
+      backgroundColor: theme.palette.primary.main,
+      '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
+        color: theme.palette.common.white,
+      },
+    },
+  },
+}))(MenuItem);
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -105,6 +149,9 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(1),
         float: 'right',
       },
+      calendar: {
+          width: '60%',
+        },
 }));
 
 
@@ -114,12 +161,11 @@ class Task extends Component {
         super(props);
         this.state = {
             isModifyClicked: false,
-            pushUserId: ''
+            pushUserId: '',
         }
         this.state = {
              files: []
         };
-
 
         this.onButtonDeleteTaskClicked = this.onButtonDeleteTaskClicked.bind(this);
         this.onButtonCompleteTaskClicked = this.onButtonCompleteTaskClicked.bind(this);
@@ -133,11 +179,15 @@ class Task extends Component {
         this.tagChips = this.tagChips.bind(this);
         this.StackTaskCard = this.StackTaskCard.bind(this);
         this.PushModal = this.PushModal.bind(this);
+        this.EventModal = this.EventModal.bind(this);
+        this.OptionsMenu = this.OptionsMenu.bind(this);
     }
     componentDidMount() {
         this.setState({
             isModifyClicked: false,
             pushUserId:this.props.task.userId,
+            pushModalOpen:false,
+            eventModalOpen:false,
         });
         this.loadFiles();
     }
@@ -341,11 +391,6 @@ class Task extends Component {
         let TaskButtonPanel;
         if(this.props.taskProfile == 'todo') {
            TaskButtonPanel = <div>
-                <Tooltip title="Add to Google Calender" placement="bottom">
-                   <IconButton aria-label="Calendar" onClick={this.onButtonCompleteTaskClicked}>
-                        <CalendarIcon/>
-                    </IconButton>
-                </Tooltip>
                 <Tooltip title="Mark as Completed" placement="bottom">
                    <IconButton aria-label="Complete" onClick={this.onButtonCompleteTaskClicked}>
                         <DoneIcon/>
@@ -405,7 +450,11 @@ class Task extends Component {
                         </Avatar>
                     }
                     action={
+                        <div>
+                        <this.OptionsMenu/>
                         <this.PushModal/>
+                        <this.EventModal/>
+                        </div>
                     }
 
                     title={<span style={{overflow: 'hidden', textOverflow:
@@ -447,41 +496,85 @@ class Task extends Component {
         );
     }
 
- PushModal() {
+ OptionsMenu() {
+ const classes = useStyles();
+ const [anchorEl, setAnchorEl] = React.useState(null);
 
-    const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget);
+  };
 
-    const handleOpen = () => {
-        setOpen(true);
-    };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handlePush = () => {
+        handleClose();
+        this.setState({
+              pushModalOpen: !this.state.pushModalOpen,
+          },function () {
+              console.log("pushModalOpen "+this.state.pushModalOpen);
+          });
+      };
 
-    const handleClose = () => {
-        setOpen(false);
-    };
+  const handleEvent = () => {
+    handleClose();
+    this.setState({
+          eventModalOpen: !this.state.eventModalOpen,
+      },function () {
+          console.log("eventModalOpen "+this.state.eventModalOpen);
+      });
+  };
     if(this.props.taskProfile !== 'todo') {
         return(<div/>);
     }
+ return(
+   <div>
+       <Tooltip title="Options" placement="bottom">
+                       <IconButton aria-label="Options" aria-haspopup="true" onClick={handleClick}>
+                            <MoreVertIcon/>
+                        </IconButton>
+                    </Tooltip>
+       <StyledMenu
+         id="simple-menu"
+         anchorEl={anchorEl}
+         keepMounted
+         open={Boolean(anchorEl)}
+         onClose={handleClose}
+       >
+         <StyledMenuItem onClick={handlePush}>
+         <ListItemIcon>
+                     <ShareIcon fontSize="small" />
+                   </ListItemIcon>
+                   <ListItemText primary="Push" />
+         </StyledMenuItem>
+          <StyledMenuItem onClick={handleEvent}>
+          <ListItemIcon>
+                      <CalendarIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText primary="Google Calendar Event" />
+          </StyledMenuItem>
+       </StyledMenu>
+     </div>
+ );
+ }
+
+ PushModal() {
+    const classes = useStyles();
       return (
         <div>
-            <Tooltip title="Push" placement="bottom">
-               <IconButton aria-label="Push" onClick={handleOpen}>
-                    <ShareIcon/>
-                </IconButton>
-            </Tooltip>
           <Modal
             aria-labelledby="transition-modal-title"
             aria-describedby="transition-modal-description"
             className={classes.modal}
-            open={open}
-            onClose={handleClose}
+            open={this.state.pushModalOpen}
+            onClose={()=>{this.setState({pushModalOpen:false})}}
             closeAfterTransition
             BackdropComponent={Backdrop}
             BackdropProps={{
               timeout: 500,
             }}
           >
-            <Fade in={open}>
+            <Fade in={this.state.pushModalOpen}>
               <div className={classes.modalPaper}>
                             <TextField
                             id="email-input"
@@ -505,6 +598,95 @@ class Task extends Component {
 
         </div>
       );
+    }
+
+ EventModal() {
+        const classes = useStyles();
+        const [selectedDate, setSelectedDate] = React.useState(new Date());
+
+  const handleDateChange = date => {
+    setSelectedDate(date);
+  };
+        return (
+         <div>
+                  <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    className={classes.modal}
+                    open={this.state.eventModalOpen}
+                    onClose={()=>{this.setState({eventModalOpen:false})}}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                      timeout: 500,
+                    }}
+                  >
+            <Fade in={this.state.eventModalOpen}>
+            <div className={classes.modalPaper}>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <Grid container className={classes.calendar} justify="left">
+                        <GridList cellHeight={'auto'} className={classes
+                        .gridList} cols={2}>
+                            <GridListTile key='dateStart'
+                                style={{ padding:'2px' }} cols={1}>
+                                <KeyboardDatePicker
+                                    margin="normal"
+                                    id="mui-pickers-date"
+                                    label="Start Date"
+                                    value={selectedDate}
+                                    onChange={handleDateChange}
+                                    KeyboardButtonProps={{
+                                    'aria-label': 'Start date',
+                                }}
+                            />
+                            </GridListTile>
+                            <GridListTile key='timeStart'
+                                style={{ padding:'2px' }} cols={1}>
+                                    <KeyboardTimePicker
+                                    margin="normal"
+                                    id="mui-pickers-time"
+                                    label="Start time"
+                                    value={selectedDate}
+                                    onChange={handleDateChange}
+                                    KeyboardButtonProps={{
+                                    'aria-label': 'Start Time',
+                                }}
+                            />
+                            </GridListTile>
+                            <GridListTile key='dateEnd'
+                                style={{ padding:'2px' }} cols={1}>
+                                <KeyboardDatePicker
+                                    margin="normal"
+                                    id="mui-pickers-date"
+                                    label="End Date"
+                                    value={selectedDate}
+                                    onChange={handleDateChange}
+                                    KeyboardButtonProps={{
+                                    'aria-label': 'End date',
+                                }}
+                            />
+                            </GridListTile>
+                            <GridListTile key='timeEnd'
+                                style={{ padding:'2px' }} cols={1}>
+                                    <KeyboardTimePicker
+                                    margin="normal"
+                                    id="mui-pickers-time"
+                                    label="End time"
+                                    value={selectedDate}
+                                    onChange={handleDateChange}
+                                    KeyboardButtonProps={{
+                                    'aria-label': 'End Time',
+                                }}
+                            />
+                            </GridListTile>
+                        </GridList>
+                    </Grid>
+                </MuiPickersUtilsProvider>
+                </div>
+            </Fade>
+            </Modal>
+            </div>
+        );
     }
 
     render() {
