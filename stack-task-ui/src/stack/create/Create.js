@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './Create.css';
-import { createTask, uploadPhoto, modifyTask, base64toBlob, deletePhoto, styles } from '../../util/APIUtils';
+import { createTask, uploadPhoto, modifyTask, base64toBlob, truncate,
+deletePhoto, styles } from '../../util/APIUtils';
 import Alert from 'react-s-alert';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -30,6 +31,8 @@ import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import ListSubheader from '@material-ui/core/ListSubheader';
+import Fade from '@material-ui/core/Fade';
+import Zoom from '@material-ui/core/Zoom';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -113,7 +116,6 @@ class Create extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.removeFile = this.removeFile.bind(this);
         this.StackCreateCard = this.StackCreateCard.bind(this);
-        this.truncate = this.truncate.bind(this);
     }
 
     componentWillMount() {
@@ -271,11 +273,6 @@ class Create extends Component {
     }
     }
 
-
-    truncate(str) {
-        return str.length > 75 ? str.substring(0, 75) + "..." : str;
-    }
-
     StackCreateCard() {
         const classes = useStyles();
         const [expanded, setExpanded] = React.useState(false);
@@ -300,11 +297,6 @@ class Create extends Component {
                 <div className={classes.grid}>
                     <GridList cellHeight={'auto'} className={classes
                     .gridList} cols={4}>
-                        <GridListTile key="Subheader" cols={4} style={{ height:
-                        'auto'}}>
-                            <ListSubheader component="div"
-                            style={{paddingLeft: '0px'}}>Uploads</ListSubheader>
-                        </GridListTile>
                         <GridListTile key="dropzone" cols={4} style={{ height:
                                                 'auto'}}>
                             <Dropzone onDrop={this.onDrop}>
@@ -312,7 +304,8 @@ class Create extends Component {
                                 <section className="container">
                                     <div {...getRootProps({className: 'dropzone'})}>
                                         <input {...getInputProps()} />
-                                        <p>Drag 'n' drop files here, or click to select files</p>
+                                        <p>Drag 'n' drop, or click here to
+                                        upload files</p>
                                     </div>
                                 </section>
                                 )}
@@ -355,7 +348,7 @@ class Create extends Component {
 
 
         return (
-
+        <Zoom timeout={150} in={this.state.task}>
         <Card className={classes.card}>
             <CardHeader
                 avatar={
@@ -371,11 +364,21 @@ class Create extends Component {
                     </IconButton>
                 }
 
-                title={<span style={{overflow: 'hidden', textOverflow:
-                    'ellipsis'}}>
-                    {this.truncate(this.state.task.description)}
-                    </span>}
-                subheader={this.state.task.createdDate}>
+                title={
+                    <Typography variant="h6"
+                    color="textPrimary" component="p">
+                        {<span style={{overflow: 'hidden', textOverflow:
+                        'ellipsis'}}>
+                            {truncate(this.state.task.description)}
+                        </span>}
+                    </Typography>}
+
+                subheader={
+                     <Typography variant="caption"
+                        color="textPrimary" component="p">
+                                {this.state.task.createdDate}
+                    </Typography>
+                }>
             </CardHeader>
         <CardContent>
         <div style={styles.tagContainer}>
@@ -405,14 +408,17 @@ class Create extends Component {
             defaultValue={this.state.task.userId}
             autoComplete="email"
             margin="normal"
+            variant="outlined"
+            style={{ paddingLeft: 16}}
             value={this.state.task.userId} onChange={this.handleInputChange} required
             />
-        </CardContent>
-        <CardContent>
-            <Typography variant="body2" component="p">
+
+            <Typography variant="body1" color="textSecondary" component="p"
+            style={{ paddingLeft: 16, paddingRight: 16}}>
                     <TextField
                     id="standard-multiline-flexible"
                     label="description"
+                    variant="outlined"
                     multiline
                     fullWidth
                     rowsMax="4"
@@ -445,6 +451,7 @@ class Create extends Component {
                 </CardContent>
             </Collapse>
         </Card>
+        </Zoom>
         );
     }
 

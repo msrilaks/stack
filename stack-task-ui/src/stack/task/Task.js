@@ -9,7 +9,8 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Alert from 'react-s-alert';
-import { deleteTask, patchTask, getPhotos, base64toBlob, styles } from '../../util/APIUtils';
+import { deleteTask, patchTask, getPhotos, base64toBlob, truncate, styles } from
+ '../../util/APIUtils';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CalendarIcon from '@material-ui/icons/CalendarToday';
@@ -37,6 +38,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
+import Zoom from '@material-ui/core/Zoom';
 import TextField from '@material-ui/core/TextField';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
@@ -92,9 +94,14 @@ const useStyles = makeStyles(theme => ({
     maxWidth: 700,
     marginBottom:30,
   },
+    media: {
+      height: 140,
+    },
+  taskButtonPanel: {
+      marginLeft: 'auto',
+  },
   expand: {
     transform: 'rotate(0deg)',
-    marginLeft: 'auto',
     transition: theme.transitions.create('transform', {
       duration: theme.transitions.duration.shortest,
     }),
@@ -108,6 +115,7 @@ const useStyles = makeStyles(theme => ({
   chipContainer: {
         display: 'flex',
         float: 'right',
+        paddingRight: '20px',
         flexWrap: 'wrap',
         '& > *': {
         margin: theme.spacing(0.5),
@@ -130,6 +138,15 @@ const useStyles = makeStyles(theme => ({
         overflow: 'visible',
         backgroundColor: theme.palette.background.paper,
     },
+    gridEvent: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'left',
+        overflow: 'visible',
+        backgroundColor: theme.palette.background.paper,
+        width: '600px',
+    },
+
     gridList: {
         width: '100%',
         height: 'auto',
@@ -175,7 +192,6 @@ class Task extends Component {
         this.handleInputChange = this.handleInputChange.bind(this);
         this.reloadTask = this.reloadTask.bind(this);
         this.loadFiles = this.loadFiles.bind(this);
-        this.truncate = this.truncate.bind(this);
         this.tagChips = this.tagChips.bind(this);
         this.StackTaskCard = this.StackTaskCard.bind(this);
         this.PushModal = this.PushModal.bind(this);
@@ -308,10 +324,6 @@ class Task extends Component {
 
     }
 
-    truncate(str) {
-        return str.length > 75 ? str.substring(0, 75) + "..." : str;
-    }
-
     tagChips() {
     const classes = useStyles();
             return <div className={classes.chipContainer}>
@@ -324,6 +336,8 @@ class Task extends Component {
                             <Chip
                                 key={data}
                                 label={data}
+                                size="small"
+                                clickable="true"
                                 color="primary"/>
                         );
                     })}
@@ -390,7 +404,7 @@ class Task extends Component {
 
         let TaskButtonPanel;
         if(this.props.taskProfile == 'todo') {
-           TaskButtonPanel = <div>
+           TaskButtonPanel = <div className={classes.taskButtonPanel}>
                 <Tooltip title="Mark as Completed" placement="bottom">
                    <IconButton aria-label="Complete" onClick={this.onButtonCompleteTaskClicked}>
                         <DoneIcon/>
@@ -408,10 +422,10 @@ class Task extends Component {
                 </Tooltip>
             </div>
         } else if(this.props.taskProfile == 'deleted'){
-            TaskButtonPanel = <div>
+            TaskButtonPanel = <div className={classes.taskButtonPanel}>
          </div>
         } else if(this.props.taskProfile == 'pushed'){
-            TaskButtonPanel = <div>
+            TaskButtonPanel = <div className={classes.taskButtonPanel}>
             <Tooltip title="Nudge" placement="bottom">
                 <IconButton aria-label="Remind">
                     <AlarmIcon />
@@ -424,7 +438,7 @@ class Task extends Component {
             </Tooltip>
          </div>
         }else if(this.props.taskProfile == 'completed'){
-            TaskButtonPanel = <div>
+            TaskButtonPanel = <div className={classes.taskButtonPanel}>
             <Tooltip title="Mark as TODO" placement="bottom">
                 <IconButton aria-label="Undo" onClick={this.onButtonTodoTaskClicked}>
                      <UndoIcon />
@@ -440,6 +454,7 @@ class Task extends Component {
 
 
         return (
+            <Zoom timeout={150} in={this.props.task}>
             <Card className={classes.card}>
                 <CardHeader
                     avatar={
@@ -457,25 +472,40 @@ class Task extends Component {
                         </div>
                     }
 
-                    title={<span style={{overflow: 'hidden', textOverflow:
-                    'ellipsis'}}>
-                                                  {this.truncate(this.props.task.description)}
-                                              </span>}
-                    subheader={this.props.task.createdDate}>
+                    title={
+                        <Typography variant="h6"
+                        color="textPrimary" component="p">
+                            {<span style={{overflow: 'hidden', textOverflow:
+                            'ellipsis'}}>
+                                {truncate(this.props.task.description)}
+                            </span>}
+                        </Typography>}
 
+                    subheader={
+                         <Typography variant="caption"
+                            color="textPrimary" component="p">
+                                    {this.props.task.createdDate}
+                        </Typography>
+                    }>
                     </CardHeader>
+
                     <CardContent>
-                    <this.tagChips/>
+                        <GridList cellHeight={'auto'} className={classes
+                             .gridList} cols={2}>
+                            <GridListTile key='taskDetail'
+                                style={{ padding:'2px' }} cols={2}>
+                                     <this.tagChips/>
+                            </GridListTile>
+                            <GridListTile key='taskDetail2'
+                                  style={{ padding:'2px' }} cols={2}>
+                                  <Typography variant="subtitle2" color="textSecondary"
+                                       component="p" style={{ }}>
+                                      { this.props.task.description }
+                                  </Typography>
+                            </GridListTile>
+                        </GridList>
                     </CardContent>
 
-                <CardContent>
-                    <Typography variant="body2" color="textSecondary" component="p">
-                        { this.props.task.description }
-                    </Typography>
-                </CardContent>
-                <CardContent >
-                    {UploadPanel}
-                </CardContent>
                 <CardActions disableSpacing>
                     {TaskButtonPanel}
                     <IconButton
@@ -489,10 +519,12 @@ class Task extends Component {
                     </IconButton>
                 </CardActions>
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
-                    <CardContent>
+                    <CardContent >
+                        {UploadPanel}
                     </CardContent>
                 </Collapse>
             </Card>
+            </Zoom>
         );
     }
 
@@ -622,9 +654,9 @@ class Task extends Component {
                     }}
                   >
             <Fade in={this.state.eventModalOpen}>
+            <div className={classes.gridEvent}>
             <div className={classes.modalPaper}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <Grid container className={classes.calendar} justify="left">
                         <GridList cellHeight={'auto'} className={classes
                         .gridList} cols={2}>
                             <GridListTile key='dateStart'
@@ -680,12 +712,18 @@ class Task extends Component {
                             />
                             </GridListTile>
                         </GridList>
-                    </Grid>
                 </MuiPickersUtilsProvider>
+                <Button variant="contained" color="primary"
+                                                className={classes.pushButton}
+                                                onClick={this.onButtonPushTaskClicked}>
+                                                     Add
+                                                 </Button>
+                </div>
                 </div>
             </Fade>
             </Modal>
             </div>
+
         );
     }
 

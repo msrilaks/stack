@@ -170,7 +170,7 @@ class Stack extends Component {
                 <Tab label="Deleted"/>
                 </StackTabs>
             </Paper>
-             <div className="stack-container">
+             <div className="stack-container" style={styles.stackContainer}>
             <div className="stack-task-container" style={styles.stackTaskContainer}>
             {              
                 <If condition={this.state.value === 0}>

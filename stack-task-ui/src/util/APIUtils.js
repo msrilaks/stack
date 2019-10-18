@@ -78,9 +78,11 @@ export const styles = {
         color:'#5D5A58',
         background:'#F5F5F5',
     },
-    stackTaskContainer: {
+    stackContainer: {
         paddingLeft: '50px',
         paddingRight: '50px',
+    },
+    stackTaskContainer: {
     },
     taskIcon: {
         color:'#1ea5ae',
@@ -135,6 +137,11 @@ export function getCurrentUser() {
         method: 'GET'
     });
 }
+
+export function truncate(str) {
+   return str.length > 50 ? str.substring(0, 50) + "..." : str;
+}
+
 
 export function getStack() {
     if(!localStorage.getItem(config.ACCESS_TOKEN)) {
