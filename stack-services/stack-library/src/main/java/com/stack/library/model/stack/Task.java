@@ -31,7 +31,7 @@ public class Task implements Comparable<Task>, Cloneable {
     private Long                     pushedTimeStamp;
     private Long                     deletedTimeStamp;
     private Long                     completeByTimeStamp;
-    private StackEvent stackEvent;
+    //private StackEvent stackEvent;
     @CreatedDate
     private Date                     createdDate;
     @LastModifiedDate

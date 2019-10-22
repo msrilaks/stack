@@ -641,7 +641,10 @@ class Task extends Component {
  EventModal() {
         const classes = useStyles();
         const [selectedDate, setSelectedDate] = React.useState(new Date());
-
+        const [location, setLocation] = React.useState("");
+  const handleLocationChange = location => {
+    setLocation(location);
+  };
   const handleDateChange = date => {
     setSelectedDate(date);
   };
@@ -719,6 +722,14 @@ class Task extends Component {
                             </GridListTile>
                         </GridList>
                 </MuiPickersUtilsProvider>
+                <TextField
+                            id="location"
+                            label="location"
+                            name="location"
+                            fullWidth
+                            margin="normal"
+                            onChange={this.handleLocationChange}
+                />
                 <Button variant="contained" color="primary"
                                                 className={classes.pushButton}
                                                 onClick={this.onButtonPushTaskClicked}>

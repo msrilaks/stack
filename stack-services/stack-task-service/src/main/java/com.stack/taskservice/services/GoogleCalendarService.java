@@ -63,8 +63,8 @@ public class GoogleCalendarService {
             event.setLocation(stackEvent.getLocation());
             event.setDescription(task.getDescription());
             service.events().insert("primary", event).execute();
-            task.setStackEvent(stackEvent);
-            stackRepository.saveStack(stack);
+            //task.setStackEvent(stackEvent);
+            //stackRepository.saveStack(stack);
         } catch (GeneralSecurityException e) {
             LOGGER.error("Security exception adding to Google Calendar", e);
         } catch (Exception e) {
