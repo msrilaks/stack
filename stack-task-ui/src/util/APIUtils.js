@@ -52,6 +52,15 @@ const requestUpload = (options) => {
 };
 
 export const styles = {
+    appIcon: {
+        paddingTop: '16px',
+        paddingRight: '4px',
+        height:'40px',
+        weight:'40px',
+    },
+    appBranding: {
+    display: 'inline-block',
+    },
     appTitle: {
         color:'#1ea5ae',
         fontFamily: 'Montserrat, sans-serif',
