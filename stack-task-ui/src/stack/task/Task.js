@@ -364,8 +364,7 @@ class Task extends Component {
                     {Object.entries(prevfiles).map(([key, file])=>(
                         <GridListTile key={file.id} style={{ padding: '2px' }}
                         cols={1}>
-                            <img src={file.preview} alt={file.title}
-                            height='120px' width='145px'/>
+                            <img src={file.preview} alt={file.title}/>
                             <GridListTileBar
                                 title={file.title}
                                 classes={{
@@ -501,6 +500,11 @@ class Task extends Component {
                                       { this.props.task.description }
                                   </Typography>
                             </GridListTile>
+                        </GridList>
+                    </CardContent>
+                    <CardContent>
+                        <GridList cellHeight={'auto'} className={classes
+                                                     .gridList} cols={2}>
                             <GridListTile key='taskDetail2'
                                   style={{ padding:'2px' }} cols={2}>
                                   {UploadPanel}

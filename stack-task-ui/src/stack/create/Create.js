@@ -298,7 +298,7 @@ class Create extends Component {
                     <GridList cellHeight={'auto'} className={classes
                     .gridList} cols={4}>
                         <GridListTile key="dropzone" cols={4} style={{ height:
-                                                'auto'}}>
+                                                'auto', paddingBottom:'20px'}}>
                             <Dropzone onDrop={this.onDrop}>
                                 {({getRootProps, getInputProps}) => (
                                 <section className="container">
@@ -311,12 +311,10 @@ class Create extends Component {
                                 )}
                             </Dropzone>
                         </GridListTile>
-
                         {this.state.files.map(file =>(
                             <GridListTile key={file.id} style={{ padding: '2px' }}
                             cols={1}>
-                                <img src={file.preview} alt={file.title}
-                                height='120px' width='145px'/>
+                                <img src={file.preview} alt={file.title}/>
                                 <GridListTileBar
                                     title={file.title}
                                     classes={{
