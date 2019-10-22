@@ -47,6 +47,7 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import 'date-fns';
+import { format } from 'date-fns'
 import DateFnsUtils from '@date-io/date-fns';
 import {
   MuiPickersUtilsProvider,
@@ -479,7 +480,8 @@ class Task extends Component {
                     subheader={
                          <Typography variant="caption"
                             color="textPrimary" component="p">
-                                    {this.props.task.createdDate}
+                                    {
+format(new Date(this.props.task.createdDate), 'HH:mm a, dd MMM yyyy')}
                         </Typography>
                     }>
                     </CardHeader>
