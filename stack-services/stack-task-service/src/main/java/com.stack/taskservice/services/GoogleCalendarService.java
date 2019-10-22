@@ -6,7 +6,13 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.calendar.Calendar;
+import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.EventDateTime;
+import com.stack.library.model.stack.Stack;
+import com.stack.library.model.stack.StackEvent;
+import com.stack.library.model.stack.Task;
 import com.stack.taskservice.context.StackRequestContext;
+import com.stack.taskservice.repository.StackRepository;
 import com.stack.taskservice.security.google.GoogleCredentialManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +21,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.GeneralSecurityException;
+import java.util.UUID;
 
 @Component
 public class GoogleCalendarService {
@@ -32,8 +39,12 @@ public class GoogleCalendarService {
     @Value("${spring.application.name}")
     private String appName;
 
-    public void listCalendar() {
+    @Autowired
+    StackRepository stackRepository;
 
+    public Task addEvent(UUID taskId, StackEvent stackEvent) {
+        Stack stack = stackRequestContext.getStack();
+        Task task = stackRepository.findTaskById(taskId, stack);
         try {
             GoogleCredential credential =
                     googleCredentialManager.getCredential(
@@ -45,11 +56,20 @@ public class GoogleCalendarService {
                     .setApplicationName(appName)
                     .build();
 
-            LOGGER.info("## SRI Google calendar: " + service.calendarList());
+            Event event = new Event();
+            event.setStart(new EventDateTime().setDateTime(stackEvent.getStart()));
+            event.setEnd(new EventDateTime().setDateTime(stackEvent.getEnd()));
+            event.setSummary(task.getTitle());
+            event.setLocation(stackEvent.getLocation());
+            event.setDescription(task.getDescription());
+            service.events().insert("primary", event).execute();
+            task.setStackEvent(stackEvent);
+            stackRepository.saveStack(stack);
         } catch (GeneralSecurityException e) {
-            e.printStackTrace();
+            LOGGER.error("Security exception adding to Google Calendar", e);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Exception adding to Google Calendar", e);
         }
+        return task;
     }
 }

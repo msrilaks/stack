@@ -1,8 +1,10 @@
 package com.stack.taskservice.controller;
 
 import com.stack.library.model.stack.Stack;
+import com.stack.library.model.stack.StackEvent;
 import com.stack.library.model.stack.Task;
 import com.stack.taskservice.context.StackRequestContext;
+import com.stack.taskservice.services.GoogleCalendarService;
 import com.stack.taskservice.services.StackService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,6 +33,9 @@ public class StackController {
 
     @Autowired
     StackService stackService;
+
+    @Autowired
+    GoogleCalendarService googleCalendarService;
 
     @GetMapping(path = "/stack",
                 produces = "application/json")
@@ -156,5 +161,16 @@ public class StackController {
         } else {
             return ResponseEntity.ok(task);
         }
+    }
+
+    @PostMapping(path = "/stack/{stackId}/tasks/{taskId}/event",
+                consumes = "application/json",
+                produces = "application/json")
+    @ApiOperation(value = "Create Google Event for Task", tags = {"Event"})
+    public ResponseEntity<Task> createGoogleEvent(
+            @PathVariable("stackId") String stackId,
+            @PathVariable("taskId") UUID taskId,
+            @RequestBody @Valid StackEvent stackEvent) {
+        return ResponseEntity.ok(googleCalendarService.addEvent(taskId, stackEvent));
     }
 }

@@ -31,6 +31,7 @@ public class Task implements Comparable<Task>, Cloneable {
     private Long                     pushedTimeStamp;
     private Long                     deletedTimeStamp;
     private Long                     completeByTimeStamp;
+    private StackEvent stackEvent;
     @CreatedDate
     private Date                     createdDate;
     @LastModifiedDate
@@ -52,6 +53,10 @@ public class Task implements Comparable<Task>, Cloneable {
         task.setCreatedDate(getCreatedDate());
         task.resetTimeStamps();
         return task;
+    }
+
+    public String getTitle() {
+        return ((description.length() > 30)? description.substring(0,29) : description);
     }
 
     public void resetTimeStamps() {
