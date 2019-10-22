@@ -9,8 +9,8 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Alert from 'react-s-alert';
-import { deleteTask, patchTask, getPhotos, base64toBlob, truncate, styles } from
- '../../util/APIUtils';
+import { deleteTask, patchTask, getPhotos, base64toBlob,
+    truncate, addEvent, styles } from '../../util/APIUtils';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CalendarIcon from '@material-ui/icons/CalendarToday';
@@ -92,12 +92,26 @@ const StyledMenuItem = withStyles(theme => ({
 
 const useStyles = makeStyles(theme => ({
   card: {
-    maxWidth: 700,
-    marginBottom:30,
+    maxWidth: 800,
+    marginBottom:35,
+  },
+  cardHeader:{
+    backgroundColor: 'aliceblue',
+    borderBottom: 'aliceblue',
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'groove',
   },
     media: {
       height: 140,
     },
+  taskTitle: {
+    fontFamily: 'cursive',
+    textTransform: 'capitalize',
+  },
+  taskDetail: {
+    fontSize: '1rem',
+    fontWeight: '500',
+  },
   taskButtonPanel: {
       marginLeft: 'auto',
   },
@@ -182,14 +196,21 @@ class Task extends Component {
             pushUserId: '',
         }
         this.state = {
-             files: []
+             files: [],
+             event:{
+                 location:'',
+                 start:new Date(),
+                 end:new Date(),
+             }
         };
+
 
         this.onButtonDeleteTaskClicked = this.onButtonDeleteTaskClicked.bind(this);
         this.onButtonCompleteTaskClicked = this.onButtonCompleteTaskClicked.bind(this);
         this.onButtonTodoTaskClicked = this.onButtonTodoTaskClicked.bind(this);
         this.onButtonModifyTaskClicked = this.onButtonModifyTaskClicked.bind(this);
         this.onButtonPushTaskClicked = this.onButtonPushTaskClicked.bind(this);
+        this.onButtonAddEventClicked = this.onButtonAddEventClicked.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.reloadTask = this.reloadTask.bind(this);
         this.loadFiles = this.loadFiles.bind(this);
@@ -206,6 +227,19 @@ class Task extends Component {
             pushModalOpen:false,
             eventModalOpen:false,
         });
+
+        this.setState({
+            event:{
+                location:'',
+                start:new Date(),
+                end:new Date(),
+            }
+        },function () {
+            console.log("location "+this.state.event.location);
+            console.log("eventStartDate "+this.state.event.start);
+            console.log("eventEndDate "+this.state.event.end);
+        });
+
         this.loadFiles();
     }
 
@@ -232,6 +266,21 @@ class Task extends Component {
         });
     }
 
+    onButtonAddEventClicked(addevent){
+        const eventRequest = Object.assign({}, this.state.event);
+        console.log(eventRequest);
+        addEvent(eventRequest, this.props.stack.id, this.props.task.id)
+            .then((response) => {
+                this.setState({
+                        eventModalOpen:false
+                    },function () {
+                        console.log("AddEventRequest "+response);
+                    });
+                Alert.success("Google Calendar Event added.");
+        }).catch(error => {
+            Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
+        });
+    }
     onButtonTodoTaskClicked() {
         const completeTaskRequest = Object.assign({}, this.props.task);
         console.log(completeTaskRequest);
@@ -450,8 +499,8 @@ class Task extends Component {
 
         return (
             <Zoom timeout={150} in={this.props.task}>
-            <Card className={classes.card}>
-                <CardHeader
+            <Card className={classes.card} elevation='24'>
+                <CardHeader className={classes.cardHeader}
                     avatar={
                         <Avatar aria-label="task"
                             className={classes.avatar}
@@ -469,7 +518,7 @@ class Task extends Component {
 
                     title={
                         <Typography variant="h6"
-                        color="textPrimary" component="p">
+                        color="textPrimary" component="p" className={classes.taskTitle}>
                             {<span style={{overflow: 'hidden', textOverflow:
                             'ellipsis'}}>
                                 {truncate(this.props.task.description)}
@@ -495,8 +544,9 @@ class Task extends Component {
                             </GridListTile>
                             <GridListTile key='taskDetail2'
                                   style={{ padding:'2px' }} cols={2}>
-                                  <Typography variant="subtitle2" color="textSecondary"
-                                       component="p" style={{ }}>
+                                  <Typography variant="subtitle2"
+                                  color="textPrimary"
+                                       component="p" className={classes.taskDetail}>
                                       { this.props.task.description }
                                   </Typography>
                             </GridListTile>
@@ -639,15 +689,39 @@ class Task extends Component {
     }
 
  EventModal() {
-        const classes = useStyles();
-        const [selectedDate, setSelectedDate] = React.useState(new Date());
-        const [location, setLocation] = React.useState("");
-  const handleLocationChange = location => {
-    setLocation(location);
-  };
-  const handleDateChange = date => {
-    setSelectedDate(date);
-  };
+    const classes = useStyles();
+
+    const handleLocationChange = event => {
+        const target = event.target;
+        const inputName = target.name;
+        let inputValue = target.value;
+        this.setState({
+            event:{
+                ...this.state.event,
+                location:inputValue,
+            },
+        },function () {
+            console.log("location "+this.state.event.location);
+        });
+    };
+    const handleStartDateChange = date => {
+        this.setState({
+            event:{
+                start:date,
+            },
+        },function () {
+            console.log("eventStartDate "+this.state.event.start);
+        });
+    };
+    const handleEndDateChange = date => {
+        this.setState({
+            event:{
+                end:date,
+            },
+        },function () {
+            console.log("eventEndDate "+this.state.event.end);
+        });
+    };
         return (
          <div>
                   <Modal
@@ -674,8 +748,8 @@ class Task extends Component {
                                     margin="normal"
                                     id="mui-pickers-date"
                                     label="Start Date"
-                                    value={selectedDate}
-                                    onChange={handleDateChange}
+                                    value={this.state.event.start}
+                                    onChange={handleStartDateChange}
                                     KeyboardButtonProps={{
                                     'aria-label': 'Start date',
                                 }}
@@ -687,8 +761,8 @@ class Task extends Component {
                                     margin="normal"
                                     id="mui-pickers-time"
                                     label="Start time"
-                                    value={selectedDate}
-                                    onChange={handleDateChange}
+                                    value={this.state.event.start}
+                                    onChange={handleStartDateChange}
                                     KeyboardButtonProps={{
                                     'aria-label': 'Start Time',
                                 }}
@@ -700,8 +774,8 @@ class Task extends Component {
                                     margin="normal"
                                     id="mui-pickers-date"
                                     label="End Date"
-                                    value={selectedDate}
-                                    onChange={handleDateChange}
+                                    value={this.state.event.end}
+                                    onChange={handleEndDateChange}
                                     KeyboardButtonProps={{
                                     'aria-label': 'End date',
                                 }}
@@ -713,8 +787,8 @@ class Task extends Component {
                                     margin="normal"
                                     id="mui-pickers-time"
                                     label="End time"
-                                    value={selectedDate}
-                                    onChange={handleDateChange}
+                                    value={this.state.event.end}
+                                    onChange={handleEndDateChange}
                                     KeyboardButtonProps={{
                                     'aria-label': 'End Time',
                                 }}
@@ -728,13 +802,11 @@ class Task extends Component {
                             name="location"
                             fullWidth
                             margin="normal"
-                            onChange={this.handleLocationChange}
+                            onChange={handleLocationChange}
                 />
                 <Button variant="contained" color="primary"
-                                                className={classes.pushButton}
-                                                onClick={this.onButtonPushTaskClicked}>
-                                                     Add
-                                                 </Button>
+                    className={classes.pushButton}
+                    onClick={this.onButtonAddEventClicked}>Add</Button>
                 </div>
                 </div>
             </Fade>

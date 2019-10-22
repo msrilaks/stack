@@ -36,8 +36,21 @@ import Zoom from '@material-ui/core/Zoom';
 
 const useStyles = makeStyles(theme => ({
   card: {
-    maxWidth: 700,
-    marginBottom:30,
+    maxWidth: 800,
+    marginBottom:35,
+  },
+  taskTitle: {
+    fontFamily: 'cursive',
+    textTransform: 'capitalize',
+  },
+  taskDetail: {
+    fontSize: '1rem',
+  },
+  cardHeader:{
+    backgroundColor: 'aliceblue',
+    borderBottom: 'aliceblue',
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'groove',
   },
   media: {
     height: 0,
@@ -347,8 +360,8 @@ class Create extends Component {
 
         return (
         <Zoom timeout={150} in={this.state.task}>
-        <Card className={classes.card}>
-            <CardHeader
+        <Card className={classes.card} elevation='24'>
+            <CardHeader className={classes.cardHeader}
                 avatar={
                     <Avatar aria-label="task"
                         className={classes.avatar}
@@ -364,7 +377,7 @@ class Create extends Component {
 
                 title={
                     <Typography variant="h6"
-                    color="textPrimary" component="p">
+                    color="textPrimary" component="p" className={classes.taskTitle}>
                         {<span style={{overflow: 'hidden', textOverflow:
                         'ellipsis'}}>
                             {truncate(this.state.task.description)}
@@ -412,7 +425,8 @@ class Create extends Component {
             />
 
             <Typography variant="body1" color="textSecondary" component="p"
-            style={{ paddingLeft: 16, paddingRight: 16}}>
+            style={{ paddingLeft: 16, paddingRight: 16}}
+            className={classes.taskDetail}>
                     <TextField
                     id="standard-multiline-flexible"
                     label="description"

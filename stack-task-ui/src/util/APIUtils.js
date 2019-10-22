@@ -53,13 +53,16 @@ const requestUpload = (options) => {
 
 export const styles = {
     appIcon: {
-        paddingTop: '16px',
-        paddingRight: '4px',
-        height:'40px',
+        paddingTop: '15px',
+        paddingRight: '10px',
+        height:'45px',
         weight:'40px',
     },
+    appBrandingContainer: {
+        display: 'inline-flex',
+    },
     appBranding: {
-    display: 'inline-block',
+        display: 'inline-block',
     },
     appTitle: {
         color:'#1ea5ae',
@@ -240,6 +243,18 @@ export function modifyTask(modifyTaskRequest, patchAction) {
         url: config.API_BASE_URL + "/stack/"+modifyTaskRequest.stackId+"/tasks/"+modifyTaskRequest.id,
         method: 'PUT',
         body: JSON.stringify(modifyTaskRequest)
+    });
+}
+
+export function addEvent(eventRequest, stackId, taskId) {
+    if(!localStorage.getItem(config.ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: config.API_BASE_URL + "/stack/"+stackId+"/tasks/"+taskId+"/event",
+        method: 'POST',
+        body: JSON.stringify(eventRequest)
     });
 }
 
