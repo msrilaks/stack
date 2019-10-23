@@ -65,7 +65,7 @@ const StyledMenu = withStyles({
   },
 })(props => (
   <Menu
-    elevation={0}
+    elevation={5}
     getContentAnchorEl={null}
     anchorOrigin={{
       vertical: 'bottom',
@@ -499,7 +499,7 @@ class Task extends Component {
 
         return (
             <Zoom timeout={150} in={this.props.task}>
-            <Card className={classes.card} elevation='24'>
+            <Card className={classes.card} elevation='10'>
                 <CardHeader className={classes.cardHeader}
                     avatar={
                         <Avatar aria-label="task"

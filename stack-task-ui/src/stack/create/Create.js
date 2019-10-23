@@ -360,7 +360,7 @@ class Create extends Component {
 
         return (
         <Zoom timeout={150} in={this.state.task}>
-        <Card className={classes.card} elevation='24'>
+        <Card className={classes.card} elevation='10'>
             <CardHeader className={classes.cardHeader}
                 avatar={
                     <Avatar aria-label="task"
