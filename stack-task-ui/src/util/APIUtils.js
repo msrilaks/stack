@@ -54,7 +54,7 @@ const requestUpload = (options) => {
 export const styles = {
     appIcon: {
         paddingTop: '15px',
-        paddingRight: '10px',
+        paddingRight: '15px',
         height:'45px',
         weight:'40px',
     },
@@ -95,6 +95,9 @@ export const styles = {
         paddingRight: '50px',
     },
     stackTaskContainer: {
+    },
+    taskListContainer: {
+        paddingTop:'10px',
     },
     taskIcon: {
         color:'#1ea5ae',

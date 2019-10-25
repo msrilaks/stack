@@ -38,7 +38,7 @@ class TaskList extends Component {
             </div>
         }
         return ( 
-            <div>
+            <div style={styles.taskListContainer}>
             {
             (this.props.tasks && Object.keys(this.props.tasks).length > 0) ? (
             Object.entries(this.props.tasks).map(([key, item])=>(
