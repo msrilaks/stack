@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -54,7 +55,7 @@ public class StackService {
             Boolean isDeleted,
             Boolean isPushed,
             Boolean isCompleted,
-            Boolean isToDo) {
+            Boolean isToDo, List<String> tags) {
         Stack stack = stackRequestContext.getStack();
         if (isDeleted) {
             return stackRepository.fetchDeletedTasks(stack);

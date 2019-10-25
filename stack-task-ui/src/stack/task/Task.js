@@ -206,6 +206,7 @@ class Task extends Component {
 
 
         this.onButtonDeleteTaskClicked = this.onButtonDeleteTaskClicked.bind(this);
+        this.onButtonCalendarClicked = this.onButtonCalendarClicked.bind(this);
         this.onButtonCompleteTaskClicked = this.onButtonCompleteTaskClicked.bind(this);
         this.onButtonTodoTaskClicked = this.onButtonTodoTaskClicked.bind(this);
         this.onButtonModifyTaskClicked = this.onButtonModifyTaskClicked.bind(this);
@@ -357,6 +358,15 @@ class Task extends Component {
         });
     }
 
+
+    onButtonCalendarClicked() {
+        this.setState({
+            eventModalOpen: !this.state.eventModalOpen,
+        },function () {
+            console.log("eventModalOpen "+this.state.eventModalOpen);
+        });
+    }
+
     onButtonModifyTaskClicked() {
         this.setState({
             isModifyClicked: true,
@@ -462,6 +472,11 @@ class Task extends Component {
                 <Tooltip title="Delete" placement="bottom">
                     <IconButton aria-label="Delete" onClick={this.onButtonDeleteTaskClicked}>
                         <DeleteIcon/>
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Add to Google Calendar" placement="bottom">
+                    <IconButton aria-label="Calendar" onClick={this.onButtonCalendarClicked}>
+                        <CalendarIcon/>
                     </IconButton>
                 </Tooltip>
             </div>
@@ -635,12 +650,12 @@ class Task extends Component {
                    </ListItemIcon>
                    <ListItemText primary="Push" />
          </StyledMenuItem>
-          <StyledMenuItem onClick={handleEvent}>
+          {/*<StyledMenuItem onClick={handleEvent}>
           <ListItemIcon>
                       <CalendarIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText primary="Google Calendar Event" />
-          </StyledMenuItem>
+          </StyledMenuItem>*/}
        </StyledMenu>
      </div>
  );
@@ -707,6 +722,7 @@ class Task extends Component {
     const handleStartDateChange = date => {
         this.setState({
             event:{
+                ...this.state.event,
                 start:date,
             },
         },function () {
@@ -716,6 +732,7 @@ class Task extends Component {
     const handleEndDateChange = date => {
         this.setState({
             event:{
+                ...this.state.event,
                 end:date,
             },
         },function () {
