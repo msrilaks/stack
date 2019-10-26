@@ -50,6 +50,7 @@ class TaskList extends Component {
                             task={item} 
                             taskIndex= {key}
                             taskProfile={this.props.taskProfile}
+                            setFilterTags={this.props.setFilterTags}
                             reloadTasksFunc={this.props.reloadTasks}/>
                         </div>
                   </div>

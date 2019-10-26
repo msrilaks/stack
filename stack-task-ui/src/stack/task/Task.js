@@ -397,7 +397,8 @@ class Task extends Component {
                                 key={data}
                                 label={data}
                                 size="small"
-                                clickable="true"
+                                clickable={true}
+                                onClick={()=>this.props.setFilterTags(data)}
                                 color="primary"/>
                         );
                     })}

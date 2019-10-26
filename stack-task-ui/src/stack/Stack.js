@@ -17,7 +17,23 @@ import AlarmIcon from '@material-ui/icons/Alarm';
 import { If, Then, ElseIf, Else } from 'react-if-elseif-else-render';
 import IconButton from '@material-ui/core/IconButton';
 import { styled } from '@material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
+import Chip from '@material-ui/core/Chip';
 
+const useStyles = makeStyles(theme => ({
+  chipContainer: {
+        display: 'flex',
+        float: 'right',
+        paddingRight: '20px',
+        maxRows: '2',
+        maxWidth: '200px',
+        flexWrap: 'wrap',
+        '& > *': {
+        margin: theme.spacing(0.5),
+        },
+    },
+}));
 
 class Stack extends Component {
     
@@ -31,6 +47,7 @@ class Stack extends Component {
             movedTasks: null,
             deletedTasks: null,
             showCreateTask: false,
+            filterTags: '',
             value: 0,
         }
 
@@ -40,6 +57,9 @@ class Stack extends Component {
         this.onButtonRemindTasksClicked = this.onButtonRemindTasksClicked.bind(this);
         this.onButtonDeleteTasksClicked = this.onButtonDeleteTasksClicked.bind(this);
         this.reloadTasks = this.reloadTasks.bind(this);
+        this.setFilterTags = this.setFilterTags.bind(this);
+        this.deleteFilterTag = this.deleteFilterTag.bind(this);
+        this.tagChips = this.tagChips.bind(this);
     }
 
          
@@ -53,12 +73,58 @@ class Stack extends Component {
     componentDidMount() {
           this.setState({
            // tasks:this.props.stack.tasks,
-            
+            filterTags: '',
          },function () {
             console.log("stackTasks : "+ this.state.tasks)
         });
         this.reloadTasks();
        }
+
+    deleteFilterTag(chip) {
+
+    }
+
+    setFilterTags(chips) {
+    if(this.state.filterTags && this.state.filterTags.trim!=""
+            && this.state.filterTags.trim().length>0) {
+                 var newTags = this.state.filterTags +','+ chips +'';
+                 this.setState({
+                                    filterTags : newTags
+                                },function () {
+                                    console.log("this.state.filterTags : "
+                                    + this.state.filterTags)
+                            });
+            } else {
+                var newTags = chips +'';
+                this.setState({
+                        filterTags : newTags
+                    },function () {
+                        console.log("this.state.filterTags : "
+                        + this.state.filterTags);
+                });
+            }
+    }
+
+    tagChips() {
+    const classes = useStyles();
+            return <div className={classes.chipContainer}>
+                    {
+                        this.state.filterTags
+                        && this.state.filterTags.trim() !== ""
+                        && this.state.filterTags.length>0
+                        && this.state.filterTags.split(',').map(data => {
+                        return (
+                            <Chip
+                                key={data}
+                                label={data}
+                                size="small"
+                                clickable="true"
+                                onDelete={()=>this.deleteFilterTag(data)}
+                                color="primary"/>
+                        );
+                    })}
+                </div>
+    }
 
     reloadTasks() {
         if(this.state.value == 0){
@@ -179,6 +245,7 @@ class Stack extends Component {
                     <IconButton aria-label="Add" onClick={this.onButtonCreateTaskClicked}>
                         <AddIcon  style={styles.stackIcon}/>
                     </IconButton>
+                    <this.tagChips/>
                     {this.state.showCreateTask ?
                             <Create  authenticated={this.props.authenticated} 
                                     currentUser={this.props.currentUser} 
@@ -187,9 +254,11 @@ class Stack extends Component {
                                     taskProfile='created'/>
                                     :null}
                     </div>
-                   <TaskList tasks={this.state.todoTasks} reloadTasks={this.reloadTasks}
-                            authenticated={this.props.authenticated}
-                         currentUser={this.props.currentUser}
+                   <TaskList tasks={this.state.todoTasks}
+                        reloadTasks={this.reloadTasks}
+                        setFilterTags={this.setFilterTags}
+                        authenticated={this.props.authenticated}
+                        currentUser={this.props.currentUser}
                         stack={this.props.stack}
                         taskProfile='todo'/>
                    </Then>
@@ -199,11 +268,13 @@ class Stack extends Component {
                             <AlarmIcon  style={styles.stackIcon}/>
                         </IconButton>
                         </div>
-                         <TaskList tasks={this.state.movedTasks} reloadTasks={this.reloadTasks}
-                            authenticated={this.props.authenticated}
-                         currentUser={this.props.currentUser}
-                        stack={this.props.stack}
-                        taskProfile='pushed'/>
+                         <TaskList tasks={this.state.movedTasks}
+                             reloadTasks={this.reloadTasks}
+                             setFilterTags={this.setFilterTags}
+                             authenticated={this.props.authenticated}
+                             currentUser={this.props.currentUser}
+                             stack={this.props.stack}
+                         taskProfile='pushed'/>
                     </ElseIf>
                    <ElseIf condition={this.state.value === 2 }>
                         <div>
@@ -211,7 +282,9 @@ class Stack extends Component {
                                 <DeleteIcon  style={styles.stackIcon}/>
                             </IconButton>
                         </div>
-                         <TaskList tasks={this.state.completedTasks} reloadTasks={this.reloadTasks}
+                         <TaskList tasks={this.state.completedTasks}
+                            reloadTasks={this.reloadTasks}
+                            setFilterTags={this.setFilterTags}
                             authenticated={this.props.authenticated}
                          currentUser={this.props.currentUser}
                         stack={this.props.stack}
@@ -223,9 +296,11 @@ class Stack extends Component {
                         <ClearIcon  style={styles.stackIcon}/>
                     </IconButton>
                     </div>
-                    <TaskList tasks={this.state.deletedTasks} reloadTasks={this.reloadTasks}
-                            authenticated={this.props.authenticated}
-                         currentUser={this.props.currentUser}
+                    <TaskList tasks={this.state.deletedTasks}
+                        reloadTasks={this.reloadTasks}
+                        setFilterTags={this.setFilterTags}
+                        authenticated={this.props.authenticated}
+                        currentUser={this.props.currentUser}
                         stack={this.props.stack}
                         taskProfile='deleted'/>
                     </ElseIf>
