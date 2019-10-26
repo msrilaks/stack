@@ -3,6 +3,7 @@ package com.stack.taskservice.repository;
 import com.stack.library.model.stack.Stack;
 import com.stack.library.model.stack.Task;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -21,13 +22,13 @@ public interface StackCustomRepository {
 
     Task findTaskById(UUID taskId, Stack stack);
 
-    Map<String, Task> fetchDeletedTasks(Stack stack);
+    Map<String, Task> fetchDeletedTasks(Stack stack, List<String> tags);
 
-    Map<String, Task> fetchCompletedTasks(Stack stack);
+    Map<String, Task> fetchCompletedTasks(Stack stack, List<String> tags);
 
-    Map<String, Task> fetchPushedTasks(Stack stack);
+    Map<String, Task> fetchPushedTasks(Stack stack, List<String> tags);
 
-    Map<String, Task> fetchToDoTasks(Stack stack);
+    Map<String, Task> fetchToDoTasks(Stack stack, List<String> tags);
 
-    Map<String, Task> fetchAllTasks(Stack stack);
+    Map<String, Task> fetchAllTasks(Stack stack,List<String> tags);
 }

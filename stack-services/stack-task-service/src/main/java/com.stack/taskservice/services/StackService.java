@@ -58,15 +58,15 @@ public class StackService {
             Boolean isToDo, List<String> tags) {
         Stack stack = stackRequestContext.getStack();
         if (isDeleted) {
-            return stackRepository.fetchDeletedTasks(stack);
+            return stackRepository.fetchDeletedTasks(stack, tags);
         } else if (isPushed) {
-            return stackRepository.fetchPushedTasks(stack);
+            return stackRepository.fetchPushedTasks(stack, tags);
         } else if (isCompleted) {
-            return stackRepository.fetchCompletedTasks(stack);
+            return stackRepository.fetchCompletedTasks(stack, tags);
         } else if (isToDo) {
-            return stackRepository.fetchToDoTasks(stack);
+            return stackRepository.fetchToDoTasks(stack, tags);
         }
-        return stackRepository.fetchAllTasks(stack);
+        return stackRepository.fetchAllTasks(stack, tags);
     }
 
     public Task getTask(UUID taskId) {

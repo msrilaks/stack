@@ -95,12 +95,12 @@ public class StackController {
                     "false") Boolean isCompleted,
             @RequestParam(name = "isToDo", required = false, defaultValue =
                     "false") Boolean isToDo,
-            @RequestParam(name = "tags", required = false, defaultValue =
-                    "false") List<String> tags
-            ) {
-        return ResponseEntity.ok(stackService.getTasks(isDeleted,
-                                                       isPushed, isCompleted, isToDo,
-                                                       tags));
+            @RequestParam(name = "tags", required = false) List<String> tags) {
+                return ResponseEntity.ok(stackService.getTasks(isDeleted,
+                                                               isPushed,
+                                                               isCompleted,
+                                                               isToDo,
+                                                               tags));
     }
 
     @GetMapping(path = "/stack/{stackId}/tasks/{taskId}", consumes = "application/json",

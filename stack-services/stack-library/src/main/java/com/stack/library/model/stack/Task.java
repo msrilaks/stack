@@ -6,9 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import java.util.Date;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter
@@ -42,6 +40,12 @@ public class Task implements Comparable<Task>, Cloneable {
         return this.createdDate.compareTo(task.getCreatedDate()) * -1;
     }
 
+    public void setTags(final String tagsInput){
+        if(tagsInput!=null || !tagsInput.isEmpty()) {
+            tagsInput.replaceAll("\\s","");
+        }
+        this.tags = tagsInput;
+    }
     @Override
     public Task clone() {
         Task task = Task.builder().build();
@@ -53,6 +57,24 @@ public class Task implements Comparable<Task>, Cloneable {
         task.setCreatedDate(getCreatedDate());
         task.resetTimeStamps();
         return task;
+    }
+
+    public boolean containsTags(List<String> tagList) {
+        if (tags == null || tags.isEmpty()) {
+            return false;
+        }
+        if (tagList==null || tagList.isEmpty()) {
+            return true;
+        }
+
+        List<String> tagArr = Arrays.asList(tags.toLowerCase().split("\\s*,\\s*"));
+
+        for(String tag : tagList){
+            if(!tagArr.contains(tag.toLowerCase().trim())) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public String getTitle() {

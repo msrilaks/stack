@@ -4,18 +4,20 @@ import com.stack.library.exception.TaskException;
 import com.stack.library.model.error.ErrorCodes;
 import com.stack.library.model.stack.Stack;
 import com.stack.library.model.stack.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class StackCustomRepositoryImpl implements StackCustomRepository {
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+            StackCustomRepositoryImpl.class.getName());
+
     @Autowired
     MongoTemplate mongoTemplate;
 
@@ -96,38 +98,45 @@ public class StackCustomRepositoryImpl implements StackCustomRepository {
     }
 
     @Override
-    public Map<String, Task> fetchDeletedTasks(Stack stack) {
+    public Map<String, Task> fetchDeletedTasks(Stack stack, List<String> tags) {
         Predicate<Task> predicate =
                 (task -> task.getDeletedTimeStamp() != null);
-        return fetchTasks(stack, predicate);
+        return fetchTasks(stack, predicate.and(filterByTags(tags)));
     }
 
     @Override
-    public Map<String, Task> fetchCompletedTasks(Stack stack) {
+    public Map<String, Task> fetchCompletedTasks(Stack stack, List<String> tags) {
         Predicate<Task> predicate = (task -> task.getCompletedTimeStamp() != null &&
                                              task.getDeletedTimeStamp() == null);
-        return fetchTasks(stack, predicate);
+        return fetchTasks(stack, predicate.and(filterByTags(tags)));
     }
 
     @Override
-    public Map<String, Task> fetchPushedTasks(Stack stack) {
+    public Map<String, Task> fetchPushedTasks(Stack stack, List<String> tags) {
         Predicate<Task> predicate = (task -> task.getPushedTimeStamp() != null &&
                                              task.getDeletedTimeStamp() == null);
-        return fetchTasks(stack, predicate);
+        return fetchTasks(stack, predicate.and(filterByTags(tags)));
     }
 
     @Override
-    public Map<String, Task> fetchToDoTasks(Stack stack) {
+    public Map<String, Task> fetchToDoTasks(Stack stack, List<String> tags) {
         Predicate<Task> predicate = (task -> task.getDeletedTimeStamp() == null &&
                                              task.getCompletedTimeStamp() == null &&
                                              task.getPushedTimeStamp() == null);
-        return fetchTasks(stack, predicate);
+        return fetchTasks(stack, predicate.and(filterByTags(tags)));
     }
 
     @Override
-    public Map<String, Task> fetchAllTasks(Stack stack) {
+    public Map<String, Task> fetchAllTasks(Stack stack, List<String> tags) {
         Predicate<Task> predicate = (task -> true);
         return fetchTasks(stack, predicate);
+    }
+
+    private Predicate<Task> filterByTags( List<String> tags) {
+        if(tags == null || tags.isEmpty()) {
+            return (task -> true);
+        }
+        return (task -> task.containsTags(tags));
     }
 
     private Map<String, Task> fetchTasks(Stack stack, Predicate<Task> predicate) {
