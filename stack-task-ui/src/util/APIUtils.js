@@ -95,6 +95,7 @@ export const styles = {
         paddingRight: '50px',
     },
     stackTaskContainer: {
+        display: 'inline-block',
     },
     taskListContainer: {
         paddingTop:'10px',

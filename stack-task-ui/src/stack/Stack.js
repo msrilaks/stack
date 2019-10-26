@@ -24,10 +24,10 @@ import Chip from '@material-ui/core/Chip';
 const useStyles = makeStyles(theme => ({
   chipContainer: {
         display: 'flex',
-        float: 'right',
-        paddingRight: '20px',
+        float: 'left',
+        padding: '20px',
         maxRows: '2',
-        maxWidth: '200px',
+        maxWidth: '700px',
         flexWrap: 'wrap',
         '& > *': {
         margin: theme.spacing(0.5),
@@ -81,28 +81,40 @@ class Stack extends Component {
        }
 
     deleteFilterTag(chip) {
-
+            var newTagsArr = this.state.filterTags.split(',');
+            newTagsArr.splice(newTagsArr.indexOf(chip), 1);
+            var newTags = newTagsArr.toString()
+            this.setState({
+                filterTags : newTags
+            },function () {
+                    console.log("Task tags - deleted tag:" +chip+" , tags:"+
+                    this.state.filterTags);
+            });
     }
 
     setFilterTags(chips) {
-    if(this.state.filterTags && this.state.filterTags.trim!=""
-            && this.state.filterTags.trim().length>0) {
-                 var newTags = this.state.filterTags +','+ chips +'';
-                 this.setState({
-                                    filterTags : newTags
-                                },function () {
-                                    console.log("this.state.filterTags : "
-                                    + this.state.filterTags)
-                            });
-            } else {
-                var newTags = chips +'';
-                this.setState({
-                        filterTags : newTags
-                    },function () {
-                        console.log("this.state.filterTags : "
-                        + this.state.filterTags);
-                });
+        if(this.state.filterTags && this.state.filterTags.trim!=""
+                && this.state.filterTags.trim().length>0) {
+            var newTagsArr = this.state.filterTags.split(',');
+            if(newTagsArr.indexOf(chips) > -1) {
+                return;
             }
+            var newTags = this.state.filterTags +','+ chips +'';
+            this.setState({
+                    filterTags : newTags
+                },function () {
+                    console.log("this.state.filterTags : "
+                    + this.state.filterTags)
+            });
+        } else {
+            var newTags = chips +'';
+            this.setState({
+                    filterTags : newTags
+                },function () {
+                    console.log("this.state.filterTags : "
+                    + this.state.filterTags);
+            });
+        }
     }
 
     tagChips() {
@@ -118,7 +130,6 @@ class Stack extends Component {
                                 key={data}
                                 label={data}
                                 size="small"
-                                clickable="true"
                                 onDelete={()=>this.deleteFilterTag(data)}
                                 color="primary"/>
                         );
@@ -237,15 +248,17 @@ class Stack extends Component {
                 </StackTabs>
             </Paper>
              <div className="stack-container" style={styles.stackContainer}>
+             <this.tagChips/>
             <div className="stack-task-container" style={styles.stackTaskContainer}>
-            {              
+            {
+
                 <If condition={this.state.value === 0}>
                    <Then>
                    <div>
                     <IconButton aria-label="Add" onClick={this.onButtonCreateTaskClicked}>
                         <AddIcon  style={styles.stackIcon}/>
                     </IconButton>
-                    <this.tagChips/>
+
                     {this.state.showCreateTask ?
                             <Create  authenticated={this.props.authenticated} 
                                     currentUser={this.props.currentUser} 
