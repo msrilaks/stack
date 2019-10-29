@@ -51,6 +51,8 @@ const useStyles = makeStyles(theme => ({
     borderBottom: 'aliceblue',
     borderBottomWidth: '1px',
     borderBottomStyle: 'groove',
+    paddingTop: '8px',
+    paddingBottom: '8px',
   },
   media: {
     height: 0,
