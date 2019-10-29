@@ -297,9 +297,17 @@ export function getTasks(stackId) {
     });
 } 
 
-export function getTodoTasks(stackId) {
+export function getTodoTasks(stackId, tags) {
     if(!localStorage.getItem(config.ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
+    }
+
+    if(tags && tags.trim() !== "" && tags.length>0) {
+         return request({
+                url: config.API_BASE_URL +
+                "/stack/"+stackId+"/tasks?isToDo=true&&tags="+tags,
+                method: 'GET'
+            });
     }
 
     return request({
@@ -308,33 +316,54 @@ export function getTodoTasks(stackId) {
     });
 } 
 
-export function getDeletedTasks(stackId) {
+export function getDeletedTasks(stackId, tags) {
     if(!localStorage.getItem(config.ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }
 
+    if(tags && tags.trim() !== "" && tags.length>0) {
+         return request({
+                url: config.API_BASE_URL +
+                "/stack/"+stackId+"/tasks?isDeleted=true&&tags="+tags,
+                method: 'GET'
+            });
+    }
     return request({
         url: config.API_BASE_URL + "/stack/"+stackId+"/tasks?isDeleted=true",
         method: 'GET'
     });
 } 
 
-export function getMovedTasks(stackId) {
+export function getMovedTasks(stackId, tags) {
     if(!localStorage.getItem(config.ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }
 
+    if(tags && tags.trim() !== "" && tags.length>0) {
+         return request({
+                url: config.API_BASE_URL +
+                "/stack/"+stackId+"/tasks?isPushed=true&&tags="+tags,
+                method: 'GET'
+            });
+    }
     return request({
         url: config.API_BASE_URL + "/stack/"+stackId+"/tasks?isPushed=true",
         method: 'GET'
     });
 } 
 
-export function getCompletedTasks(stackId) {
+export function getCompletedTasks(stackId, tags) {
     if(!localStorage.getItem(config.ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }
 
+    if(tags && tags.trim() !== "" && tags.length>0) {
+         return request({
+                url: config.API_BASE_URL +
+                "/stack/"+stackId+"/tasks?isCompleted=true&&tags="+tags,
+                method: 'GET'
+            });
+    }
     return request({
         url: config.API_BASE_URL + "/stack/"+stackId+"/tasks?isCompleted=true",
         method: 'GET'

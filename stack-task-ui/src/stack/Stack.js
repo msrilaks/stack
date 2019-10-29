@@ -87,6 +87,7 @@ class Stack extends Component {
             this.setState({
                 filterTags : newTags
             },function () {
+                    this.reloadTasks();
                     console.log("Task tags - deleted tag:" +chip+" , tags:"+
                     this.state.filterTags);
             });
@@ -103,6 +104,7 @@ class Stack extends Component {
             this.setState({
                     filterTags : newTags
                 },function () {
+                    this.reloadTasks();
                     console.log("this.state.filterTags : "
                     + this.state.filterTags)
             });
@@ -111,6 +113,7 @@ class Stack extends Component {
             this.setState({
                     filterTags : newTags
                 },function () {
+                    this.reloadTasks();
                     console.log("this.state.filterTags : "
                     + this.state.filterTags);
             });
@@ -140,7 +143,7 @@ class Stack extends Component {
     reloadTasks() {
         if(this.state.value == 0){
 
-        getTodoTasks(this.props.stack.id)
+        getTodoTasks(this.props.stack.id, this.state.filterTags)
         .then(response => {
             this.setState({
                 todoTasks: response, 
@@ -155,7 +158,7 @@ class Stack extends Component {
         
     }else if(this.state.value == 1) {
 
-        getMovedTasks(this.props.stack.id)
+        getMovedTasks(this.props.stack.id, this.state.filterTags)
         .then(response => {
             this.setState({
                 movedTasks: response, 
@@ -171,7 +174,7 @@ class Stack extends Component {
 
     }else if(this.state.value == 2){
    
-        getCompletedTasks(this.props.stack.id)
+        getCompletedTasks(this.props.stack.id, this.state.filterTags)
         .then(response => {
             this.setState({
                 completedTasks: response, 
@@ -185,7 +188,7 @@ class Stack extends Component {
         }); 
     
     }else if(this.state.value == 3) {
-        getDeletedTasks(this.props.stack.id)
+        getDeletedTasks(this.props.stack.id, this.state.filterTags)
         .then(response => {
             this.setState({
                 deletedTasks: response, 
