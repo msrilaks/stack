@@ -262,17 +262,17 @@ export function addEvent(eventRequest, stackId, taskId) {
     });
 }
 
-export function getProfilePic(userName){
+export function getUser(task) {
     if(!localStorage.getItem(config.ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }
-    userName = 'gajanan.mudaliar@gmail.com'; 
     return request({
-        url: "https://www.google.com/m8/feeds/photos/profile/google/"+userName+"?v=3",
-        method: 'GET',
+        url: config.API_BASE_URL + "/stack/"+task.stackId
+            +"/tasks/"+task.id+"/user",
+        method: 'GET'
     });
- 
 }
+
 export function patchTask(patchTaskRequest, patchAction) {
     if(!localStorage.getItem(config.ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");

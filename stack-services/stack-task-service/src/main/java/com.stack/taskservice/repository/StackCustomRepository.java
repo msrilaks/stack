@@ -10,7 +10,7 @@ import java.util.UUID;
 public interface StackCustomRepository {
     Task saveTaskToStack(Task task, Stack stack);
 
-    Task saveTaskAsPushed(UUID taskId, Stack stack);
+    Task saveTaskAsPushed(UUID taskId, Stack stack, String pushedToUserId);
 
     Task saveTaskAsDeleted(UUID taskId, Stack stack);
 

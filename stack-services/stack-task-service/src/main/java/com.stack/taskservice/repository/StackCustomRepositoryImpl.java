@@ -46,9 +46,10 @@ public class StackCustomRepositoryImpl implements StackCustomRepository {
     }
 
     @Override
-    public Task saveTaskAsPushed(UUID taskId, Stack stack) {
+    public Task saveTaskAsPushed(UUID taskId, Stack stack, String pushedToUserId) {
         Task task = findTaskById(taskId, stack);
         task.setPushedTimeStamp(System.currentTimeMillis());
+        task.setPushedUserId(pushedToUserId);
         return updateTaskToStack(task, stack);
     }
 

@@ -107,7 +107,7 @@ public class StackService {
             photoService.movePhotos(stack.getId(), taskId.toString(), pushStack.getId(),
                                     pushTask.getId().toString());
             emailHandler.postTaskPushed(pushStack, pushTask);
-            stackRepository.saveTaskAsPushed(taskId, stack);
+            stackRepository.saveTaskAsPushed(taskId, stack, toUserId);
         }
         return task;
     }

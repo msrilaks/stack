@@ -21,6 +21,7 @@ public class Task implements Comparable<Task>, Cloneable {
     private String                   stackId;
     private String                   userId;
     private String                   createdByUserId;
+    private String                   pushedUserId;
     private String                   origin;
     private String                   description;
     private String                   tags;
@@ -81,9 +82,14 @@ public class Task implements Comparable<Task>, Cloneable {
         return ((description.length() > 30)? description.substring(0,29) : description);
     }
 
+    public boolean isPushed() {
+        return (pushedTimeStamp!=null && pushedUserId!=null);
+    }
+
     public void resetTimeStamps() {
         setDeletedTimeStamp(null);
         setCompletedTimeStamp(null);
         setPushedTimeStamp(null);
+        setPushedUserId(null);
     }
 }

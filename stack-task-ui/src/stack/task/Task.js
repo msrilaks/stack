@@ -10,7 +10,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Alert from 'react-s-alert';
 import { deleteTask, patchTask, getPhotos, base64toBlob,
-    truncate, addEvent, styles } from '../../util/APIUtils';
+    truncate, addEvent, styles, getUser } from '../../util/APIUtils';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CalendarIcon from '@material-ui/icons/CalendarToday';
@@ -28,9 +28,10 @@ import clsx from 'clsx';
 import CardHeader from '@material-ui/core/CardHeader';
 import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
-import { red } from '@material-ui/core/colors';
+import { grey } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
+import PersonIcon from '@material-ui/icons/Person';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Chip from '@material-ui/core/Chip';
@@ -127,7 +128,7 @@ const useStyles = makeStyles(theme => ({
     transform: 'rotate(180deg)',
   },
   avatar: {
-    backgroundColor: red[500],
+    backgroundColor: grey[500],
   },
   chipContainer: {
         display: 'flex',
@@ -203,6 +204,11 @@ class Task extends Component {
                  location:'',
                  start:new Date(),
                  end:new Date(),
+             },
+             pushUser:{
+                 imageUrl:'',
+                 name:'',
+                 email:'',
              }
         };
 
@@ -222,6 +228,7 @@ class Task extends Component {
         this.PushModal = this.PushModal.bind(this);
         this.EventModal = this.EventModal.bind(this);
         this.OptionsMenu = this.OptionsMenu.bind(this);
+        this.loadUserAvatar=this.loadUserAvatar.bind(this);
     }
     componentDidMount() {
         this.setState({
@@ -236,6 +243,11 @@ class Task extends Component {
                 location:'',
                 start:new Date(),
                 end:new Date(),
+            },
+            pushUser:{
+                imageUrl:'',
+                name:'',
+                email:'',
             }
         },function () {
             console.log("location "+this.state.event.location);
@@ -244,6 +256,25 @@ class Task extends Component {
         });
 
         this.loadFiles();
+        this.loadUserAvatar();
+    }
+
+    loadUserAvatar() {
+         getUser(this.props.task)
+                 .then(response => {
+                     this.setState({
+                          pushUser:{
+                               ...this.state.pushUser,
+                           name : response.name,
+                           email: response.email,
+                           imageUrl: response.imageUrl,
+                           }
+                     },function () {
+                         console.log("pushUser" + this.state
+                         .pushUser.name);
+                     });
+                 }).catch(error => {
+                 });
     }
 
     loadFiles() {
@@ -449,7 +480,6 @@ class Task extends Component {
             </div>
         )}
 
-
         let PushedUserPanel;
         if(this.props.taskProfile == 'pushed'){
             PushedUserPanel = <div>
@@ -457,6 +487,28 @@ class Task extends Component {
                 <span className="task-description"> { this.props.task.userId }</span>
              </Typography>
          </div>
+        }
+
+        let StackUserAvatar;
+        if(this.props.task.pushedUserId == '' ||
+            this.props.task.pushedUserId == null) {
+                StackUserAvatar = <Avatar aria-label="task"
+                    className={classes.avatar}
+                    src={this.props.currentUser.imageUrl}
+                    alt={this.props.currentUser.name}>
+                </Avatar>
+        } else {
+            if(this.state.pushUser.imageUrl == '') {
+                StackUserAvatar = <Avatar className={classes.avatar}>
+                <PersonIcon/>
+                </Avatar>
+            } else {
+                StackUserAvatar = <Avatar aria-label="task"
+                            className={classes.avatar}
+                            src={this.state.pushUser.imageUrl}
+                            alt={this.state.pushUser.name}>
+                        </Avatar>
+            }
         }
 
         let TaskButtonPanel;
@@ -519,13 +571,7 @@ class Task extends Component {
             <Zoom timeout={150} in={this.props.task}>
             <Card className={classes.card} elevation='10'>
                 <CardHeader className={classes.cardHeader}
-                    avatar={
-                        <Avatar aria-label="task"
-                            className={classes.avatar}
-                            src={this.props.currentUser.imageUrl}
-                            alt={this.props.currentUser.name}>
-                        </Avatar>
-                    }
+                    avatar={StackUserAvatar}
                     action={
                         <div>
                         <this.OptionsMenu/>
