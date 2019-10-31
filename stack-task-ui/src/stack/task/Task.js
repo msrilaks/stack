@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './Task.css';
 import Create from '../create/Create';
+import Profile from '../../user/profile/Profile';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -27,11 +28,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import CardHeader from '@material-ui/core/CardHeader';
 import Collapse from '@material-ui/core/Collapse';
-import Avatar from '@material-ui/core/Avatar';
-import { grey } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
-import PersonIcon from '@material-ui/icons/Person';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Chip from '@material-ui/core/Chip';
@@ -126,9 +124,6 @@ const useStyles = makeStyles(theme => ({
   },
   expandOpen: {
     transform: 'rotate(180deg)',
-  },
-  avatar: {
-    backgroundColor: grey[500],
   },
   chipContainer: {
         display: 'flex',
@@ -492,22 +487,30 @@ class Task extends Component {
         let StackUserAvatar;
         if(this.props.task.pushedUserId == '' ||
             this.props.task.pushedUserId == null) {
-                StackUserAvatar = <Avatar aria-label="task"
-                    className={classes.avatar}
-                    src={this.props.currentUser.imageUrl}
-                    alt={this.props.currentUser.name}>
-                </Avatar>
+                 StackUserAvatar = <Profile
+                        authenticated={this.props.authenticated}
+                        currentUser={this.props.currentUser}
+                        stack={this.props.stack}
+                        imageUrl={this.props.currentUser.imageUrl}
+                        name={this.props.currentUser.name}
+                        email={this.props.currentUser.email}/>
         } else {
             if(this.state.pushUser.imageUrl == '') {
-                StackUserAvatar = <Avatar className={classes.avatar}>
-                <PersonIcon/>
-                </Avatar>
+                StackUserAvatar = <Profile
+                                    authenticated={this.props.authenticated}
+                                    currentUser={this.props.currentUser}
+                                    stack={this.props.stack}
+                                    imageUrl=''
+                                    name=''
+                                    email={this.props.task.pushedUserId}/>
             } else {
-                StackUserAvatar = <Avatar aria-label="task"
-                            className={classes.avatar}
-                            src={this.state.pushUser.imageUrl}
-                            alt={this.state.pushUser.name}>
-                        </Avatar>
+                StackUserAvatar = <Profile
+                                        authenticated={this.props.authenticated}
+                                        currentUser={this.props.currentUser}
+                                        stack={this.props.stack}
+                                        imageUrl={this.state.pushUser.imageUrl}
+                                        name={this.state.pushUser.name}
+                                        email={this.state.pushUser.email}/>
             }
         }
 
