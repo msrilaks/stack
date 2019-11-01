@@ -20,12 +20,15 @@ import { styled } from '@material-ui/styles';
 import { withStyles } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
+import ChipInput from 'material-ui-chip-input'
 
 const useStyles = makeStyles(theme => ({
   chipContainer: {
         display: 'flex',
         float: 'left',
-        padding: '20px',
+        paddingBottom: '20px',
+        paddingLeft: '20px',
+        paddingRight: '20px',
         maxRows: '2',
         maxWidth: '700px',
         flexWrap: 'wrap',
@@ -33,6 +36,11 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(0.5),
         },
     },
+    chip: {
+        backgroundColor:'#3f51b5',
+        height: '24px',
+    },
+
 }));
 
 class Stack extends Component {
@@ -121,22 +129,50 @@ class Stack extends Component {
     }
 
     tagChips() {
-    const classes = useStyles();
+        const classes = useStyles();
+        const StackChipInput = styled(ChipInput)({
+                    '& input': {
+                        fontSize: '15px',
+                        fontFamily: "Sans Serif",
+                        paddingBottom: '17px',
+                    },
+                    '& span': {
+                        color: '#ffffff',
+                        fontSize: '13px',
+                        fontWeight: '300',
+                    },
+                    '& svg': {
+                        color: '#ffffff',
+                        height: '18px',
+                    }
+                });
+
+        let defaultTags=[];
+        if(this.state.filterTags && this.state.filterTags.trim() !=""
+            && this.state.filterTags.trim().length > 0
+            && this.state.filterTags.split(',').length>0 ){
+                defaultTags = this.state.filterTags.split(',')
+        }
             return <div className={classes.chipContainer}>
                     {
-                        this.state.filterTags
-                        && this.state.filterTags.trim() !== ""
-                        && this.state.filterTags.length>0
-                        && this.state.filterTags.split(',').map(data => {
-                        return (
-                            <Chip
-                                key={data}
-                                label={data}
-                                size="small"
-                                onDelete={()=>this.deleteFilterTag(data)}
-                                color="primary"/>
-                        );
-                    })}
+                        <StackChipInput
+                                value={defaultTags}
+                                placeholder="filter by #tags"
+                                alwaysShowPlaceholder='true'
+                                onAdd={(chips) => this.setFilterTags(chips)}
+                                onDelete={(chips)=>this.deleteFilterTag(chips)}
+                                inputProps={{
+                                    'allowDuplicates': 'false',
+                                }}
+                                inputLabelProps={{
+                                    'font': 'sans-serif',
+                                    'fontFamily': 'sans-serif',
+                                }}
+                                 classes={{
+                                    chip: classes.chip,
+                                  }}
+                            />
+                    }
                 </div>
     }
 
@@ -251,18 +287,24 @@ class Stack extends Component {
                 </StackTabs>
             </Paper>
              <div className="stack-container" style={styles.stackContainer}>
-             <this.tagChips/>
+
             <div className="stack-task-container" style={styles.stackTaskContainer}>
             {
 
                 <If condition={this.state.value === 0}>
                    <Then>
                    <div>
-                    <IconButton aria-label="Add" onClick={this.onButtonCreateTaskClicked}>
-                        <AddIcon  style={styles.stackIcon}/>
-                    </IconButton>
-
-                    {this.state.showCreateTask ?
+                       <div style={styles.stackControls}>
+                            <div style={styles.stackControlContent}>
+                                <IconButton aria-label="Add" onClick={this.onButtonCreateTaskClicked}>
+                                    <AddIcon  style={styles.stackIcon}/>
+                                </IconButton>
+                            </div>
+                            <div style={styles.stackControlContent}>
+                                <this.tagChips/>
+                            </div>
+                        </div>
+                        {this.state.showCreateTask ?
                             <Create  authenticated={this.props.authenticated} 
                                     currentUser={this.props.currentUser} 
                                     stack={this.props.stack} 
@@ -279,11 +321,17 @@ class Stack extends Component {
                         taskProfile='todo'/>
                    </Then>
                    <ElseIf condition={this.state.value === 1 }>
-                        <div>
-                        <IconButton aria-label="Alarm" onClick={this.onButtonRemindTasksClicked}>
-                            <AlarmIcon  style={styles.stackIcon}/>
-                        </IconButton>
-                        </div>
+                           <div style={styles.stackControls}>
+                               <div style={styles.stackControlContent}>
+                                   <IconButton aria-label="Alarm"
+                                       onClick={this.onButtonRemindTasksClicked}>
+                                       <AlarmIcon  style={styles.stackIcon}/>
+                                  </IconButton>
+                               </div>
+                               <div style={styles.stackControlContent}>
+                                   <this.tagChips/>
+                               </div>
+                           </div>
                          <TaskList tasks={this.state.movedTasks}
                              reloadTasks={this.reloadTasks}
                              setFilterTags={this.setFilterTags}
@@ -293,11 +341,17 @@ class Stack extends Component {
                          taskProfile='pushed'/>
                     </ElseIf>
                    <ElseIf condition={this.state.value === 2 }>
-                        <div>
-                            <IconButton aria-label="Delete" onClick={this.onButtonDeleteTasksClicked}>
-                                <DeleteIcon  style={styles.stackIcon}/>
-                            </IconButton>
-                        </div>
+                          <div style={styles.stackControls}>
+                                <div style={styles.stackControlContent}>
+                                    <IconButton aria-label="Delete"
+                                        onClick={this.onButtonDeleteTasksClicked}>
+                                        <DeleteIcon  style={styles.stackIcon}/>
+                                    </IconButton>
+                                </div>
+                                <div style={styles.stackControlContent}>
+                                    <this.tagChips/>
+                                </div>
+                         </div>
                          <TaskList tasks={this.state.completedTasks}
                             reloadTasks={this.reloadTasks}
                             setFilterTags={this.setFilterTags}
@@ -307,11 +361,17 @@ class Stack extends Component {
                         taskProfile='completed'/>
                     </ElseIf>
                     <ElseIf condition={this.state.value === 3}>
-                    <div>
-                    <IconButton aria-label="Clear" onClick={this.onButtonClearTasksClicked}>
-                        <ClearIcon  style={styles.stackIcon}/>
-                    </IconButton>
-                    </div>
+                          <div style={styles.stackControls}>
+                                <div style={styles.stackControlContent}>
+                                    <IconButton aria-label="Clear"
+                                        onClick={this.onButtonClearTasksClicked}>
+                                        <ClearIcon  style={styles.stackIcon}/>
+                                    </IconButton>
+                                </div>
+                                <div style={styles.stackControlContent}>
+                                    <this.tagChips/>
+                                </div>
+                         </div>
                     <TaskList tasks={this.state.deletedTasks}
                         reloadTasks={this.reloadTasks}
                         setFilterTags={this.setFilterTags}

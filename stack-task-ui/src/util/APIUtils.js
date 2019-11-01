@@ -97,6 +97,13 @@ export const styles = {
     stackTaskContainer: {
         display: 'inline-block',
     },
+    stackControls: {
+        display: 'inline-flex',
+        paddingTop: '20px',
+    },
+    stackControlContent: {
+            display: 'inline-block',
+    },
     taskListContainer: {
         paddingTop:'10px',
     },
