@@ -102,6 +102,10 @@ const useStyles = makeStyles(theme => ({
     paddingTop: '8px',
     paddingBottom: '8px',
   },
+    cardContent: {
+      paddingLeft:45,
+      paddingRight:45,
+    },
     media: {
       height: 140,
     },
@@ -129,7 +133,6 @@ const useStyles = makeStyles(theme => ({
   chipContainer: {
         display: 'flex',
         float: 'right',
-        paddingRight: '20px',
         flexWrap: 'wrap',
         '& > *': {
         margin: theme.spacing(0.5),
@@ -150,6 +153,7 @@ const useStyles = makeStyles(theme => ({
         flexWrap: 'wrap',
         justifyContent: 'left',
         overflow: 'visible',
+        marginTop: '15px',
         backgroundColor: theme.palette.background.paper,
     },
     gridEvent: {
@@ -573,7 +577,7 @@ class Task extends Component {
 
         return (
             <Zoom timeout={150} in={this.props.task}>
-            <Card className={classes.card} elevation='10'>
+            <Card className={classes.card} elevation='15'>
                 <CardHeader className={classes.cardHeader}
                     avatar={StackUserAvatar}
                     action={
@@ -603,7 +607,7 @@ class Task extends Component {
                     }>
                     </CardHeader>
 
-                    <CardContent>
+                    <CardContent className={classes.cardContent}>
                         <GridList cellHeight={'auto'} className={classes
                              .gridList} cols={2}>
                             <GridListTile key='taskDetail'
@@ -611,20 +615,17 @@ class Task extends Component {
                                      <this.tagChips/>
                             </GridListTile>
                             <GridListTile key='taskDetail2'
-                                  style={{ padding:'2px' }} cols={2}>
+                                  style={{ padding:'2px',marginTop:'15px' }}
+                                  cols={2}>
                                   <Typography variant="subtitle2"
                                   color="textPrimary"
                                        component="p" className={classes.taskDetail}>
                                       { this.props.task.description }
                                   </Typography>
                             </GridListTile>
-                        </GridList>
-                    </CardContent>
-                    <CardContent>
-                        <GridList cellHeight={'auto'} className={classes
-                                                     .gridList} cols={2}>
+
                             <GridListTile key='taskDetail2'
-                                  style={{ padding:'2px' }} cols={2}>
+                                  style={{  }} cols={2}>
                                   {UploadPanel}
                              </GridListTile>
                         </GridList>

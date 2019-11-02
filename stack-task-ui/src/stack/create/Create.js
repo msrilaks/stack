@@ -58,6 +58,10 @@ const useStyles = makeStyles(theme => ({
     marginBottom:35,
     marginTop:'10px',
   },
+  cardContent: {
+    paddingLeft:45,
+    paddingRight:45,
+  },
   taskTitle: {
     fontFamily: 'cursive',
     textTransform: 'capitalize',
@@ -320,7 +324,7 @@ class Create extends Component {
             '& input': {
                 fontSize: '15px',
                 fontFamily: "Sans Serif",
-                paddingBottom: '17px',
+                paddingBottom: '0px',
             },
             '& span': {
                 color: '#ffffff',
@@ -333,6 +337,16 @@ class Create extends Component {
             }
         });
 
+    const StyledDiv = styled('div')({
+        fontSize: '15px',
+        fontFamily: "Sans Serif",
+        padding: '0',
+        marginTop: '30px',
+    });
+
+    const StyledSection = styled('section')({
+        padding: '0',
+    });
 
     let UploadPanel  =  (
                 <div className={classes.grid}>
@@ -342,13 +356,13 @@ class Create extends Component {
                                                 'auto', paddingBottom:'20px'}}>
                             <Dropzone onDrop={this.onDrop}>
                                 {({getRootProps, getInputProps}) => (
-                                <section className="container">
-                                    <div {...getRootProps({className: 'dropzone'})}>
+                                <StyledSection className="container">
+                                    <StyledDiv {...getRootProps({className: 'dropzone'})}>
                                         <input {...getInputProps()} />
                                         <p>Drag 'n' drop, or click here to
                                         upload files</p>
-                                    </div>
-                                </section>
+                                    </StyledDiv>
+                                </StyledSection>
                                 )}
                             </Dropzone>
                         </GridListTile>
@@ -388,7 +402,7 @@ class Create extends Component {
 
         return (
         <Zoom timeout={150} in={this.state.task}>
-        <Card className={classes.card} elevation='10'>
+        <Card className={classes.card} elevation='15'>
             <CardHeader className={classes.cardHeader}
                 avatar={
                     <Avatar aria-label="task"
@@ -414,7 +428,7 @@ class Create extends Component {
                     </Typography>
                 }>
             </CardHeader>
-        <CardContent>
+        <CardContent className={classes.cardContent}>
         <div className={classes.chipContainer}>
             <StackChipInput
                 value={defaultTags}
@@ -435,10 +449,9 @@ class Create extends Component {
                 }}
             />
             </div>
-        </CardContent>
-        <CardContent>
+
             <Typography variant="body1" color="textSecondary" component="p"
-                        style={{ paddingLeft: 16, paddingRight: 16}}
+                        style={{ }}
                         className={classes.taskDetail}>
             <TextField
             id="email-input"
@@ -457,7 +470,7 @@ class Create extends Component {
             </Typography>
 
             <Typography variant="body1" color="textSecondary" component="p"
-            style={{ paddingLeft: 16, paddingRight: 16}}
+            style={{ }}
             className={classes.taskDetail}>
                     <TextField
                     id="standard-multiline-flexible"
@@ -470,9 +483,7 @@ class Create extends Component {
                     margin="normal"
                     />
             </Typography>
-        </CardContent>
 
-        <CardContent>
             {UploadPanel}
         </CardContent>
         <CardActions disableSpacing>
