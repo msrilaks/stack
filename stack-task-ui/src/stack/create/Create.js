@@ -33,19 +33,42 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import Fade from '@material-ui/core/Fade';
 import Zoom from '@material-ui/core/Zoom';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles(theme => ({
+    chipContainer: {
+        display: 'flex',
+        float: 'right',
+        maxWidth: '400px',
+        paddingBottom: '20px',
+        paddingLeft: '20px',
+        paddingRight: '16px',
+        maxRows: '2',
+        flexWrap: 'wrap',
+        '& > *': {
+        margin: theme.spacing(0.5),
+        },
+    },
+    chip: {
+        backgroundColor:'#3f51b5',
+        height: '24px',
+    },
   card: {
     maxWidth: 800,
     marginBottom:35,
+    marginTop:'10px',
   },
   taskTitle: {
     fontFamily: 'cursive',
     textTransform: 'capitalize',
+    fontSize: 'medium',
   },
   taskDetail: {
     fontSize: '1rem',
   },
+    taskButtonPanel: {
+        marginLeft: 'auto',
+    },
   cardHeader:{
     backgroundColor: 'aliceblue',
     borderBottom: 'aliceblue',
@@ -60,7 +83,6 @@ const useStyles = makeStyles(theme => ({
   },
   expand: {
     transform: 'rotate(0deg)',
-    marginLeft: 'auto',
     transition: theme.transitions.create('transform', {
       duration: theme.transitions.duration.shortest,
     }),
@@ -111,8 +133,6 @@ class Create extends Component {
         };
         this.state = { newTaskAdded: false };
         this.onDrop = (newfiles) => {
-
-              console.log("##SRI " + newfiles)
                newfiles: newfiles.map(file => Object.assign(file, {
                                                 preview: URL.createObjectURL(file)
                                               }))
@@ -300,10 +320,16 @@ class Create extends Component {
             '& input': {
                 fontSize: '15px',
                 fontFamily: "Sans Serif",
+                paddingBottom: '17px',
             },
             '& span': {
-                color: '#1a9099',
+                color: '#ffffff',
+                fontSize: '13px',
                 fontWeight: '300',
+            },
+            '& svg': {
+                color: '#ffffff',
+                height: '18px',
             }
         });
 
@@ -371,11 +397,6 @@ class Create extends Component {
                         alt={this.props.currentUser.name}>
                     </Avatar>
                 }
-                action={
-                    <IconButton aria-label="settings">
-                    <MoreVertIcon />
-                    </IconButton>
-                }
 
                 title={
                     <Typography variant="h6"
@@ -394,7 +415,7 @@ class Create extends Component {
                 }>
             </CardHeader>
         <CardContent>
-        <div style={styles.tagContainer}>
+        <div className={classes.chipContainer}>
             <StackChipInput
                 value={defaultTags}
                 placeholder="#tags"
@@ -409,10 +430,16 @@ class Create extends Component {
                     'font': 'sans-serif',
                     'fontFamily': 'sans-serif'
                 }}
+                classes={{
+                    chip: classes.chip,
+                }}
             />
             </div>
         </CardContent>
         <CardContent>
+            <Typography variant="body1" color="textSecondary" component="p"
+                        style={{ paddingLeft: 16, paddingRight: 16}}
+                        className={classes.taskDetail}>
             <TextField
             id="email-input"
             label="push to"
@@ -421,10 +448,13 @@ class Create extends Component {
             defaultValue={this.state.task.userId}
             autoComplete="email"
             margin="normal"
-            variant="outlined"
-            style={{ paddingLeft: 16}}
+            inputProps={{
+
+            }}
+            style={{ width:'300px'}}
             value={this.state.task.userId} onChange={this.handleInputChange} required
             />
+            </Typography>
 
             <Typography variant="body1" color="textSecondary" component="p"
             style={{ paddingLeft: 16, paddingRight: 16}}
@@ -432,7 +462,6 @@ class Create extends Component {
                     <TextField
                     id="standard-multiline-flexible"
                     label="description"
-                    variant="outlined"
                     multiline
                     fullWidth
                     rowsMax="4"
@@ -447,10 +476,14 @@ class Create extends Component {
             {UploadPanel}
         </CardContent>
         <CardActions disableSpacing>
-            <IconButton type="submit" aria-label="Submit">
-                <SaveIcon/>
-            </IconButton>
-            <IconButton
+        <div className={classes.taskButtonPanel}>
+            <Tooltip title="Save" placement="bottom">
+                <IconButton type="submit" aria-label="Submit" >
+                    <SaveIcon/>
+                </IconButton>
+            </Tooltip>
+        </div>
+            {/*<IconButton
                 className={clsx(classes.expand, {
                 [classes.expandOpen]: expanded,
                 })}
@@ -458,7 +491,7 @@ class Create extends Component {
                 aria-expanded={expanded}
                 aria-label="show more">
                 <ExpandMoreIcon />
-            </IconButton>
+            </IconButton>*/}
         </CardActions>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent>

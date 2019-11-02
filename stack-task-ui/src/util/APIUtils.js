@@ -130,10 +130,6 @@ export const styles = {
         height: '32px',
         width: '32px'
     },
-    tagContainer: {
-        float: 'right',
-        maxWidth: '400px',
-    },
    img: {
      display: 'block',
      width: 'auto',

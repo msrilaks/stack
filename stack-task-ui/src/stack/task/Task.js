@@ -108,9 +108,10 @@ const useStyles = makeStyles(theme => ({
   taskTitle: {
     fontFamily: 'cursive',
     textTransform: 'capitalize',
+    fontSize: 'medium',
   },
   taskDetail: {
-    fontSize: '1rem',
+    fontSize: 'medium',
     fontWeight: '500',
   },
   taskButtonPanel: {
