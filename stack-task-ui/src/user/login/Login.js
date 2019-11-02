@@ -37,7 +37,7 @@ class Login extends Component {
         return (
             <div className="login-container">
                 <div className="login-content">
-                    <h1 className="login-title">Login to StackItDown</h1>
+                    <h1 className="login-title">Login to Stack It Down</h1>
                     <SocialLogin />
                     {/* <div className="or-separator">
                         <span className="or-text">OR</span>
@@ -98,7 +98,7 @@ class LoginForm extends Component {
         .then(response => {
             localStorage.setItem(config.ACCESS_TOKEN, response.accessToken);
             Alert.success("You're successfully logged in!");
-            this.props.history.push("/");
+            this.props.history.push("/stack");
         }).catch(error => {
             Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
         });

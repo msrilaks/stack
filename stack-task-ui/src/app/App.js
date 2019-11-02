@@ -99,8 +99,6 @@ class App extends Component {
         <div className="app-body">
           <Switch>
             <Route exact path="/" component={Home}></Route>           
-            <PrivateRoute path="/profile" authenticated={this.state.authenticated} currentUser={this.state.currentUser}
-              component={Profile}></PrivateRoute>
               <PrivateRoute path="/create" authenticated={this.state.authenticated} currentUser={this.state.currentUser} stack={this.state.stack}
               component={Create}></PrivateRoute>
             <PrivateRoute path="/stack" authenticated={this.state.authenticated} currentUser={this.state.currentUser} stack={this.state.stack}

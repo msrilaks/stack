@@ -21,7 +21,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
 import ChipInput from 'material-ui-chip-input'
-
+import LoadingIndicator from '../common/LoadingIndicator';
 const useStyles = makeStyles(theme => ({
   chipContainer: {
         display: 'flex',
@@ -56,6 +56,7 @@ class Stack extends Component {
             deletedTasks: null,
             showCreateTask: false,
             filterTags: '',
+            loading: false,
             value: 0,
         }
 
@@ -177,6 +178,9 @@ class Stack extends Component {
     }
 
     reloadTasks() {
+       this.setState({
+          loading: true
+        });
         if(this.state.value == 0){
 
         getTodoTasks(this.props.stack.id, this.state.filterTags)
@@ -184,11 +188,14 @@ class Stack extends Component {
             this.setState({
                 todoTasks: response, 
                 showCreateTask:false,
-                
+                loading: false
                 },function () {
                     console.log("todoTasks : "+ this.state.todoTasks)
                 });
           }).catch(error => {
+             this.setState({
+                loading: false
+              });
             Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
         }); 
         
@@ -199,11 +206,14 @@ class Stack extends Component {
             this.setState({
                 movedTasks: response, 
                 showCreateTask:false,
-                
+                loading: false
                 },function () {
                     console.log("movedTasks : "+ this.state.movedTasks)
                 });
           }).catch(error => {
+            this.setState({
+              loading: false
+            });
             Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
         }); 
       
@@ -215,11 +225,14 @@ class Stack extends Component {
             this.setState({
                 completedTasks: response, 
                 showCreateTask:false,
-                
+                loading: false
                 },function () {
                     console.log("completedTasks : "+ this.state.completedTasks)
                 });
           }).catch(error => {
+            this.setState({
+              loading: false
+            });
             Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
         }); 
     
@@ -229,11 +242,14 @@ class Stack extends Component {
             this.setState({
                 deletedTasks: response, 
                 showCreateTask:false,
-                
+                loading: false
                 },function () {
                     console.log("deletedTasks : "+ this.state.deletedTasks)
                 });
           }).catch(error => {
+            this.setState({
+                loading: false
+            });
             Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
         }); 
     }
@@ -287,12 +303,13 @@ class Stack extends Component {
                 </StackTabs>
             </Paper>
              <div className="stack-container" style={styles.stackContainer}>
-
             <div className="stack-task-container" style={styles.stackTaskContainer}>
             {
-
-                <If condition={this.state.value === 0}>
-                   <Then>
+                <If condition={this.state.loading === true}>
+                <Then>
+                <LoadingIndicator />
+                </Then>
+                <ElseIf condition={this.state.value === 0}>
                    <div>
                        <div style={styles.stackControls}>
                             <div style={styles.stackControlContent}>
@@ -319,7 +336,7 @@ class Stack extends Component {
                         currentUser={this.props.currentUser}
                         stack={this.props.stack}
                         taskProfile='todo'/>
-                   </Then>
+                   </ElseIf>
                    <ElseIf condition={this.state.value === 1 }>
                            <div style={styles.stackControls}>
                                <div style={styles.stackControlContent}>
