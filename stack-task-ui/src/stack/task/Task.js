@@ -57,6 +57,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Grow from '@material-ui/core/Grow';
 
 const StyledMenu = withStyles({
   paper: {
@@ -451,6 +452,7 @@ class Task extends Component {
 
         let UploadPanel;
         if(prevfiles && prevfiles.length>0){ UploadPanel= (
+        <Grow timeout={10} in={prevfiles}>
             <div className={classes.grid}>
                 <GridList cellHeight={'auto'} className={classes
                 .gridList} cols={4}>
@@ -478,6 +480,7 @@ class Task extends Component {
                 )}
                 </GridList>
             </div>
+            </Grow>
         )}
 
         let PushedUserPanel;
@@ -576,7 +579,7 @@ class Task extends Component {
 
 
         return (
-            <Zoom timeout={150} in={this.props.task}>
+            <Fade timeout={150} in={this.props.task}>
             <Card className={classes.card} elevation='15'>
                 <CardHeader className={classes.cardHeader}
                     avatar={StackUserAvatar}
@@ -649,7 +652,7 @@ class Task extends Component {
                     </CardContent>
                 </Collapse>
             </Card>
-            </Zoom>
+            </Fade>
         );
     }
 
