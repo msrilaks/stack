@@ -369,7 +369,7 @@ class Create extends Component {
                         {this.state.files.map(file =>(
                             <GridListTile key={file.id} style={{ padding: '2px' }}
                             cols={1}>
-                                <img src={file.preview} alt={file.title}/>
+                                <img src={file.preview}/>
                                 <GridListTileBar
                                     title={file.title}
                                     classes={{
