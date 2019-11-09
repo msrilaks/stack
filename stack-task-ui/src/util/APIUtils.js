@@ -54,7 +54,7 @@ const requestUpload = (options) => {
 export const styles = {
     appIcon: {
         paddingTop: '15px',
-        paddingRight: '15px',
+        paddingRight: '9px',
         height:'45px',
         weight:'40px',
     },
@@ -72,6 +72,7 @@ export const styles = {
     appLogout: {
         color:'#1ea5ae',
         fontFamily: 'Montserrat, sans-serif',
+        paddingRight: '9px'
     },
     appHeader: {
         //background: 'linear-gradient(45deg, #e9fafc 30%, #d2f5f9 90%)',

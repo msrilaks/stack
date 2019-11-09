@@ -604,8 +604,8 @@ class Task extends Component {
                          <Typography variant="caption"
                             color="textPrimary" component="p">
                             {
-                                format(new Date(this.props.task.createdDate)
-                                , 'HH:mm a, dd MMM yyyy')}
+                                this.props.task.createdDate
+                                }
                         </Typography>
                     }>
                     </CardHeader>
