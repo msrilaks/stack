@@ -20,17 +20,11 @@ class Home extends Component {
 
     StackHome(){
         const classes = useStyles();
-        return <div>
-                           <GridList cellHeight={'auto'} className={classes
-                           .gridList} cols={1}>
-                               <GridListTile key='stackHome1' cols={1}>
-                                       <img src="/stackHome1M.jpg" />
-                               </GridListTile>
-                               <GridListTile key='stackHome2' cols={1}>
-                                       <img src="/stackHome2M.jpg" height="600"
-                                             width="800"/>
-                               </GridListTile>
-                           </GridList>
+        return <div class="fadein">
+
+                                       <img id="f2" src="/stackHome1M.jpg" />
+                                       <img id="f1" src="/stackHome2M.jpg"/>
+
                        </div>
     }
 
