@@ -40,22 +40,22 @@ animation-duration: 20s;
 0% {opacity: 0;}
 25% {opacity: 1;}
 50% {opacity: 1;}
-75% {opacity: 1;}
+75% {opacity: 0;}
 100% {opacity: 0;}
 }
 @keyframes fade {
 0% {opacity: 0;}
 25% {opacity: 1;}
 50% {opacity: 1;}
-75% {opacity: 1;}
+75% {opacity: 0;}
 100% {opacity: 0;}
 }
 
 #f1 {
 }
 #f2 {
--webkit-animation-delay: 2s;
-animation-delay: 2s;
+-webkit-animation-delay: 10s;
+animation-delay: 10s;
 }
 #f3 {
 font-size: 25px;
