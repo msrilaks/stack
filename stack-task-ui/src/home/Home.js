@@ -21,11 +21,10 @@ class Home extends Component {
     StackHome(){
         const classes = useStyles();
         return <div class="fadein">
-
-                                       <img id="f2" src="/stackHome1M.jpg" />
-                                       <img id="f1" src="/stackHome2M.jpg"/>
-
-                       </div>
+            <img id="f2" src="/stackHome1M.jpg" />
+            <img id="f1" src="/stackHome2M.jpg"/>
+            <p id="f3" class="centered"></p>
+        </div>
     }
 
     render() {

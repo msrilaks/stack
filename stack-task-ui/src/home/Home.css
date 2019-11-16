@@ -6,47 +6,98 @@
 }
 
 .home-title {
-    font-size: 25px;
-    font-weight: 400;
-    color: rgba(0,0,0,0.70);
-    margin-top: 50px; 
+font-size: 25px;
+font-weight: 400;
+color: rgba(0,0,0,0.70);
+margin-top: 50px;
+}
+.centered {
+font-size: 25px;
+font-weight: 400;
+color: rgba(0,0,0,0.70);
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+}
+.fadein img {
+min-height: calc(100vh);
+text-align: center;
+padding: 0px;
+position:absolute;
+top:0;
+-webkit-animation-name: fade;
+-webkit-animation-iteration-count: infinite;
+-webkit-animation-timing-function: ease-in-out;
+-webkit-animation-duration: 20s;
+animation-name: fade;
+animation-iteration-count: infinite;
+animation-timing-function: ease-in-out;
+animation-duration: 20s;
 }
 
- .fadein img {
-    min-height: calc(100vh);
-    text-align: center;
-     padding: 0px;
-     position:absolute;
-     top:0;
-     -webkit-animation-name: fade;
-     -webkit-animation-iteration-count: infinite;
-     -webkit-animation-timing-function: ease-in-out;
-     -webkit-animation-duration: 10s;
-     animation-name: fade;
-     animation-iteration-count: infinite;
-     animation-timing-function: ease-in-out;
-     animation-duration: 10s;
- }
+@-webkit-keyframes fade {
+0% {opacity: 0;}
+25% {opacity: 1;}
+50% {opacity: 1;}
+75% {opacity: 1;}
+100% {opacity: 0;}
+}
+@keyframes fade {
+0% {opacity: 0;}
+25% {opacity: 1;}
+50% {opacity: 1;}
+75% {opacity: 1;}
+100% {opacity: 0;}
+}
 
- @-webkit-keyframes fade {
-     0% {opacity: 0;}
-     25% {opacity: 1;}
-     50% {opacity: 1;}
-     75% {opacity: 0;}
-     100% {opacity: 0;}
- }
- @keyframes fade {
-     0% {opacity: 0;}
-     25% {opacity: 1;}
-     50% {opacity: 1;}
-     75% {opacity: 0;}
-     100% {opacity: 0;}
- }
+#f1 {
+}
+#f2 {
+-webkit-animation-delay: 2s;
+animation-delay: 2s;
+}
+#f3 {
+font-size: 25px;
+font-weight: 'bold';
+-webkit-animation-name: pulse;
+-webkit-animation-iteration-count: infinite;
+-webkit-animation-timing-function: ease-in-out;
+-webkit-animation-duration: 20s;
+animation-name: pulse;
+animation-iteration-count: infinite;
+animation-timing-function: ease-in-out;
+animation-duration: 20s;
+}
 
- #f1 {
- }
- #f2 {
-     -webkit-animation-delay: 5s;
-     animation-delay: 5s;
- }
+@keyframes pulse {
+0% {
+color: #051E3E;
+}
+50% {
+color: white;
+}
+100% {
+color: #051E3E;
+}
+}
+
+#f3:after {
+content: "";
+-webkit-animation-name: spin;
+-webkit-animation-iteration-count: infinite;
+-webkit-animation-timing-function: ease-in-out;
+-webkit-animation-duration: 20s;
+animation-name: spin;
+animation-iteration-count: infinite;
+animation-timing-function: ease-in-out;
+animation-duration: 20s;
+}
+
+@keyframes spin {
+0% { content:"Stay on top of your tasks."; }
+25% { content:"Push tasks to your friends."; }
+50% { content:"Collaborate. Get notified."; }
+100% { content:"Add Google Calender events."; }
+}
 
