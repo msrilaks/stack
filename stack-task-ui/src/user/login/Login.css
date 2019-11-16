@@ -32,6 +32,8 @@
 
 .social-btn {
     border: 3px solid white;
+    margin: 15px;
+
 }
 
 .social-btn img {
@@ -39,7 +41,7 @@
     float: left;
     margin-top: 7px;
     margin-right: 4px;
-        padding-bottom: 3px;
+    padding-bottom: 3px;
     margin-bottom: 10px;
 }
 

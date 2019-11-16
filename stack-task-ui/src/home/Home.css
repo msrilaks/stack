@@ -53,11 +53,13 @@ animation-duration: 20s;
 
 #f1 {
 width:100%;
+height:100%;
 }
 #f2 {
 -webkit-animation-delay: 10s;
 animation-delay: 10s;
 width:100%;
+height:100%;
 }
 #f3 {
 font-size: 25px;
