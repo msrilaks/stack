@@ -17,8 +17,8 @@ class Home extends Component {
                     <p id="f3" class="centered"></p>
                 </div>}
         return <div class="fadein">
-            <img id="f2" src="/stackHome1L.jpg" />
-            <img id="f1" src="/stackHome2L.jpg"/>
+            <img id="f2" src="/stackHome1M.jpg" />
+            <img id="f1" src="/stackHome2M.jpg"/>
             <p id="f3" class="centered"></p>
         </div>
     }

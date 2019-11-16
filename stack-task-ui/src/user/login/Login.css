@@ -21,32 +21,31 @@
 .social-login {
     display: inline-flex;
     max-width: 300px;
-    font-size: 25px;
-    font-weight: 400;
-    color: rgba(0,0,0,0.70);
+    min-width: 280px;
     position: absolute;
     top: 30%;
     left: 50%;
     transform: translate(-40%, -50%);
+    box-shadow: 0 1px 11px rgba(0, 0, 0, 0.9) inset;
+    background: gainsboro;
+}
+
+a:link{
+    font-size: 1.2em;
+    font-weight: bold;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .social-btn {
     border: 3px solid white;
     margin: 15px;
-
 }
 
 .social-btn img {
     height: 32px;
     float: left;
-    margin-top: 7px;
-    margin-right: 4px;
-    padding-bottom: 3px;
-    margin-bottom: 10px;
-}
-
-.social-btn.google {
-
+    margin-right: 0px;
 }
 
 .social-btn.facebook img {
@@ -64,13 +63,3 @@
     font-size: 14px;
 }
 
-.login-title {
-    font-size: 2em;
-    font-weight: bold;
-    color: black;
-}
-
-.centered {
-
-max-width: 300px;
-}
