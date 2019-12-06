@@ -15,7 +15,7 @@ class AppHeader extends Component {
                         <div style={styles.appBranding}>
                             <img src="/favicon.ico" style={styles.appIcon}/>
                         </div>
-                        <div style={styles.appBranding}>
+                        <div className="app-nav" style={styles.appBranding}>
                             <Typography  variant="h5" component="h2">
                                 <Link to="/stack" style={styles.appTitle}
                                 className="app-title">Stack It Down</Link>

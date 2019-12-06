@@ -8,8 +8,7 @@ class Home extends Component {
     }
 
     StackHome(){
-        if(/iPhone|iPad|iPod|Android|webOS|BlackBerry|Windows Phone/i.test(navigator.userAgent)
-            || window.innerWidth < 480){
+        if(window.screen.width < 480){
                 //code for mobile
                 return <div class="fadein">
                     <img id="f2" src="/stackHome1XS.jpg" />

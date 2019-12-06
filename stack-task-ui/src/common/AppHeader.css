@@ -2,13 +2,13 @@
     height: 60px;
     position: relative;
     z-index: 10;
-    display: block;
+    display: inline-block;
+    width: 100%;
 }
 
 .app-title {
     line-height: 60px;
     vertical-align: middle;
-    font-size: 1.35em;
     color:'#EA005E',
 }
 
@@ -59,4 +59,9 @@
     position: relative;
     height: 32px;
     width: 32px;
+}
+
+.app-nav a:link {
+    font-size: 1.2em;
+    font-size: calc(16px + 1vw);
 }
