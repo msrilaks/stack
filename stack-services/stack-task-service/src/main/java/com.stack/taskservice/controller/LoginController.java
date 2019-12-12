@@ -69,6 +69,7 @@ public class LoginController {
     }
 
     @PostMapping("/signup")
+    @ApiOperation(value = "User Sign up", tags = {"Login"}, hidden = true)
     public ResponseEntity<?> registerUser(
             @Valid @RequestBody SignUpRequest signUpRequest) {
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {

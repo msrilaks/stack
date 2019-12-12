@@ -31,6 +31,7 @@ public class UserController {
 
     @GetMapping("/user/me")
     @PreAuthorize("hasRole('USER')")
+    @ApiOperation(value = "Get User - me", tags = {"User"})
     public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
         return userRepository.findByEmail(userPrincipal.getEmail())
                              .orElseThrow(() -> new ResourceNotFoundException(
