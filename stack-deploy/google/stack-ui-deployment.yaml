@@ -25,6 +25,7 @@ apiVersion: v1
 metadata:
  name: stack-task-ui
 spec:
+ type: LoadBalancer
  ports:
   - protocol: TCP
     port: 80
