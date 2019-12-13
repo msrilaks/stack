@@ -1,0 +1,33 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: stack-task-ui-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stack-task-ui
+  template:
+    metadata:
+      labels:
+        app: stack-task-ui
+    spec:
+      containers:
+        - name: stack-task-ui
+          image: srilakshmi29/stack-task-ui:prod
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+      restartPolicy: Always
+---
+kind: Service
+apiVersion: v1
+metadata:
+ name: stack-task-ui
+spec:
+ ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+ selector:
+  app: stack-task-ui
