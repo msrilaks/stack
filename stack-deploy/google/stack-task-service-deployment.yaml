@@ -1,5 +1,5 @@
 kind: Deployment
-apiVersion: apps/v1
+apiVersion: extensions/v1beta1
 metadata:
   name: stack-task-service-deployment
 spec:
@@ -29,11 +29,13 @@ kind: Service
 apiVersion: v1
 metadata:
  name: stack-task-service
+ labels:
+   app: stack-task-service
 spec:
- type: NodePort
  ports:
   - protocol: TCP
     port: 8080
     targetPort: 8080
+    name: http
  selector:
   app: stack-task-service
