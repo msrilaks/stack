@@ -2,11 +2,26 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: stack-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: stack-ip-address
+    networking.gke.io/managed-certificates: stack-certificate
 spec:
   rules:
     - http:
         paths:
-          - path: /*
+          - path: /
             backend:
               serviceName: stack-task-ui
               servicePort: 80
+          - path: /stackitdown
+            backend:
+              serviceName: stack-task-ui
+              servicePort: 80
+          - path: /oauth2/*
+            backend:
+              serviceName: stack-task-service
+              servicePort: 8080
+          - path: /stack/*
+            backend:
+              serviceName: stack-task-service
+              servicePort: 8080

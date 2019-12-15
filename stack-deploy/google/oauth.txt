@@ -3,3 +3,7 @@ https://www.stackitdown.com:8080/login/oauth2/code/google
 
 Dev:
 https://localhost:8080/login/oauth2/code/google
+
+Managed GKE cert:
+https://cloud.google.com/kubernetes-engine/docs/how-to/managed-certs
+gcloud compute addresses create stack-ip-address --global
