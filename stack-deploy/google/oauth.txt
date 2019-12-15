@@ -1,0 +1,5 @@
+Production:
+https://www.stackitdown.com:8080/login/oauth2/code/google
+
+Dev:
+https://localhost:8080/login/oauth2/code/google
