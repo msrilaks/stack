@@ -1,0 +1,39 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: stack-task-service-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stack-task-service
+  template:
+    metadata:
+      labels:
+        app: stack-task-service
+    spec:
+      containers:
+        - name: stack-task-service
+          image: srilakshmi29/stack-task-service:latest
+          env:
+            - name: LOG_DIR
+              value: "logs"
+            - name: SPRING_PROFILES_ACTIVE
+              value: "google"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+      restartPolicy: Always
+---
+kind: Service
+apiVersion: v1
+metadata:
+ name: stack-task-service
+spec:
+ type: NodePort
+ ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+ selector:
+  app: stack-task-service
