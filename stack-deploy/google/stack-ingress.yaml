@@ -9,15 +9,27 @@ spec:
   rules:
     - http:
         paths:
-          - path: /
+          - path: /*
             backend:
               serviceName: stack-task-ui
               servicePort: 80
-          - path: /stackitdown
+          - path: /stackitdown/*
             backend:
               serviceName: stack-task-ui
               servicePort: 80
-          - path: /oauth2/*
+          - path: /oauth2/redirect/*
+            backend:
+              serviceName: stack-task-ui
+              servicePort: 80
+          - path: /health/*
+            backend:
+              serviceName: stack-task-service
+              servicePort: 8080
+          - path: /oauth2/authorize/*
+            backend:
+              serviceName: stack-task-service
+              servicePort: 8080
+          - path: /login/oauth2/code/*
             backend:
               serviceName: stack-task-service
               servicePort: 8080
