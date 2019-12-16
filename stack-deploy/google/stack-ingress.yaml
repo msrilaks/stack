@@ -5,6 +5,10 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "nginx"
 spec:
+  tls:
+  - hosts:
+    - www.stackitdown.com
+    secretName: stacksecret
   rules:
     - http:
         paths:
