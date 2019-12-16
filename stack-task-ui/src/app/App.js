@@ -101,7 +101,8 @@ class App extends Component {
             <Route exact path="/" component={Home}></Route>           
               <PrivateRoute path="/create" authenticated={this.state.authenticated} currentUser={this.state.currentUser} stack={this.state.stack}
               component={Create}></PrivateRoute>
-            <PrivateRoute path="/stack" authenticated={this.state.authenticated} currentUser={this.state.currentUser} stack={this.state.stack}
+            <PrivateRoute path="/stackitdown" authenticated={this.state
+            .authenticated} currentUser={this.state.currentUser} stack={this.state.stack}
               component={Stack}></PrivateRoute>
             <Route path="/login"
               render={(props) => <Login authenticated={this.state.authenticated} {...props} />}></Route>
