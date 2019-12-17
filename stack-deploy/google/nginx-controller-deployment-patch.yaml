@@ -18,6 +18,7 @@ spec:
           args:
             - /nginx-ingress-controller
             - --default-backend-service=$(POD_NAMESPACE)/default-http-backend
+            - --default-ssl-certificate=$(POD_NAMESPACE)/stacksecret
             - --publish-service=$(POD_NAMESPACE)/ingress-nginx
           env:
             - name: POD_NAME

@@ -61,6 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .disable()
             .exceptionHandling()
             .authenticationEntryPoint(new RestAuthenticationEntryPoint())
+            .and().requiresChannel().anyRequest().requiresSecure()
             .and()
             .authorizeRequests()
             .antMatchers("/",
