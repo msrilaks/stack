@@ -17,7 +17,7 @@ class AppHeader extends Component {
                         </div>
                         <div className="app-nav" style={styles.appBranding}>
                             <Typography  variant="h5" component="h2">
-                                <Link to="/stack" style={styles.appTitle}
+                                <Link to="/stackitdown" style={styles.appTitle}
                                 className="app-title">Stack It Down</Link>
                             </Typography>
                         </div>
