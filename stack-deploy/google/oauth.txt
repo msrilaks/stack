@@ -10,4 +10,17 @@ gcloud compute addresses create stack-ip-address --global
 
 Setup nginx
 https://rahmonov.me/posts/nginx-ingress-controller/
-kubectl create clusterrolebinding cluster-admin-binding \ --clusterrole cluster-admin \ --user $(gcloud config get-value account)
+
+lets encrypt
+https://runnable.com/blog/how-to-use-lets-encrypt-on-kubernetes
+https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nginx-ingress-with-cert-manager-on-digitalocean-kubernetes
+https://www.thomasvitale.com/https-spring-boot-ssl-certificate/
+
+https://cert-manager.io/docs/tutorials/acme/ingress/
+kubectl create --edit -f https://netlify.cert-manager.io/docs/tutorials/acme/example/letsencrypt2.yaml
+
+
+https://cert-manager.io/docs/installation/kubernetes/
+kubectl create namespace cert-manager
+
+https://medium.com/google-cloud/installing-helm-in-google-kubernetes-engine-7f07f43c536

@@ -7,7 +7,7 @@ metadata:
 spec:
   tls:
   - hosts:
-    - www.stackitdown.com
+    - stackitdown.com
     secretName: stacksecret
   rules:
     - http:
