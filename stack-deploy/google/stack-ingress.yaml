@@ -4,6 +4,7 @@ metadata:
   name: stack-ingress
   annotations:
     kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   tls:
   - hosts:
@@ -13,6 +14,34 @@ spec:
     - http:
         paths:
           - path: /
+            backend:
+              serviceName: stack-task-ui
+              servicePort: 80
+          - path: /static/*
+            backend:
+              serviceName: stack-task-ui
+              servicePort: 80
+          - path: /stackHome1M.jpg
+            backend:
+              serviceName: stack-task-ui
+              servicePort: 80
+          - path: /stackHome2M.jpg
+            backend:
+              serviceName: stack-task-ui
+              servicePort: 80
+          - path: /stackHome1XS.jpg
+            backend:
+              serviceName: stack-task-ui
+              servicePort: 80
+          - path: /stackHome2XS.jpg
+            backend:
+              serviceName: stack-task-ui
+              servicePort: 80
+          - path: /*.*
+            backend:
+              serviceName: stack-task-ui
+              servicePort: 80
+          - path: /*.ico
             backend:
               serviceName: stack-task-ui
               servicePort: 80
