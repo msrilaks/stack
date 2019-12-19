@@ -4,6 +4,17 @@ https://www.stackitdown.com:8080/login/oauth2/code/google
 Dev:
 https://localhost:8080/login/oauth2/code/google
 
+Self Signed Cert
+openssl req -x509 -nodes -days 730 -newkey rsa:2048 -keyout stack-ingress.key
+-out stack-ingress.crt -config req.cnf -sha256
+Another way:
+openssl genrsa -out test-ingress-1.key 2048
+openssl req -new -key test-ingress-1.key -out test-ingress-1.csr \
+    -subj "/CN=[FIRST_DOMAIN_NAME]"
+openssl x509 -req -days 365 -in test-ingress-1.csr -signkey test-ingress-1.key \
+    -out test-ingress-1.crt
+
+
 Managed GKE cert:
 https://cloud.google.com/kubernetes-engine/docs/how-to/managed-certs
 gcloud compute addresses create stack-ip-address --global
