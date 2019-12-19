@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  default.conf: |
+    # Add upstream for letsencrypt job
+    upstream letsencrypt {
+      server letsencrypt:80 max_fails=0 fail_timeout=1s;
+    }
+    server {
+      # Redirect all traffic in /.well-known/ to letsencrypt
+      location ^~ /.well-known/acme-challenge/ {
+        proxy_pass http://letsencrypt;
+      }
+    }
