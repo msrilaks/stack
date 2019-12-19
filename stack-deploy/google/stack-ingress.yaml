@@ -37,10 +37,6 @@ spec:
             backend:
               serviceName: stack-task-ui
               servicePort: 80
-          - path: /*.*
-            backend:
-              serviceName: stack-task-ui
-              servicePort: 80
           - path: /*.ico
             backend:
               serviceName: stack-task-ui
