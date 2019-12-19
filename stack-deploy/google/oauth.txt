@@ -5,8 +5,7 @@ Dev:
 https://localhost:8080/login/oauth2/code/google
 
 Self Signed Cert
-openssl req -x509 -nodes -days 730 -newkey rsa:2048 -keyout stack-ingress.key
--out stack-ingress.crt -config req.cnf -sha256
+openssl req -x509 -nodes -days 730 -newkey rsa:2048 -keyout stack-ingress.key -out stack-ingress.crt -config req.cnf -sha256
 Another way:
 openssl genrsa -out test-ingress-1.key 2048
 openssl req -new -key test-ingress-1.key -out test-ingress-1.csr \
