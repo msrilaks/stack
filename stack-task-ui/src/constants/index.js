@@ -10,7 +10,7 @@ const dev = {
   const prod = {
     ACCESS_TOKEN: 'accessToken',
     API_BASE_URL: 'https://www.stackitdown.com',
-    GOOGLE_AUTH_URL: 'https://www.stackitdown.com' + '/oauth2/authorize/google?redirect_uri=' + 'http://www.stackitdown.com/oauth2/redirect',
+    GOOGLE_AUTH_URL: 'https://www.stackitdown.com' + '/oauth2/authorize/google?redirect_uri=' + 'https://www.stackitdown.com/oauth2/redirect',
     // OAUTH2_REDIRECT_URI: 'http://www.stackitdown.com/oauth2/redirect',  
     // FACEBOOK_AUTH_URL: 'http://www.stackitdown.com:8080' + '/oauth2/authorize/facebook?redirect_uri=' + 'http://www.stackitdown.com/oauth2/redirect',
     // GITHUB_AUTH_URL: 'http://www.stackitdown.com:8080' + '/oauth2/authorize/github?redirect_uri=' + 'http://www.stackitdown.com/oauth2/redirect'
