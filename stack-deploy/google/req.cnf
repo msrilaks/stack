@@ -8,11 +8,7 @@ ST = CA
 L = Fremont
 O = StackItDown
 OU = StackItDown
-CN = www.stackitdown.com
+CN = stackitdown.com
 [v3_req]
 keyUsage = critical, digitalSignature, keyAgreement
 extendedKeyUsage = serverAuth
-subjectAltName = @alt_names
-[alt_names]
-DNS.1 = www.stackitdown.com
-DNS.2 = stackitdown.com

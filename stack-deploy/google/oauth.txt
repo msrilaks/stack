@@ -16,6 +16,9 @@ openssl x509 -req -days 365 -in test-ingress-1.csr -signkey test-ingress-1.key \
     -out test-ingress-1.crt
 
 
+openssl req -nodes -newkey rsa:2048 -keyout stackitdown.key -out stackitdown.csr -config req.cnf
+_44877DAF902A91AEDBB405BCD90FE747.stackitdown.com -> DDCE9F39034990BA72CC7A171466A176.117A546904FDC4D6A06C8F9EBFE5B272.037b12f8b4.ssl.com
+
 Managed GKE cert:
 https://cloud.google.com/kubernetes-engine/docs/how-to/managed-certs
 gcloud compute addresses create stack-ip-address --global
@@ -36,3 +39,5 @@ https://cert-manager.io/docs/installation/kubernetes/
 kubectl create namespace cert-manager
 
 https://medium.com/google-cloud/installing-helm-in-google-kubernetes-engine-7f07f43c536
+
+
