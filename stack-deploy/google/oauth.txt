@@ -6,7 +6,7 @@ https://localhost:8080/login/oauth2/code/google
 
 Self Signed Cert
 openssl req -x509 -nodes -days 730 -newkey rsa:2048 -keyout stack-ingress.key -out stack-ingress.crt -config req.cnf -sha256
-openssl pkcs12 -export -in ./stack-ingress.crt -inkey stack-ingress.key -out stack-ingress.pfx -name "stack"
+
 
 Another way:
 openssl genrsa -out test-ingress-1.key 2048
@@ -15,8 +15,9 @@ openssl req -new -key test-ingress-1.key -out test-ingress-1.csr \
 openssl x509 -req -days 365 -in test-ingress-1.csr -signkey test-ingress-1.key \
     -out test-ingress-1.crt
 
-
+Secure SSL:
 openssl req -nodes -newkey rsa:2048 -keyout stackitdown.key -out stackitdown.csr -config req.cnf
+openssl pkcs12 -export -in ./stackitdown.crt -inkey stackitdown.key -out stackitdown.pfx -name "stack"
 _44877DAF902A91AEDBB405BCD90FE747.stackitdown.com -> DDCE9F39034990BA72CC7A171466A176.117A546904FDC4D6A06C8F9EBFE5B272.037b12f8b4.ssl.com
 
 Managed GKE cert:
