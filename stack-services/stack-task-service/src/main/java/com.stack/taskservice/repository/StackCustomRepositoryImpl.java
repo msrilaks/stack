@@ -9,10 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.*;
 
 public class StackCustomRepositoryImpl implements StackCustomRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(
@@ -48,8 +48,7 @@ public class StackCustomRepositoryImpl implements StackCustomRepository {
     @Override
     public Task saveTaskAsPushed(UUID taskId, Stack stack, String pushedToUserId) {
         Task task = findTaskById(taskId, stack);
-        task.setPushedTimeStamp(System.currentTimeMillis());
-        task.setPushedUserId(pushedToUserId);
+        task.addTaskPushLogEntry(pushedToUserId);
         return updateTaskToStack(task, stack);
     }
 
@@ -133,8 +132,8 @@ public class StackCustomRepositoryImpl implements StackCustomRepository {
         return fetchTasks(stack, predicate);
     }
 
-    private Predicate<Task> filterByTags( List<String> tags) {
-        if(tags == null || tags.isEmpty()) {
+    private Predicate<Task> filterByTags(List<String> tags) {
+        if (tags == null || tags.isEmpty()) {
             return (task -> true);
         }
         return (task -> task.containsTags(tags));

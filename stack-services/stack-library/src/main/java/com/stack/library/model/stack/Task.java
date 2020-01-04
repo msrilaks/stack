@@ -25,11 +25,11 @@ public class Task implements Comparable<Task>, Cloneable {
     private String                   origin;
     private String                   description;
     private String                   tags;
-    private Map<String, TaskContent> taskContentMap;
     private Long                     completedTimeStamp;
     private Long                     pushedTimeStamp;
     private Long                     deletedTimeStamp;
     private Long                     completeByTimeStamp;
+    private SortedMap<UUID, TaskPushLogEntry> taskPushLogEntryMap = new TreeMap<>();
     //private StackEvent stackEvent;
     @CreatedDate
     private Date                     createdDate;
@@ -76,6 +76,15 @@ public class Task implements Comparable<Task>, Cloneable {
             }
         }
         return true;
+    }
+
+    public void addTaskPushLogEntry(String pushedToUserId) {
+        pushedTimeStamp = (pushedTimeStamp == null)?
+                          System.currentTimeMillis() : pushedTimeStamp;
+        pushedUserId = (pushedUserId == null)? pushedToUserId : pushedUserId;
+        TaskPushLogEntry taskPushLogEntry = new TaskPushLogEntry(stackId, userId,
+                                                                    pushedToUserId);
+        taskPushLogEntryMap.put(taskPushLogEntry.getId(), taskPushLogEntry);
     }
 
     public String getTitle() {
