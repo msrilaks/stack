@@ -20,8 +20,7 @@ public class TaskPushLogEntry implements Cloneable {
     private String                   stackId;
     private String                   userId;
     private String                   pushedUserId;
-    @CreatedDate
-    private Date                     createdDate;
+    private Long                     createdTimeStamp;
 
     public TaskPushLogEntry(String stackId, String userId, String pushedUserId) {
         super();
@@ -29,5 +28,6 @@ public class TaskPushLogEntry implements Cloneable {
         setStackId(stackId);
         setUserId(userId);
         setPushedUserId(pushedUserId);
+        setCreatedTimeStamp(System.currentTimeMillis());
     }
 }
