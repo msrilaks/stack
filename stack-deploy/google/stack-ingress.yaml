@@ -58,6 +58,14 @@ spec:
             backend:
               serviceName: stack-task-service
               servicePort: 8080
+          - path: /swagger-ui.html
+            backend:
+              serviceName: stack-task-service
+              servicePort: 8080
+          - path: /webjars/springfox-swagger-ui/*
+            backend:
+              serviceName: stack-task-service
+              servicePort: 8080
           - path: /oauth2/authorize
             backend:
               serviceName: stack-task-service

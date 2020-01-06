@@ -3,8 +3,9 @@
 ##Production
 docker build -f Dockerfile-prod -t srilakshmi29/stack-task-ui:prod .
 docker push srilakshmi29/stack-task-ui:prod
-docker run -p 80:80 -e REACT_APP_STAGE=production --name stack-task-ui -d srilakshmi29/stack-task-ui:prod
+kubectl set image deployment stack-task-ui-deployment stack-task-ui=srilakshmi29/stack-task-ui:prod
 
+docker run -p 80:80 -e REACT_APP_STAGE=production --name stack-task-ui -d srilakshmi29/stack-task-ui:prod
 docker-compose -f docker-compose-prod.yml up -d --build
 
 ##Dev

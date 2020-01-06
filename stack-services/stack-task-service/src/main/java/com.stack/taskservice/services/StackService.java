@@ -97,6 +97,7 @@ public class StackService {
             try {
                 pushTask = stackRepository.findTaskById(taskId, pushStack);
                 pushTask.resetTimeStamps();
+                pushTask.setDescription(task.getDescription());
             } catch (Exception e) {
                 LOGGER.info("Task not found", e);
             }
