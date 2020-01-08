@@ -74,8 +74,7 @@ public class StackController {
                              .build();
     }
 
-    @GetMapping(path = "/stack/{stackId}", consumes = "application/json",
-                produces = "application/json")
+    @GetMapping(path = "/stack/{stackId}",produces = "application/json")
     @ApiOperation(value = "Get a Stack", tags = {"Stack"})
     public ResponseEntity<Stack> getStack(
             @PathVariable("stackId") String stackId) {
