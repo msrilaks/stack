@@ -34,13 +34,13 @@ public class SwaggerConfiguration extends WebMvcConfigurationSupport {
             .apis(RequestHandlerSelectors
             .basePackage("com.stack.taskservice"))
             .paths(PathSelectors.any()).build()
-//            .pathProvider(new RelativePathProvider(servletContext) {
-//                @Override
-//                public String getApplicationBasePath() {
-//                return "/";
-//                }
-//            })
-            .protocols(protoSet);
+            .protocols(protoSet)
+            .pathProvider(new RelativePathProvider(servletContext) {
+                @Override
+                    public String getApplicationBasePath() {
+                    return "/";
+                }
+            });
     }
     @Override
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
