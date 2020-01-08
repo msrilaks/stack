@@ -60,15 +60,14 @@ public class StackController {
                  produces = "application/json")
     @ApiOperation(value = "Create a Stack", tags = {"Stack"})
     public ResponseEntity<Stack> createStack(
-            @RequestBody @Valid Stack stack, Authentication authentication) {
+            @RequestBody @Valid Stack stack,
+            Authentication authentication) {
         return ResponseEntity.ok(stackService.createStack(stack));
     }
 
-    @DeleteMapping(path = "/stack/{stackId}", consumes = "application/json",
-                   produces = "application/json")
+    @DeleteMapping(path = "/stack/{stackId}", produces = "application/json")
     @ApiOperation(value = "Delete a Stack", tags = {"Stack"})
-    public ResponseEntity deleteStack(
-            @PathVariable("stackId") String stackId) {
+    public ResponseEntity deleteStack(@PathVariable("stackId") String stackId) {
         stackService.deleteStack(stackId);
         return ResponseEntity.ok()
                              .build();
