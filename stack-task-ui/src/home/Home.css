@@ -23,7 +23,8 @@ transform: translate(-50%, -50%);
 .fadein img {
 min-height: calc(100vh);
 text-align: center;
-padding: 0px;
+padding-right: 40px;
+padding-left: 40px;
 position:absolute;
 top:0;
 -webkit-animation-name: fade;
