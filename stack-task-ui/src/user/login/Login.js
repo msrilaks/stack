@@ -36,8 +36,11 @@ class Login extends Component {
 
         return (
             <div className="login-container">
-
-                    <SocialLogin />
+                <div class="fadein">
+                    <img id="f2" src="/stackHome1M.jpg" />
+                    <img id="f1" src="/stackHome2M.jpg"/>
+                </div>
+                <SocialLogin id="f3" class="centered"/>
                     {/* <div className="or-separator">
                         <span className="or-text">OR</span>
                     </div>
@@ -56,7 +59,7 @@ class SocialLogin extends Component {
                 <a className="btn btn-block social-btn"
                 href={config
                 .GOOGLE_AUTH_URL}>
-                <img src={googleLogo} alt="Google"
+                <img id="f4" src={googleLogo} alt="Google"
                 style={{marginTop: "5px"}}/>Log in with
                 Google</a>
                 {/*<a className="btn btn-block social-btn facebook"
