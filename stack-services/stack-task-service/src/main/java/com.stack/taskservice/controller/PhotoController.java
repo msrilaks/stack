@@ -2,6 +2,7 @@ package com.stack.taskservice.controller;
 
 import com.stack.library.model.stack.PhotoResponse;
 import com.stack.taskservice.services.PhotoService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
+@Api(value = "Photos",
+     description = "Upload and manage photos, files and media related to tasks",
+     tags = {"Photos"})
 public class PhotoController {
 
     @Autowired

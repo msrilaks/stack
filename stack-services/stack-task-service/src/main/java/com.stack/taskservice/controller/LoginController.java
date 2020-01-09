@@ -25,11 +25,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.net.URI;
 
 @Controller
+@ApiIgnore
 public class LoginController {
     private static final Logger LOGGER = LoggerFactory.getLogger(
             LoginController.class.getName());
@@ -63,8 +65,6 @@ public class LoginController {
         String token = tokenProvider.createToken(authentication);
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("Authentication", "Bearer " + token);
-        //return new ResponseEntity<Void>(responseHeaders, HttpStatus.OK);
-        //return ResponseEntity.ok(responseHeaders, new LoginResponse());
         return ResponseEntity.ok(LoginResponse.builder().accessToken(token).build());
     }
 

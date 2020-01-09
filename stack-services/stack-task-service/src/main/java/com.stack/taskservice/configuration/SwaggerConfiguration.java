@@ -6,6 +6,8 @@ import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.schema.ModelRef;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -36,6 +38,17 @@ public class SwaggerConfiguration {
                     Arrays.asList("application/json")))
             .produces(new LinkedHashSet<>(
                   Arrays.asList("application/json")))
-            .globalOperationParameters(Collections.singletonList(authHeader));
+            .globalOperationParameters(Collections.singletonList(authHeader))
+            .apiInfo(apiInfo());
+    }
+
+    private ApiInfo apiInfo() {
+        return new ApiInfo(
+            "Stack It Down REST API Specification",
+            "REST APIs to create and manage Stacks, Tasks, Photos and Event.",
+            "v1",
+            "Terms of service",
+            new Contact("Admin", "www.stackitdown.com", "stackitdown@gmail.com"),
+            "License", "API license URL", Collections.emptyList());
     }
 }

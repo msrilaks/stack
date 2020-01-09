@@ -41,7 +41,7 @@ public class StackController {
     @GetMapping(path = "/stack",
                 produces = "application/json")
     @ApiOperation(value = "Get a Stack", tags = {"Stack"})
-    public ResponseEntity<Stack> getStack(Authentication authentication) {
+    public ResponseEntity<Stack> getStack() {
         if (stackRequestContext.getUser() == null) {
             return ResponseEntity.badRequest().build();
         }
@@ -59,9 +59,7 @@ public class StackController {
     @PostMapping(path = "/stack", consumes = "application/json",
                  produces = "application/json")
     @ApiOperation(value = "Create a Stack", tags = {"Stack"})
-    public ResponseEntity<Stack> createStack(
-            @RequestBody @Valid Stack stack,
-            Authentication authentication) {
+    public ResponseEntity<Stack> createStack(@RequestBody @Valid Stack stack) {
         return ResponseEntity.ok(stackService.createStack(stack));
     }
 

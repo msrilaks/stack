@@ -8,6 +8,7 @@ import com.stack.taskservice.repository.UserRepository;
 import com.stack.taskservice.security.CurrentUser;
 import com.stack.taskservice.security.UserPrincipal;
 import com.stack.taskservice.services.StackService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
+@Api(value = "User", description = "Stack User Endpoints", tags = {"User"})
 public class UserController {
     private static final Logger LOGGER = LoggerFactory.getLogger(
             UserController.class.getName());
@@ -31,7 +33,7 @@ public class UserController {
 
     @GetMapping("/user/me")
     @PreAuthorize("hasRole('USER')")
-    @ApiOperation(value = "Get User - me", tags = {"User"})
+    @ApiOperation(value = "Get User - me", tags = {"User"}, hidden = true)
     public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
         return userRepository.findByEmail(userPrincipal.getEmail())
                              .orElseThrow(() -> new ResourceNotFoundException(
@@ -43,7 +45,7 @@ public class UserController {
     @GetMapping(path = "/stack/{stackId}/tasks/{taskId}/user",
                 consumes = "application/json",
                 produces = "application/json")
-    @ApiOperation(value = "Get User who owns the Task", tags = {"User"})
+    @ApiOperation(value = "Get User who owns the Task", tags = {"Task"})
     public User getTaskUser( @PathVariable("stackId") String stackId,
                              @PathVariable("taskId") UUID taskId) {
         Task task = stackService.getTask(taskId);
