@@ -3,6 +3,7 @@ package com.stack.taskservice.controller;
 import com.stack.library.model.stack.Stack;
 import com.stack.library.model.stack.StackEvent;
 import com.stack.library.model.stack.Task;
+import com.stack.library.model.stack.TaskPushLogEntry;
 import com.stack.taskservice.context.StackRequestContext;
 import com.stack.taskservice.services.GoogleCalendarService;
 import com.stack.taskservice.services.StackService;
@@ -21,6 +22,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Iterator;
 
 
 @Controller
@@ -158,7 +160,12 @@ public class StackController {
         } else if (isToDo) {
             return ResponseEntity.ok(stackService.completeTask(taskId, false));
         } else if (isPushed) {
-            return ResponseEntity.ok(stackService.pushTask(taskId, task.getUserId()));
+            Iterator pushLogsIterator = task.getTaskPushLogEntryMap().values().iterator();
+            while(pushLogsIterator.hasNext()) {
+                TaskPushLogEntry pushEntry = (TaskPushLogEntry)pushLogsIterator.next();
+                stackService.pushTask(taskId, pushEntry.getPushedUserId());
+            }
+            return ResponseEntity.ok(stackService.getTask(taskId));
         } else {
             return ResponseEntity.ok(task);
         }

@@ -49,7 +49,8 @@ public class UserController {
     public User getTaskUser( @PathVariable("stackId") String stackId,
                              @PathVariable("taskId") UUID taskId) {
         Task task = stackService.getTask(taskId);
-        String userId=(task.isPushed())?task.getPushedUserId():task.getUserId();
+        String userId=(task.isPushed())?task.getTaskPushLogEntryMap().firstEntry().getValue().getPushedUserId()
+                :task.getUserId();
         return userRepository.findByEmail(userId)
                      .orElseThrow(() -> new ResourceNotFoundException("User",
                                                                       "email",
