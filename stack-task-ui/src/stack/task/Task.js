@@ -345,7 +345,11 @@ class Task extends Component {
 
         onButtonPushTaskClicked(event) {
             const pushTaskRequest = Object.assign({}, this.props.task);
-            pushTaskRequest.userId = this.state.pushUserId;
+            var pushLogEntry = {
+                    pushedUserId:  this.state.pushUserId
+                  };
+            var taskPushLogEntryMap = { "1": pushLogEntry };
+            pushTaskRequest.taskPushLogEntryMap = taskPushLogEntryMap;
             console.log(pushTaskRequest);
             patchTask(pushTaskRequest,"isPushed=true")
             .then((response) => {
