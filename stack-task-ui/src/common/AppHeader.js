@@ -9,7 +9,7 @@ class AppHeader extends Component {
     render() {
         return (
             <header className="app-header"  style={styles.appHeader}>
-                <div className="container">
+                <div>
                     <div className="app-branding"
                         style={styles.appBrandingContainer}>
                         <div style={styles.appBranding}>
