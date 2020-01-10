@@ -53,9 +53,9 @@ const requestUpload = (options) => {
 
 export const styles = {
     appIcon: {
-        paddingTop: '15px',
-        height:'45px',
-        weight:'40px',
+        paddingTop: '12px',
+        height:'48px',
+        weight:'48px',
     },
     appBrandingContainer: {
         display: 'inline-flex',
