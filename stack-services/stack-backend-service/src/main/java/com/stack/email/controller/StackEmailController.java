@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.validation.Valid;
 
 @Controller
-@Api(value = "Stack", description = "REST API for Stack", tags = {"Stack"})
+@Api(value = "Email", description = "REST API for Email", tags = {"Email"})
 public class StackEmailController {
     @Autowired
     StackEmailService stackEmailService;
