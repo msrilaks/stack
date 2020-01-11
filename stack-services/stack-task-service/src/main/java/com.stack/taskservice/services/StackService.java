@@ -2,6 +2,7 @@ package com.stack.taskservice.services;
 
 import com.stack.library.model.stack.Stack;
 import com.stack.library.model.stack.Task;
+import com.stack.library.model.stack.TaskPushLogEntry;
 import com.stack.taskservice.context.StackRequestContext;
 import com.stack.taskservice.handler.EmailHandler;
 import com.stack.taskservice.repository.StackRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -76,13 +78,20 @@ public class StackService {
 
     public Task createTask(Task task) {
         Stack stack = stackRequestContext.getStack();
-        if (!task.getUserId().equals(stack.getUserId())) {
-            String pushUserId = task.getUserId();
-            Task createdTask = stackRepository.saveTaskToStack(task, stack);
-            return pushTask(createdTask.getId(), pushUserId);
-        }
         Task createdTask = stackRepository.saveTaskToStack(task, stack);
+        if (!task.getTaskPushLogEntryMap().isEmpty()) {
+            return pushTask(createdTask);
+        }
         return createdTask;
+    }
+
+    public Task pushTask(Task task){
+        Iterator pushLogsIterator = task.getTaskPushLogEntryMap().values().iterator();
+        while(pushLogsIterator.hasNext()) {
+            TaskPushLogEntry pushEntry = (TaskPushLogEntry)pushLogsIterator.next();
+            pushTask(task.getId(), pushEntry.getPushedUserId());
+        }
+        return getTask(task.getId());
     }
 
     public Task pushTask(UUID taskId, String toUserId) {
@@ -122,14 +131,13 @@ public class StackService {
             UUID taskId,
             @Valid Task task) {
         Stack stack = stackRequestContext.getStack();
-        Task toModifyTask = stackRepository.findTaskById(taskId, stack);
-        if (!task.getUserId().equals(stack.getUserId()) ||
-            (task.getUserId().equals(stack.getUserId()) &&
-             !toModifyTask.getUserId().equals(task.getUserId()))) {
-            stackRepository.saveTaskAsModified(task, taskId, stack);
-            return pushTask(taskId, task.getUserId());
+        Task modifiedTask = stackRepository.saveTaskAsModified(task, taskId, stack);
+        if (!task.getTaskPushLogEntryMap().isEmpty()) {
+            //If the task in the request has push entries, honour those entries.
+            //modifiedTask will have the older push entries too.
+            return pushTask(task);
         }
-        return stackRepository.saveTaskAsModified(task, taskId, stack);
+        return modifiedTask;
     }
 
     public Task deleteTask(UUID taskId) {

@@ -3,7 +3,6 @@ package com.stack.taskservice.controller;
 import com.stack.library.model.stack.Stack;
 import com.stack.library.model.stack.StackEvent;
 import com.stack.library.model.stack.Task;
-import com.stack.library.model.stack.TaskPushLogEntry;
 import com.stack.taskservice.context.StackRequestContext;
 import com.stack.taskservice.services.GoogleCalendarService;
 import com.stack.taskservice.services.StackService;
@@ -13,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +20,6 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.Iterator;
 
 
 @Controller
@@ -73,7 +70,7 @@ public class StackController {
                              .build();
     }
 
-    @GetMapping(path = "/stack/{stackId}",produces = "application/json")
+    @GetMapping(path = "/stack/{stackId}", produces = "application/json")
     @ApiOperation(value = "Get a Stack", tags = {"Stack"})
     public ResponseEntity<Stack> getStack(
             @PathVariable("stackId") String stackId) {
@@ -94,11 +91,11 @@ public class StackController {
             @RequestParam(name = "isToDo", required = false, defaultValue =
                     "false") Boolean isToDo,
             @RequestParam(name = "tags", required = false) List<String> tags) {
-                return ResponseEntity.ok(stackService.getTasks(isDeleted,
-                                                               isPushed,
-                                                               isCompleted,
-                                                               isToDo,
-                                                               tags));
+        return ResponseEntity.ok(stackService.getTasks(isDeleted,
+                                                       isPushed,
+                                                       isCompleted,
+                                                       isToDo,
+                                                       tags));
     }
 
     @GetMapping(path = "/stack/{stackId}/tasks/{taskId}", consumes = "application/json",
@@ -160,20 +157,15 @@ public class StackController {
         } else if (isToDo) {
             return ResponseEntity.ok(stackService.completeTask(taskId, false));
         } else if (isPushed) {
-            Iterator pushLogsIterator = task.getTaskPushLogEntryMap().values().iterator();
-            while(pushLogsIterator.hasNext()) {
-                TaskPushLogEntry pushEntry = (TaskPushLogEntry)pushLogsIterator.next();
-                stackService.pushTask(taskId, pushEntry.getPushedUserId());
-            }
-            return ResponseEntity.ok(stackService.getTask(taskId));
+            return ResponseEntity.ok(stackService.pushTask(task));
         } else {
             return ResponseEntity.ok(task);
         }
     }
 
     @PostMapping(path = "/stack/{stackId}/tasks/{taskId}/event",
-                consumes = "application/json",
-                produces = "application/json")
+                 consumes = "application/json",
+                 produces = "application/json")
     @ApiOperation(value = "Create Google Event for Task", tags = {"Event"})
     public ResponseEntity<Task> createGoogleEvent(
             @PathVariable("stackId") String stackId,
