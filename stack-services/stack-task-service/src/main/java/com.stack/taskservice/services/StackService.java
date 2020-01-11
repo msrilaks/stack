@@ -81,7 +81,7 @@ public class StackService {
         Task createdTask = stackRepository.saveTaskToStack(task.clone(), stack);
         LOGGER.info("Created task : " + createdTask);
         //Go over the push log in the task from request body
-        if (!task.getTaskPushLogEntryMap().isEmpty()) {
+        if (task.getTaskPushLogEntryMap()!=null && !task.getTaskPushLogEntryMap().isEmpty()) {
             //If the task in the request has push entries, honour those entries.
             task.setId(createdTask.getId());
             return pushTask(task);
@@ -136,7 +136,7 @@ public class StackService {
             @Valid Task task) {
         Stack stack = stackRequestContext.getStack();
         Task modifiedTask = stackRepository.saveTaskAsModified(task.clone(), taskId, stack);
-        if (!task.getTaskPushLogEntryMap().isEmpty()) {
+        if (task.getTaskPushLogEntryMap()!=null && !task.getTaskPushLogEntryMap().isEmpty()) {
             //If the task in the request has push entries, honour those entries.
             //modifiedTask will have the older push entries too.
             return pushTask(task);

@@ -278,16 +278,19 @@ class Create extends Component {
         const createTaskRequest = Object.assign({}, this.state.task);
         var taskPushLogEntryMap = {};
         var keyEmail=0;
-        this.state.emails.forEach((email, i) => {
-            taskPushLogEntryMap[keyEmail + 1] =
-                {
-                    pushedUserId:  email
-                };
-                keyEmail=keyEmail+1;
-            //Object.assign(taskPushLogEntryMap, {[keyEmail + 1]:pushLogEntry});
-            console.log("### SRI taskPushLogEntryMap"+taskPushLogEntryMap);
-        });
-        createTaskRequest.taskPushLogEntryMap = taskPushLogEntryMap;
+        if(this.state.emails && this.state.emails!==null && this.state.emails !== undefined
+            && this.state.emails.length > 0) {
+            this.state.emails.forEach((email, i) => {
+                taskPushLogEntryMap[keyEmail + 1] =
+                    {
+                        pushedUserId:  email
+                    };
+                    keyEmail=keyEmail+1;
+                //Object.assign(taskPushLogEntryMap, {[keyEmail + 1]:pushLogEntry});
+                console.log("### SRI taskPushLogEntryMap"+taskPushLogEntryMap);
+            });
+            createTaskRequest.taskPushLogEntryMap = taskPushLogEntryMap;
+        }
         console.log(createTaskRequest);
         console.log(this.props.taskProfile);
         if(this.props.taskProfile == 'pushed') {
