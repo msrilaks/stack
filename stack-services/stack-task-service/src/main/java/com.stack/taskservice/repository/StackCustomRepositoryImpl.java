@@ -93,7 +93,8 @@ public class StackCustomRepositoryImpl implements StackCustomRepository {
                          .filter(x -> x.getId().equals(taskId))
                          .findAny().orElse(null);
         if (task == null) {
-            throw new TaskException(ErrorCodes.TASK_ID_INVALID.constructError());
+            throw new TaskException(ErrorCodes.TASK_ID_INVALID.constructError().appendMessage(". Invalid taskID: "+taskId)
+            .appendMessage(", Stack: " + stack.getId()));
         }
         return task;
     }

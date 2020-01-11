@@ -23,7 +23,6 @@ public class TaskPushLogEntry implements Cloneable {
     private Long                     createdTimeStamp;
 
     public TaskPushLogEntry(String stackId, String userId, String pushedUserId) {
-        super();
         setId(UUID.randomUUID());
         setStackId(stackId);
         setUserId(userId);
