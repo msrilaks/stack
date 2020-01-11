@@ -24,10 +24,15 @@ spec:
               value: "/stackCred"
             - name: CRED_FILE
               value: "stackCredential"
+            - name: CODE_FILE
+              value: "stackCode"
           volumeMounts:
             - mountPath: "/stackCred/stackCredential"
               name: stack-backend-credential-configmap
               subPath: "stackCredential"
+            - mountPath: "/stackCred/stackCode"
+              name: stack-backend-credential-configmap
+              subPath: "stackCode"
           imagePullPolicy: Always
           ports:
             - containerPort: 8080

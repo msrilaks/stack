@@ -26,7 +26,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
-import java.io.File;
+import java.io.*;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -37,23 +37,28 @@ import java.security.GeneralSecurityException;
 public class GmailService {
     private static String                      STACK_EMAIL = "stackitdown@gmail.com";
     private        DataStore<StoredCredential> dataStore;
+    private FileDataStoreFactory dataStoreFactory;
     private        Gmail                       gmail;
 
     @Autowired
     public GmailService(
             @Value("${credential.file}") String credentialFile,
+            @Value("${code.file}") String codeFile,
             @Value("${credential.dir}") String credentialDir) {
         String APPLICATION_NAME = "STACK_GMAIL";
         try {
             //            dataStore = MemoryDataStoreFactory.getDefaultInstance()
             //            .getDataStore(
             //                    "credentialDatastore");
-            FileDataStoreFactory dataStoreFactory =
-                    new FileDataStoreFactory(new File(credentialDir));
-            dataStore = dataStoreFactory.getDataStore(credentialFile);
 
+
+             dataStoreFactory =
+                    new FileDataStoreFactory(new File(credentialDir));
+           // dataStore = dataStoreFactory.getDataStore(credentialFile);
+            System.out.println("## SRI Step 2");
         } catch (IOException e) {
-            throw new RuntimeException("Unable to create in memory credential datastore",
+            e.printStackTrace();
+            throw new RuntimeException("Unable to create file credential datastore",
                                        e);
         }
         try {
@@ -64,7 +69,7 @@ public class GmailService {
 
             // Load client secrets
 
-            URL secretUrl = Resources.getResource("client_secrets_develop.json");
+            URL secretUrl = Resources.getResource("client_secrets_google.json");
             CharSource inputSupplier =
                     Resources.asCharSource(secretUrl, Charsets.UTF_8);
             GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(jsonFactory,
@@ -80,7 +85,8 @@ public class GmailService {
                             ImmutableList.of(
                                     GmailScopes.GMAIL_MODIFY,
                                     GmailScopes.GMAIL_READONLY))
-                            .setCredentialDataStore(dataStore)
+                            //.setCredentialDataStore(dataStore)
+                            .setDataStoreFactory(dataStoreFactory)
                             .setAccessType("offline")
                             .setApprovalPrompt("auto")
                             .build();
@@ -97,9 +103,13 @@ public class GmailService {
                 // Read code entered by user.
                 System.out.print("Code: ");
                 System.out.flush();
-                BufferedReader br = new BufferedReader(
-                        new InputStreamReader(System.in));
-                String code = br.readLine();
+                BufferedReader reader = new BufferedReader(new FileReader(codeFile));
+                String code = reader.readLine();
+                reader.close();
+                System.out.print("Code: " + code);
+//                BufferedReader br = new BufferedReader(
+//                        new InputStreamReader(System.in));
+//                String code = br.readLine();
 
                 // Generate Credential using retrieved code.
                 GoogleTokenResponse response = flow.newTokenRequest(code)
