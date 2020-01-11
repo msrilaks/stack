@@ -34,6 +34,8 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import Fade from '@material-ui/core/Fade';
 import Zoom from '@material-ui/core/Zoom';
 import Tooltip from '@material-ui/core/Tooltip';
+import { ReactMultiEmail, isEmail } from 'react-multi-email';
+import 'react-multi-email/style.css';
 
 const useStyles = makeStyles(theme => ({
     chipContainer: {
@@ -136,17 +138,21 @@ class Create extends Component {
             }
         };
         this.state = { newTaskAdded: false };
+        this.state = {
+            emails: [],
+        };
         this.onDrop = (newfiles) => {
-               newfiles: newfiles.map(file => Object.assign(file, {
-                                                preview: URL.createObjectURL(file)
-                                              }))
-               this.setState(({ files }) => ({
-                 files: files.concat(newfiles)
-               }))
+            newfiles: newfiles.map(file => Object.assign(file, {
+                                            preview: URL.createObjectURL(file)
+                                          }))
+            this.setState(({ files }) => ({
+             files: files.concat(newfiles)
+            }))
         };
         this.state = {
-          files: []
+            files: []
         };
+
 
         this.handleChipDelete = this.handleChipDelete.bind(this);
         this.handleChangeChips = this.handleChangeChips.bind(this);
@@ -262,14 +268,26 @@ class Create extends Component {
             [inputName] : inputValue
             }
         },function () {
-            console.log("### SRI " + this.state.task[inputName]+" , "+inputName);
+            // console.log("### SRI " + this.state.task[inputName]+" , "+inputName);
         });        
     }
 
-    handleSubmit(event) {
-        event.preventDefault();   
 
+    handleSubmit(event) {
+        event.preventDefault();
         const createTaskRequest = Object.assign({}, this.state.task);
+        var taskPushLogEntryMap = {};
+        var keyEmail=0;
+        this.state.emails.forEach((email, i) => {
+            taskPushLogEntryMap[keyEmail + 1] =
+                {
+                    pushedUserId:  email
+                };
+                keyEmail=keyEmail+1;
+            //Object.assign(taskPushLogEntryMap, {[keyEmail + 1]:pushLogEntry});
+            console.log("### SRI taskPushLogEntryMap"+taskPushLogEntryMap);
+        });
+        createTaskRequest.taskPushLogEntryMap = taskPushLogEntryMap;
         console.log(createTaskRequest);
         console.log(this.props.taskProfile);
         if(this.props.taskProfile == 'pushed') {
@@ -429,6 +447,7 @@ class Create extends Component {
                 }>
             </CardHeader>
         <CardContent className={classes.cardContent}>
+
         <div className={classes.chipContainer}>
             <StackChipInput
                 value={defaultTags}
@@ -450,24 +469,7 @@ class Create extends Component {
             />
             </div>
 
-            <Typography variant="body1" color="textSecondary" component="p"
-                        style={{ }}
-                        className={classes.taskDetail}>
-            <TextField
-            id="email-input"
-            label="push to"
-            type="email"
-            name="userId"
-            defaultValue={this.state.task.userId}
-            autoComplete="email"
-            margin="normal"
-            inputProps={{
 
-            }}
-            style={{ width:'300px'}}
-            value={this.state.task.userId} onChange={this.handleInputChange} required
-            />
-            </Typography>
 
             <Typography variant="body1" color="textSecondary" component="p"
             style={{ }}
@@ -482,6 +484,37 @@ class Create extends Component {
                     value={this.state.task.description} onChange={this.handleInputChange} required
                     margin="normal"
                     />
+            </Typography>
+
+            <Typography variant="body1" color="textSecondary" component="p"
+                        style={{ }}
+                        className={classes.taskDetail}>
+
+             <ReactMultiEmail
+                       placeholder="push to @emails"
+                       emails={this.state.emails}
+                       onChange={(_emails: string[]) => {
+                         this.setState({ emails: _emails });
+                       }}
+                       validateEmail={email => {
+                         return isEmail(email); // return boolean
+                       }}
+                       getLabel={(
+                         email: string,
+                         index: number,
+                         removeEmail: (index: number) => void,
+                       ) => {
+                         return (
+                           <div data-tag key={index}>
+                             {email}
+                             <span data-tag-handle onClick={() => removeEmail(index)}>
+                               ×
+                             </span>
+                           </div>
+                         );
+                       }}
+                     />
+
             </Typography>
 
             {UploadPanel}

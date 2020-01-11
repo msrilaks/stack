@@ -20,6 +20,7 @@
     "react-dom": "^16.8.6",
     "react-dropzone": "^10.1.9",
     "react-if-elseif-else-render": "^1.0.2",
+    "react-multi-email": "^0.5.3",
     "react-router-dom": "^4.3.1",
     "react-s-alert": "^1.4.1",
     "react-scripts": "1.1.5",
