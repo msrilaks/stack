@@ -1,0 +1,53 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: stack-backend-service-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stack-backend-service
+  template:
+    metadata:
+      labels:
+        app: stack-backend-service
+    spec:
+      containers:
+        - name: stack-backend-service
+          image: srilakshmi29/stack-backend-service:latest
+          env:
+            - name: LOG_DIR
+              value: "logs"
+            - name: SPRING_PROFILES_ACTIVE
+              value: "google"
+            - name: CRED_DIR
+              value: "/stackCred"
+            - name: CRED_FILE
+              value: "stackCredential"
+          volumeMounts:
+            - mountPath: "/stackCred/stackCredential"
+              name: stack-backend-credential-configmap
+              subPath: "stackCredential"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+      volumes:
+        - name: stack-backend-credential-configmap
+          configMap:
+            name: stack-backend-credential-configmap
+      restartPolicy: Always
+---
+kind: Service
+apiVersion: v1
+metadata:
+ name: stack-backend-service
+ labels:
+   app: stack-backend-service
+spec:
+ ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+    name: http
+ selector:
+  app: stack-backend-service
