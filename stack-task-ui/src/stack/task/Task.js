@@ -58,6 +58,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Grow from '@material-ui/core/Grow';
+import { ReactMultiEmail, isEmail } from 'react-multi-email';
+import 'react-multi-email/style.css';
 
 const StyledMenu = withStyles({
   paper: {
@@ -197,7 +199,7 @@ class Task extends Component {
         super(props);
         this.state = {
             isModifyClicked: false,
-            pushUserId: '',
+            emails: [],
         }
         this.state = {
              files: [],
@@ -221,7 +223,6 @@ class Task extends Component {
         this.onButtonModifyTaskClicked = this.onButtonModifyTaskClicked.bind(this);
         this.onButtonPushTaskClicked = this.onButtonPushTaskClicked.bind(this);
         this.onButtonAddEventClicked = this.onButtonAddEventClicked.bind(this);
-        this.handleInputChange = this.handleInputChange.bind(this);
         this.reloadTask = this.reloadTask.bind(this);
         this.loadFiles = this.loadFiles.bind(this);
         this.tagChips = this.tagChips.bind(this);
@@ -234,7 +235,6 @@ class Task extends Component {
     componentDidMount() {
         this.setState({
             isModifyClicked: false,
-            pushUserId:this.props.task.userId,
             pushModalOpen:false,
             eventModalOpen:false,
         });
@@ -332,24 +332,21 @@ class Task extends Component {
         });
     }
 
-    handleInputChange(event) {
-        const target = event.target;
-        const inputName = target.name;
-        let inputValue = target.value;
-        this.setState({
-            pushUserId:inputValue
-        },function () {
-            console.log("### SRI " + this.state.pushUserId);
-        });
-    }
-
         onButtonPushTaskClicked(event) {
             const pushTaskRequest = Object.assign({}, this.props.task);
-            var pushLogEntry = {
-                    pushedUserId:  this.state.pushUserId
-                  };
-            var taskPushLogEntryMap = { "1": pushLogEntry };
-            pushTaskRequest.taskPushLogEntryMap = taskPushLogEntryMap;
+            var taskPushLogEntryMap = {};
+            var keyEmail=0;
+            if(this.state.emails && this.state.emails!==null && this.state.emails !== undefined
+                && this.state.emails.length > 0) {
+                this.state.emails.forEach((email, i) => {
+                    taskPushLogEntryMap[keyEmail + 1] =
+                    {
+                        pushedUserId:  email
+                    };
+                    keyEmail=keyEmail+1;
+                });
+                pushTaskRequest.taskPushLogEntryMap = taskPushLogEntryMap;
+            }
             console.log(pushTaskRequest);
             patchTask(pushTaskRequest,"isPushed=true")
             .then((response) => {
@@ -740,17 +737,30 @@ class Task extends Component {
           >
             <Fade in={this.state.pushModalOpen}>
               <div className={classes.modalPaper}>
-                            <TextField
-                            id="email-input"
-                            label="push to"
-                            type="email"
-                            name="pushUserId"
-                            fullWidth
-                            defaultValue={this.state.pushUserId}
-                            autoComplete="email"
-                            margin="normal"
-                            onChange={this.handleInputChange} required
-                />
+                <ReactMultiEmail
+                                       placeholder="push to @emails"
+                                       emails={this.state.emails}
+                                       onChange={(_emails: string[]) => {
+                                         this.setState({ emails: _emails });
+                                       }}
+                                       validateEmail={email => {
+                                         return isEmail(email); // return boolean
+                                       }}
+                                       getLabel={(
+                                         email: string,
+                                         index: number,
+                                         removeEmail: (index: number) => void,
+                                       ) => {
+                                         return (
+                                           <div data-tag key={index}>
+                                             {email}
+                                             <span data-tag-handle onClick={() => removeEmail(index)}>
+                                               ×
+                                             </span>
+                                           </div>
+                                         );
+                                       }}
+                                     />
                 <Button variant="contained" color="primary"
                 className={classes.pushButton}
                 onClick={this.onButtonPushTaskClicked}>

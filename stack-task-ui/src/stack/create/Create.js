@@ -51,6 +51,15 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(0.5),
         },
     },
+    emailContainer: {
+        display: 'flex',
+        paddingTop: '20px',
+        maxRows: '2',
+        flexWrap: 'wrap',
+        '& > *': {
+        margin: theme.spacing(0.5),
+        },
+    },
     chip: {
         backgroundColor:'#3f51b5',
         height: '24px',
@@ -286,8 +295,6 @@ class Create extends Component {
                         pushedUserId:  email
                     };
                     keyEmail=keyEmail+1;
-                //Object.assign(taskPushLogEntryMap, {[keyEmail + 1]:pushLogEntry});
-                console.log("### SRI taskPushLogEntryMap"+taskPushLogEntryMap);
             });
             createTaskRequest.taskPushLogEntryMap = taskPushLogEntryMap;
         }
@@ -489,10 +496,7 @@ class Create extends Component {
                     />
             </Typography>
 
-            <Typography variant="body1" color="textSecondary" component="p"
-                        style={{ }}
-                        className={classes.taskDetail}>
-
+            <div className={classes.emailContainer}>
              <ReactMultiEmail
                        placeholder="push to @emails"
                        emails={this.state.emails}
@@ -518,7 +522,7 @@ class Create extends Component {
                        }}
                      />
 
-            </Typography>
+            </div>
 
             {UploadPanel}
         </CardContent>
