@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.*;
 
@@ -90,10 +91,12 @@ public class Task implements Comparable<Task>, Cloneable {
         taskPushLogEntryMap.put(taskPushLogEntry.getId() + "", taskPushLogEntry);
     }
 
+    @JsonIgnore
     public String getTitle() {
         return ((description.length() > 30)? description.substring(0,29) : description);
     }
 
+    @JsonIgnore
     public boolean isPushed() {
         return (pushedTimeStamp!=null);
     }
