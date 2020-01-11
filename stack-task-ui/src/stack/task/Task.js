@@ -141,6 +141,15 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(0.5),
         },
     },
+    emailContainer: {
+        display: 'flex',
+        paddingTop: '20px',
+        maxRows: '2',
+        flexWrap: 'wrap',
+        '& > *': {
+        margin: theme.spacing(0.5),
+        },
+    },
     modal: {
         display: 'flex',
         alignItems: 'center',
@@ -737,30 +746,32 @@ class Task extends Component {
           >
             <Fade in={this.state.pushModalOpen}>
               <div className={classes.modalPaper}>
+                <div className={classes.emailContainer}>
                 <ReactMultiEmail
-                                       placeholder="push to @emails"
-                                       emails={this.state.emails}
-                                       onChange={(_emails: string[]) => {
-                                         this.setState({ emails: _emails });
-                                       }}
-                                       validateEmail={email => {
-                                         return isEmail(email); // return boolean
-                                       }}
-                                       getLabel={(
-                                         email: string,
-                                         index: number,
-                                         removeEmail: (index: number) => void,
-                                       ) => {
-                                         return (
-                                           <div data-tag key={index}>
-                                             {email}
-                                             <span data-tag-handle onClick={() => removeEmail(index)}>
-                                               ×
-                                             </span>
-                                           </div>
-                                         );
-                                       }}
-                                     />
+                   placeholder="push to @emails"
+                   emails={this.state.emails}
+                   onChange={(_emails: string[]) => {
+                     this.setState({ emails: _emails });
+                   }}
+                   validateEmail={email => {
+                     return isEmail(email); // return boolean
+                   }}
+                   getLabel={(
+                     email: string,
+                     index: number,
+                     removeEmail: (index: number) => void,
+                   ) => {
+                     return (
+                       <div data-tag key={index}>
+                         {email}
+                         <span data-tag-handle onClick={() => removeEmail(index)}>
+                           ×
+                         </span>
+                       </div>
+                     );
+                   }}
+                 />
+                 </div>
                 <Button variant="contained" color="primary"
                 className={classes.pushButton}
                 onClick={this.onButtonPushTaskClicked}>
