@@ -1,8 +1,8 @@
 stack task service
 
 #build
-docker build -t srilakshmi29/stack-task-service .
-docker push srilakshmi29/stack-task-service
+docker build -t srilakshmi29/stack-task-service:prod1 .
+docker push srilakshmi29/stack-task-service:prod1
 kubectl set image deployment stack-task-service-deployment stack-task-service=srilakshmi29/stack-task-service:prod1
 
 #swagger

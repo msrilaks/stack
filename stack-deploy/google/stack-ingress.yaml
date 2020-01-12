@@ -86,3 +86,7 @@ spec:
             backend:
               serviceName: stack-task-service
               servicePort: 8080
+          - path: /email
+            backend:
+              serviceName: stack-backend-service
+              servicePort: 8080
