@@ -7,6 +7,7 @@ import com.stack.email.repository.UserRepository;
 import com.stack.library.model.email.EmailRequest;
 import com.stack.library.model.email.StackEmailTemplate;
 import com.stack.library.model.stack.Stack;
+import com.stack.library.model.stack.Task;
 import com.stack.library.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -45,13 +46,19 @@ public class StackEmailService {
             StackEmailTemplate stackEmailTemplate =
                     StackEmailTemplate.get(emailRequest.getTopic());
             User user = userRepository.findByEmail(stack.getUserId()).orElse(null);
-
+            User fromUser = null;
+            if(emailRequest.getFromUserEmail() != null) {
+                fromUser = userRepository.findByEmail(stack.getUserId()).orElse(null);
+            }
+            Task task = stackRepository.findTaskById(emailRequest.getTaskId(), stack);
             MimeMessage emailContent = createEmail(stack.getUserId(),
-                                                   "stackitdown",
-                                                   stackEmailTemplate.getSubject(),
-                                                   stackEmailTemplate.getMessage(user,
-                                                                                 stack,
-                                                                                 emailRequest));
+                                       "Stack It Down <stackitdown@gmail.com>",
+                                       stackEmailTemplate.getSubject(),
+                                       stackEmailTemplate.getMessage(stack,
+                                                                     task,
+                                                                     user,
+                                                                     fromUser,
+                                                                     emailRequest));
             Message message = createMessageWithEmail(emailContent);
             message =
                     gmailService.getGmail().users().messages().send("me", message)
@@ -75,11 +82,19 @@ public class StackEmailService {
 
         MimeMessage email = new MimeMessage(session);
 
+
+       // MimeMessageHelper helper = new MimeMessageHelper(email, true);
+       // helper.setTo(to);
+        //helper.setText(bodyText,true);
+        //helper.setSubject(subject);
+
+
         email.setFrom(new InternetAddress(from));
         email.addRecipient(javax.mail.Message.RecipientType.TO,
                            new InternetAddress(to));
         email.setSubject(subject);
-        email.setText(bodyText);
+        email.setContent(bodyText, "text/html");
+        //email.setText(bodyText);
         return email;
     }
 

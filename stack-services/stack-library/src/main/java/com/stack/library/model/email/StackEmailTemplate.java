@@ -2,6 +2,7 @@ package com.stack.library.model.email;
 
 import com.stack.library.constants.StackEmailConstants;
 import com.stack.library.model.stack.Stack;
+import com.stack.library.model.stack.Task;
 import com.stack.library.model.user.User;
 import lombok.Getter;
 
@@ -39,16 +40,25 @@ public enum StackEmailTemplate {
     }
 
     public String getMessage(
-            User user,
             Stack stack,
+            Task task,
+            User user,
+            User fromUser,
             @Valid EmailRequest emailRequest) {
+        String userName = (user == null) ? "" : user.getName();
+        String fromUserName = (fromUser == null) ? "" : fromUser.getName();
+        String taskTitle = (task == null)? "": task.getTitle();
         switch (topic) {
             case StackEmailConstants.STACK_CREATED_TOPIC: {
-                String userName = (user == null) ? "" : user.getName();
                 return java.text.MessageFormat.format(message, userName);
             }
             case TASK_PUSHED_TOPIC:
-                return message;
+                return java.text.MessageFormat.format(message,
+                                                      userName,
+                                                      fromUserName,
+                                                      taskTitle,
+                                                      stack.getId(),
+                                                      task.getId());
         }
         return message;
     }

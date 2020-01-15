@@ -3,6 +3,7 @@ package com.stack.taskservice.services;
 import com.stack.library.model.stack.Stack;
 import com.stack.library.model.stack.Task;
 import com.stack.library.model.stack.TaskPushLogEntry;
+import com.stack.library.model.user.User;
 import com.stack.taskservice.context.StackRequestContext;
 import com.stack.taskservice.handler.EmailHandler;
 import com.stack.taskservice.repository.StackRepository;
@@ -100,6 +101,7 @@ public class StackService {
 
     public Task pushTask(UUID taskId, String toUserId) {
         Stack stack = stackRequestContext.getStack();
+        User fromUser = stackRequestContext.getUser();
         Task task = stackRepository.findTaskById(taskId, stack);
         if (toUserId != null) {
             Stack pushStack = stackRepository.findByUserId(toUserId);
@@ -120,7 +122,7 @@ public class StackService {
             stackRepository.saveTaskToStack(pushTask, pushStack);
             photoService.movePhotos(stack.getId(), taskId.toString(), pushStack.getId(),
                                     pushTask.getId().toString());
-            emailHandler.postTaskPushed(pushStack, pushTask);
+            emailHandler.postTaskPushed(pushStack, pushTask, fromUser);
             stackRepository.saveTaskAsPushed(taskId, stack, toUserId);
         }
         return task;

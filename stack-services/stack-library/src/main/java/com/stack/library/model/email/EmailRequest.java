@@ -14,4 +14,5 @@ public class EmailRequest {
     private String topic;
     private String stackId;
     private UUID   taskId;
+    private String fromUserEmail;
 }
