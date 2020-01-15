@@ -39,30 +39,43 @@ public class GmailService {
     private        DataStore<StoredCredential> dataStore;
     private FileDataStoreFactory dataStoreFactory;
     private        Gmail                       gmail;
+    private String credentialFile;
+    private String codeFile;
+    private String credentialDir;
+    private static String APPLICATION_NAME = "STACK_GMAIL";
 
     @Autowired
     public GmailService(
             @Value("${credential.file}") String credentialFile,
             @Value("${code.file}") String codeFile,
             @Value("${credential.dir}") String credentialDir) {
-        String APPLICATION_NAME = "STACK_GMAIL";
+        this.credentialFile = credentialFile;
+        this.codeFile = codeFile;
+        this.credentialDir = credentialDir;
+        initGmail();
+    }
+
+
+    public Gmail getGmail() {
+        if(gmail == null) {
+            initGmail();
+        };
+        return gmail;
+    }
+
+    private void initGmail() {
         try {
-            //            dataStore = MemoryDataStoreFactory.getDefaultInstance()
-            //            .getDataStore(
-            //                    "credentialDatastore");
-
-
-             dataStoreFactory =
-                    new FileDataStoreFactory(new File(credentialDir));
-           // dataStore = dataStoreFactory.getDataStore(credentialFile);
-            System.out.println("## SRI Step 2");
+            if(dataStoreFactory == null) {
+                dataStoreFactory =
+                        new FileDataStoreFactory(new File(credentialDir));
+            }
+            // dataStore = dataStoreFactory.getDataStore(credentialFile);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Unable to create file credential datastore",
-                                       e);
+                    e);
         }
         try {
-
             // Set up the HTTP transport and JSON factory
             HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
@@ -73,8 +86,8 @@ public class GmailService {
             CharSource inputSupplier =
                     Resources.asCharSource(secretUrl, Charsets.UTF_8);
             GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(jsonFactory,
-                                                                         inputSupplier
-                                                                                 .openStream());
+                    inputSupplier
+                            .openStream());
 
             // Set up authorization code flow
             GoogleAuthorizationCodeFlow flow =
@@ -95,10 +108,10 @@ public class GmailService {
             // If we don't, prompt them to get one.
             if (credential == null) {
                 String url = flow.newAuthorizationUrl()
-                                 .setRedirectUri(GoogleOAuthConstants.OOB_REDIRECT_URI)
-                                 .build();
+                        .setRedirectUri(GoogleOAuthConstants.OOB_REDIRECT_URI)
+                        .build();
                 System.out.println("Please open the following URL in your browser then "
-                                   + "type the authorization code:\n" + url);
+                        + "type the authorization code:\n" + url);
 
                 // Read code entered by user.
                 System.out.print("Code: ");
@@ -107,15 +120,12 @@ public class GmailService {
                 String code = reader.readLine();
                 reader.close();
                 System.out.print("Code: " + code);
-//                BufferedReader br = new BufferedReader(
-//                        new InputStreamReader(System.in));
-//                String code = br.readLine();
 
                 // Generate Credential using retrieved code.
                 GoogleTokenResponse response = flow.newTokenRequest(code)
-                                                   .setRedirectUri(
-                                                           GoogleOAuthConstants.OOB_REDIRECT_URI)
-                                                   .execute();
+                        .setRedirectUri(
+                                GoogleOAuthConstants.OOB_REDIRECT_URI)
+                        .execute();
 
                 credential =
                         flow.createAndStoreCredential(response, STACK_EMAIL);
@@ -126,40 +136,14 @@ public class GmailService {
                     .build();
 
             Profile profile = gmail.users()
-                                   .getProfile(STACK_EMAIL)
-                                   .execute();
+                    .getProfile(STACK_EMAIL)
+                    .execute();
 
             System.out.println(profile.toPrettyString());
 
         } catch (IOException | GeneralSecurityException e) {
             e.printStackTrace();
         }
-    }
-
-
-    //
-    //            HttpTransport httpTransport = GoogleNetHttpTransport
-    //            .newTrustedTransport();
-    //            JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-    //
-    //            URL resource = Resources.getResource("Stack.p12");
-    //            GoogleCredential credential = new GoogleCredential.Builder()
-    //                    .setTransport(httpTransport)
-    //                    .setJsonFactory(jsonFactory)
-    //                    .setServiceAccountId("stackadmin@stack-of-tasks.iam
-    //                    .gserviceaccount.com")
-    //                    .setServiceAccountPrivateKeyFromP12File(new File(resource
-    //                    .getFile()))
-    //                    .setServiceAccountScopes(
-    //                            ImmutableList.of(
-    //                                    GmailScopes.GMAIL_MODIFY,
-    //                                    GmailScopes.GMAIL_READONLY))
-    //                    .setServiceAccountUser("stackadmin@stack-of-tasks.com")
-    //                    .build();
-
-
-    public Gmail getGmail() {
-        return gmail;
     }
 
 }

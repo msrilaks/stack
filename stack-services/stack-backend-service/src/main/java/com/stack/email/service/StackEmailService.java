@@ -48,7 +48,7 @@ public class StackEmailService {
             User user = userRepository.findByEmail(stack.getUserId()).orElse(null);
             User fromUser = null;
             if(emailRequest.getFromUserEmail() != null) {
-                fromUser = userRepository.findByEmail(stack.getUserId()).orElse(null);
+                fromUser = userRepository.findByEmail(emailRequest.getFromUserEmail()).orElse(null);
             }
             Task task = stackRepository.findTaskById(emailRequest.getTaskId(), stack);
             MimeMessage emailContent = createEmail(stack.getUserId(),
