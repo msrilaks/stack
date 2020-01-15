@@ -36,6 +36,8 @@ public enum StackEmailTemplate {
                 return STACK_CREATED;
             case TASK_PUSHED_TOPIC:
                 return TASK_PUSHED;
+            case TASK_NUDGE_TOPIC:
+                return TASK_NUDGE;
         }
         return null;
     }

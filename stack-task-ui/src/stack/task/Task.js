@@ -226,6 +226,7 @@ class Task extends Component {
 
 
         this.onButtonDeleteTaskClicked = this.onButtonDeleteTaskClicked.bind(this);
+        this.onButtonNudgeTaskClicked = this.onButtonNudgeTaskClicked.bind(this);
         this.onButtonCalendarClicked = this.onButtonCalendarClicked.bind(this);
         this.onButtonCompleteTaskClicked = this.onButtonCompleteTaskClicked.bind(this);
         this.onButtonTodoTaskClicked = this.onButtonTodoTaskClicked.bind(this);
@@ -381,6 +382,22 @@ class Task extends Component {
                 });
             Alert.success("Task marked completed successfully!");
             this.props.reloadTasksFunc();
+        }).catch(error => {
+            Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
+        });
+    }
+
+    onButtonNudgeTaskClicked() {
+        const nudgeTaskRequest = Object.assign({}, this.props.task);
+        console.log(nudgeTaskRequest);
+        patchTask(nudgeTaskRequest, "nudge=true")
+        .then((response) => {
+            this.setState({
+                },function () {
+                    console.log("onButtonNudgeTaskClicked "+this.state.task);
+                });
+            Alert.success("Task owners nudged successfully!");
+            //this.props.reloadTasksFunc();
         }).catch(error => {
             Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
         });
@@ -562,7 +579,7 @@ class Task extends Component {
         } else if(this.props.taskProfile == 'pushed'){
             TaskButtonPanel = <div className={classes.taskButtonPanel}>
             <Tooltip title="Nudge" placement="bottom">
-                <IconButton aria-label="Remind">
+                <IconButton aria-label="Nudge" onClick={this.onButtonNudgeTaskClicked}>
                     <AlarmIcon />
                 </IconButton>
             </Tooltip>

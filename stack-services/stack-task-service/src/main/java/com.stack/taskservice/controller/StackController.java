@@ -151,6 +151,8 @@ public class StackController {
                     "false") Boolean isCompleted,
             @RequestParam(name = "isToDo", required = false, defaultValue =
                     "false") Boolean isToDo,
+            @RequestParam(name = "nudge", required = false, defaultValue =
+                    "false") Boolean nudge,
             @RequestBody @Valid Task task) {
         if (isCompleted) {
             return ResponseEntity.ok(stackService.completeTask(taskId, true));
@@ -158,6 +160,8 @@ public class StackController {
             return ResponseEntity.ok(stackService.completeTask(taskId, false));
         } else if (isPushed) {
             return ResponseEntity.ok(stackService.pushTask(task));
+        } else if (nudge) {
+            return ResponseEntity.ok(stackService.nudgeTask(taskId));
         } else {
             return ResponseEntity.ok(task);
         }

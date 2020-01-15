@@ -133,6 +133,23 @@ public class StackService {
         return stackRepository.saveTaskAsCompleted(markCompleted, taskId, stack);
     }
 
+    public Task nudgeTask(UUID taskId) {
+        Stack stack = stackRequestContext.getStack();
+        User fromUser = stackRequestContext.getUser();
+        Task task = stackRepository.findTaskById(taskId, stack);
+        if (task.getTaskPushLogEntryMap()!=null && !task.getTaskPushLogEntryMap().isEmpty()) {
+            Iterator pushLogsIterator = task.getTaskPushLogEntryMap().values().iterator();
+            while(pushLogsIterator.hasNext()) {
+                TaskPushLogEntry pushEntry = (TaskPushLogEntry)pushLogsIterator.next();
+                Stack nudgeStack = stackRepository.findByUserId(pushEntry.getPushedUserId());
+                if (nudgeStack != null) {
+                    emailHandler.nudgeTaskOwners(nudgeStack, taskId, fromUser);
+                }
+            }
+        }
+        return task;
+    }
+
     public Task modifyTask(
             UUID taskId,
             @Valid Task task) {
