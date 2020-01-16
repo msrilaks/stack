@@ -11,15 +11,30 @@ import com.stack.library.model.stack.Task;
 import com.stack.library.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
+import org.springframework.core.io.ClassPathResource;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.BodyPart;
 import javax.validation.Valid;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Properties;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+
+import java.io.InputStream;
 
 @Component
 public class StackEmailService {
@@ -32,6 +47,11 @@ public class StackEmailService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ResourceLoader resourceLoader;
+
+    private File stackIconFile;
 
     public void sendEmail(
             @Valid EmailRequest emailRequest) {
@@ -82,19 +102,37 @@ public class StackEmailService {
 
         MimeMessage email = new MimeMessage(session);
 
+        MimeMultipart multipart = new MimeMultipart("related");
+        BodyPart messageBodyPart = new MimeBodyPart();
+        messageBodyPart.setContent(bodyText, "text/html");
+        multipart.addBodyPart(messageBodyPart);
+        // second part (the image)
+        messageBodyPart = new MimeBodyPart();
 
-       // MimeMessageHelper helper = new MimeMessageHelper(email, true);
-       // helper.setTo(to);
-        //helper.setText(bodyText,true);
-        //helper.setSubject(subject);
-
+        try {
+            if(stackIconFile == null) {
+                Resource resource = resourceLoader.getResource("classpath:favicon.ico");
+                InputStream input = resource.getInputStream();
+                Path target = Paths.get("./favicon.ico");
+                Files.copy(input, target, StandardCopyOption.REPLACE_EXISTING);
+                stackIconFile = target.toFile();
+            } else {
+                System.out.println("stackIconFile found : "+stackIconFile);
+            }
+            DataSource fds = new FileDataSource(stackIconFile);
+            messageBodyPart.setDataHandler(new DataHandler(fds));
+            messageBodyPart.setHeader("Content-ID", "<image>");
+            multipart.addBodyPart(messageBodyPart);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         email.setFrom(new InternetAddress(from));
         email.addRecipient(javax.mail.Message.RecipientType.TO,
                            new InternetAddress(to));
         email.setSubject(subject);
-        email.setContent(bodyText, "text/html");
-        //email.setText(bodyText);
+        //email.setContent(bodyText, "text/html");
+        email.setContent(multipart);
         return email;
     }
 

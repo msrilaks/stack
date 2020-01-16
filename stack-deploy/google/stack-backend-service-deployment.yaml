@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: stack-backend-service
-          image: srilakshmi29/stack-backend-service:latest
+          image: srilakshmi29/stack-backend-service:prod12
           env:
             - name: LOG_DIR
               value: "logs"
