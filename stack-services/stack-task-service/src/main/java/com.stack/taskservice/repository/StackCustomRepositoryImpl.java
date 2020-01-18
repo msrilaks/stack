@@ -4,6 +4,7 @@ import com.stack.library.exception.TaskException;
 import com.stack.library.model.error.ErrorCodes;
 import com.stack.library.model.stack.Stack;
 import com.stack.library.model.stack.Task;
+import com.stack.taskservice.configuration.StackPurgeProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,13 @@ import java.util.*;
 public class StackCustomRepositoryImpl implements StackCustomRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(
             StackCustomRepositoryImpl.class.getName());
+    private static final long MILLIS_PER_DAY = 1000*60*60*24;
 
     @Autowired
     MongoTemplate mongoTemplate;
+
+    @Autowired
+    StackPurgeProperties stackPurgeProperties;
 
     @Override
     public Task saveTaskToStack(Task task, Stack stack) {
@@ -134,6 +139,7 @@ public class StackCustomRepositoryImpl implements StackCustomRepository {
         return fetchTasks(stack, predicate);
     }
 
+
     private Predicate<Task> filterByTags(List<String> tags) {
         if (tags == null || tags.isEmpty()) {
             return (task -> true);
@@ -152,13 +158,26 @@ public class StackCustomRepositoryImpl implements StackCustomRepository {
                             (oldValue, newValue) -> oldValue, LinkedHashMap::new));
     }
 
+    private Predicate<Task> filterNonPurgeableTasks(Stack stack){
+        //Before every save, check for tasks to purge by purge policy.
+        Predicate<Task> predicate = (task ->
+            (task.getPushedTimeStamp() == null || task.getPushedTimeStamp() +
+                (MILLIS_PER_DAY * stackPurgeProperties.getPushedTasksDays()) > System.currentTimeMillis())
+            && (task.getDeletedTimeStamp() == null || task.getDeletedTimeStamp() +
+                (MILLIS_PER_DAY * stackPurgeProperties.getDeletedTasksDays()) > System.currentTimeMillis())
+            && (task.getCompletedTimeStamp() == null || task.getCompletedTimeStamp() +
+                (MILLIS_PER_DAY * stackPurgeProperties.getCompletedTasksDays()) > System.currentTimeMillis()));
+        return predicate;
+    }
     private void reorderTasks(Stack stack) {
         if (stack.getTasks() == null || stack.getTasks().isEmpty()) {
             stack.setTasks(new LinkedHashMap<>());
             return;
         }
+        Map<String, Task> nonPurgeableTasks = fetchTasks(stack,
+                                                         filterNonPurgeableTasks(stack));
         AtomicInteger i = new AtomicInteger(0);
-        Map<String, Task> tasks = stack.getTasks().entrySet()
+        Map<String, Task> tasks = nonPurgeableTasks.entrySet()
                                        .stream()
                                        .sorted(Map.Entry.comparingByValue())
                                        .collect(Collectors.toMap(
