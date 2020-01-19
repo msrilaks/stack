@@ -46,7 +46,11 @@ public class StackEmailConstants {
         STACK_MESSAGE_HEADER +
         "<h2>Dear <b><i>{0}</i></b>,</h2><br/>"+
         "<h3><i>{1}</i> has pushed a new task to your stack.</br></h3>"+
-        "<p><b><i>{2}.</i></b></p><br/>"+
+        "<h4>"+
+        "<ul style=\"list-style-type:none;\">"+
+        "<li><img src=\"https://img.icons8.com/dusk/32/000000/edit.png\"><i style=\"margin:15px;\">{2}.</i></li><br/>"+
+        "</ul>"+
+        "</h4>"+
         STACK_MESSAGE_FOOTER+
         STACK_MESSAGE_END;
 
@@ -57,7 +61,11 @@ public class StackEmailConstants {
         STACK_MESSAGE_HEADER +
         "<h2>Dear <b><i>{0}</i></b>,</h2><br/>"+
         "<h3><b><i>{1}</i></b> has nudged you for a task in your stack.<br/></h3>"+
-        "<p><b><i>{2}.</i></b></p><br/>"+
+        "<h4>"+
+        "<ul style=\"list-style-type:none;\">"+
+        "<li><img src=\"https://img.icons8.com/dusk/32/000000/edit.png\"><i style=\"margin:15px;\">{2}.</i></li><br/>"+
+        "</ul>"+
+        "</h4>"+
         STACK_MESSAGE_FOOTER+
         STACK_MESSAGE_END;
 
