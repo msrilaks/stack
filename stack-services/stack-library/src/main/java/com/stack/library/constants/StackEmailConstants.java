@@ -9,8 +9,7 @@ public class StackEmailConstants {
         "<div style=\"display:inline-flex;width: -webkit-fill-available;border-bottom: 2px solid darkgray;\"><img src=\"https://www.stackitdown.com/favicon.ico\" style=\"width:32px;height:32px;margin-top:15px;\"><H1 style=\"margin:15px;color:#1ea5ae;\">Stack It Down</H1></div>"+
         "<br/><br/>";
     public static final String STACK_MESSAGE_FOOTER =
-        "<h3>Now always stay on top of your tasks!<br/></h3><br/>"+
-        "<Button onclick=\"location.href='http://www.stackitdown.com'\" class=\"w3-btn w3-round-xxlarge\" style=\"color:#1ea5ae;font-size:15px;\"><b>Get Started</b></Button>"+
+        "<h3>Now always stay on top of your tasks! <a href=\"http://www.stackitdown.com\" style=\"color:#1ea5ae;\">Get Started</a></h3>"+
         "<br/>" +
         "<br/>" +
         "<div style=\"font-size: xx-small;\">\n" +
