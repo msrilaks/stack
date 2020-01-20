@@ -3,7 +3,7 @@ package com.stack.email;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.integration.annotation.ServiceActivator;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.integration.channel.DirectChannel;
@@ -16,6 +16,7 @@ import org.springframework.cloud.gcp.pubsub.integration.inbound.PubSubInboundCha
 @SpringBootApplication
 @PropertySource("classpath:application-${spring.profiles.active}.properties")
 @PropertySource("classpath:client_secrets_${spring.profiles.active}.json")
+@ComponentScan({"com.stack.email", "com.stack.library"})
 public class Application {
 
     public static void main(String[] args) {
@@ -35,8 +36,5 @@ public class Application {
     public MessageChannel myInputChannel() {
         return new DirectChannel();
     }
-    @ServiceActivator(inputChannel = "stackEmailChannel")
-    public void messageReceiver(String payload) {
-        System.out.println("### SRI Message arrived! Payload: " + payload);
-    }
+
 }
