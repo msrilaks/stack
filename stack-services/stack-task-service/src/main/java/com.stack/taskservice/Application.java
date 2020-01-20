@@ -6,11 +6,15 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.cloud.stream.annotation.EnableBinding;
+import com.stack.taskservice.configuration.Channels;
+
 
 @SpringBootApplication
 @PropertySource("classpath:application-${spring.profiles.active}.properties")
 @EnableMongoRepositories
 @EnableMongoAuditing
+@EnableBinding(Channels.class)
 @ComponentScan({"com.stack.taskservice", "com.stack.library"})
 public class Application {
 

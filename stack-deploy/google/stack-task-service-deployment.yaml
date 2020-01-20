@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: stack-task-service
-          image: srilakshmi29/stack-task-service:latest
+          image: srilakshmi29/stack-task-service:prod4
           env:
             - name: LOG_DIR
               value: "logs"

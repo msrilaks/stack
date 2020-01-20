@@ -4,8 +4,9 @@ import com.stack.library.model.stack.Stack;
 import com.stack.library.model.stack.Task;
 import com.stack.library.model.stack.TaskPushLogEntry;
 import com.stack.library.model.user.User;
+import com.stack.library.constants.StackEmailConstants;
 import com.stack.taskservice.context.StackRequestContext;
-import com.stack.taskservice.handler.EmailHandler;
+import com.stack.taskservice.handler.PubSubEmailHandler;
 import com.stack.taskservice.repository.StackRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,14 +32,14 @@ public class StackService {
     PhotoService photoService;
 
     @Autowired
-    EmailHandler emailHandler;
+    PubSubEmailHandler emailHandler;
 
     @Resource(name = "stackRequestContext")
     StackRequestContext stackRequestContext;
 
     public Stack createStack(Stack stack) {
         stack = stackRepository.saveStack(stack);
-        emailHandler.postStackCreated(stack);
+        emailHandler.sendEmailNotification(stack, StackEmailConstants.STACK_CREATED_TOPIC);
         return stack;
     }
 
@@ -122,7 +123,7 @@ public class StackService {
             stackRepository.saveTaskToStack(pushTask, pushStack);
             photoService.movePhotos(stack.getId(), taskId.toString(), pushStack.getId(),
                                     pushTask.getId().toString());
-            emailHandler.postTaskPushed(pushStack, pushTask, fromUser);
+            emailHandler.sendEmailNotification(pushStack, pushTask, fromUser, StackEmailConstants.TASK_PUSHED_TOPIC);
             stackRepository.saveTaskAsPushed(taskId, stack, toUserId);
         }
         return task;
@@ -143,7 +144,7 @@ public class StackService {
                 TaskPushLogEntry pushEntry = (TaskPushLogEntry)pushLogsIterator.next();
                 Stack nudgeStack = stackRepository.findByUserId(pushEntry.getPushedUserId());
                 if (nudgeStack != null) {
-                    emailHandler.nudgeTaskOwners(nudgeStack, taskId, fromUser);
+                    emailHandler.sendEmailNotification(nudgeStack, task, fromUser, StackEmailConstants.TASK_NUDGE_TOPIC);
                 }
             }
         }

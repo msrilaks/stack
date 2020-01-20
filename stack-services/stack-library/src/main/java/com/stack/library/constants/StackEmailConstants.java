@@ -2,6 +2,7 @@ package com.stack.library.constants;
 
 public class StackEmailConstants {
 
+    public static final String STACK_EMAIL_SUBSCRIPTION="STACK_EMAIL_SUBSCRIPTION";
     public static final String STACK_MESSAGE_START="<div style=\"padding:5px;\">";
     public static final String STACK_MESSAGE_END="</div>";
 
