@@ -36,6 +36,7 @@ import Zoom from '@material-ui/core/Zoom';
 import Tooltip from '@material-ui/core/Tooltip';
 import { ReactMultiEmail, isEmail } from 'react-multi-email';
 import 'react-multi-email/style.css';
+import Autocomplete from 'react-google-autocomplete';
 
 const useStyles = makeStyles(theme => ({
     chipContainer: {
@@ -495,7 +496,16 @@ class Create extends Component {
                     margin="normal"
                     />
             </Typography>
-
+             <div>
+             <Autocomplete
+                 style={{width: '90%'}}
+                 onPlaceSelected={(place) => {
+                   console.log(place);
+                 }}
+                 types={['establishment']}
+                 componentRestrictions={{country: "us"}}
+             />
+             </div>
             <div className={classes.emailContainer}>
              <ReactMultiEmail
                        placeholder="push to @emails"
