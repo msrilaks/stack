@@ -498,12 +498,11 @@ class Create extends Component {
             </Typography>
              <div>
              <Autocomplete
-                 style={{width: '90%'}}
+                 style={{width: '100%',marginTop: '20px',height: '35px'}}
                  onPlaceSelected={(place) => {
                    console.log(place);
                  }}
                  types={['establishment']}
-                 componentRestrictions={{country: "us"}}
              />
              </div>
             <div className={classes.emailContainer}>
