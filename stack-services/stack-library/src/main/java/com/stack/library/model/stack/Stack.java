@@ -8,7 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 @Setter
@@ -21,7 +21,7 @@ public class Stack {
     @Id
     private String            id;
     private String            userId;
-    private Map<String, Task> tasks;
+    private List<Task> tasks;
     @CreatedDate
     private Date              createdDate;
     @LastModifiedDate

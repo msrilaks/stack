@@ -10,7 +10,7 @@ import java.util.UUID;
 public class StackCustomRepositoryImpl implements StackCustomRepository{
     @Override
     public Task findTaskById(UUID taskId, Stack stack) {
-        return stack.getTasks().values().stream()
+        return stack.getTasks().stream()
                          .filter(x -> x.getId().equals(taskId))
                          .findAny().orElse(null);
     }

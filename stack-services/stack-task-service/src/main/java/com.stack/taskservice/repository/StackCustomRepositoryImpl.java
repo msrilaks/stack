@@ -31,14 +31,14 @@ public class StackCustomRepositoryImpl implements StackCustomRepository {
         if (task.getId() == null) {
             task.setId(UUID.randomUUID());
         }
-        Task taskFromStack = stack.getTasks().values().stream()
+        Task taskFromStack = stack.getTasks().stream()
                                   .filter(x -> x.getId().equals(task.getId()))
                                   .findAny().orElse(null);
         task.setStackId(stack.getId());
         task.setUserId(stack.getUserId());
         if (taskFromStack == null) {
             task.setCreatedDate(new Date());
-            stack.getTasks().put((stack.getTasks().size() + 1) + "", task);
+            stack.getTasks().add(task);
         }
 
         return updateTaskToStack(task, stack);
@@ -94,7 +94,7 @@ public class StackCustomRepositoryImpl implements StackCustomRepository {
 
     @Override
     public Task findTaskById(UUID taskId, Stack stack) {
-        Task task = stack.getTasks().values().stream()
+        Task task = stack.getTasks().stream()
                          .filter(x -> x.getId().equals(taskId))
                          .findAny().orElse(null);
         if (task == null) {
@@ -149,7 +149,7 @@ public class StackCustomRepositoryImpl implements StackCustomRepository {
 
     private Map<String, Task> fetchTasks(Stack stack, Predicate<Task> predicate) {
         AtomicInteger i = new AtomicInteger(0);
-        return stack.getTasks().values()
+        return stack.getTasks()
                     .stream()
                     .filter(predicate)
                     .collect(Collectors.toMap(
@@ -171,20 +171,21 @@ public class StackCustomRepositoryImpl implements StackCustomRepository {
     }
     private void reorderTasks(Stack stack) {
         if (stack.getTasks() == null || stack.getTasks().isEmpty()) {
-            stack.setTasks(new LinkedHashMap<>());
+            stack.setTasks(new ArrayList<Task>());
             return;
         }
         Map<String, Task> nonPurgeableTasks = fetchTasks(stack,
                                                          filterNonPurgeableTasks(stack));
         AtomicInteger i = new AtomicInteger(0);
-        Map<String, Task> tasks = nonPurgeableTasks.entrySet()
+        List<Task> tasks = nonPurgeableTasks.values()
                                        .stream()
-                                       .sorted(Map.Entry.comparingByValue())
-                                       .collect(Collectors.toMap(
-                                               n -> i.incrementAndGet() + "",
-                                               Map.Entry::getValue,
-                                               (oldValue, newValue) -> oldValue,
-                                               LinkedHashMap::new));
+                                        .sorted((i1, i2) -> i1.compareTo(i2))
+                                        .collect(Collectors.toList());
+//                                       .collect(Collectors.toMap(
+//                                               n -> i.incrementAndGet() + "",
+//                                               Map.Entry::getValue,
+//                                               (oldValue, newValue) -> oldValue,
+//                                               LinkedHashMap::new));
 
         stack.setTasks(tasks);
     }
