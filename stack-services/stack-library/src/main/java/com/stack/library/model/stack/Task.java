@@ -22,7 +22,9 @@ public class Task implements Comparable<Task>, Cloneable {
     private String                   stackId;
     private String                   userId;
     private String                   createdByUserId;
-    private String                   location;
+    private String                   placeId;
+    private Long                     locationTimeStamp;
+    private Location                   location;
     private String                   origin;
     private String                   description;
     private String                   tags;
@@ -54,6 +56,7 @@ public class Task implements Comparable<Task>, Cloneable {
         task.setId(getId());
         task.setTags(getTags());
         task.setDescription(getDescription());
+        task.setPlaceId(getPlaceId());
         task.setLocation(getLocation());
         task.setUserId(getUserId());
         task.setCreatedByUserId(getCreatedByUserId());
@@ -105,5 +108,10 @@ public class Task implements Comparable<Task>, Cloneable {
         setDeletedTimeStamp(null);
         setCompletedTimeStamp(null);
         setPushedTimeStamp(null);
+    }
+
+    public void clearLocation() {
+        setLocationTimeStamp(null);
+        setLocation(null);
     }
 }

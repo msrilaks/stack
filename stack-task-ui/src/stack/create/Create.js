@@ -142,6 +142,8 @@ class Create extends Component {
             stackId: '',
             tags: '',
             description: '',
+            placeId: '',
+            location: {},
             userId: '',
             createdByUserId:'',
             createdDate: ''
@@ -500,7 +502,17 @@ class Create extends Component {
              <Autocomplete
                  style={{width: '100%',marginTop: '20px',height: '35px'}}
                  onPlaceSelected={(place) => {
-                   console.log(place);
+                 console.log(place);
+                 this.setState({
+                                     task:{
+                                         ...this.state.task,
+                                     placeId: place.place_id,
+                                     location: place.geometry.location
+                                     }
+                                 },function () {
+                                     console.log("Location "
+                                     + this.state.task.location);
+                             });
                  }}
                  types={['establishment']}
              />
