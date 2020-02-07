@@ -59,6 +59,7 @@ public class Task implements Comparable<Task>, Cloneable {
         task.setPlaceId(getPlaceId());
         task.setLocation(getLocation());
         task.setUserId(getUserId());
+        task.setLocationTimeStamp(System.currentTimeMillis());
         task.setCreatedByUserId(getCreatedByUserId());
         task.setCreatedDate(getCreatedDate());
         task.resetTimeStamps();
