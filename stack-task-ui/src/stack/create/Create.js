@@ -142,6 +142,7 @@ class Create extends Component {
             stackId: '',
             tags: '',
             description: '',
+            formattedAddress: 'Enter Task Location',
             placeId: '',
             location: {},
             userId: '',
@@ -188,6 +189,7 @@ class Create extends Component {
                 userId:this.props.stack.userId,
                 tags:this.props.task.tags,
                 createdByUserId:this.props.stack.userId,
+                formattedAddress:this.props.task.formattedAddress,
                 description:this.props.task.description,
         }
             },function () {
@@ -501,12 +503,14 @@ class Create extends Component {
              <div>
              <Autocomplete
                  style={{width: '100%',marginTop: '20px',height: '35px'}}
+                 placeholder={this.state.task.formattedAddress}
                  onPlaceSelected={(place) => {
                  console.log(place);
                  this.setState({
                                      task:{
                                          ...this.state.task,
                                      placeId: place.place_id,
+                                     formattedAddress: place.formatted_address,
                                      location: place.geometry.location
                                      }
                                  },function () {
