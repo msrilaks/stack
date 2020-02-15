@@ -39,6 +39,11 @@ import 'react-multi-email/style.css';
 import Autocomplete from 'react-google-autocomplete';
 
 const useStyles = makeStyles(theme => ({
+    taskInputProps: {
+        fontSize: '13px',
+        fontFamily: "Sans Serif",
+        color: '#BDBDBD',
+      },
     chipContainer: {
         display: 'flex',
         float: 'right',
@@ -78,9 +83,6 @@ const useStyles = makeStyles(theme => ({
     fontFamily: 'cursive',
     textTransform: 'capitalize',
     fontSize: 'medium',
-  },
-  taskDetail: {
-    fontSize: '1rem',
   },
     taskButtonPanel: {
         marginLeft: 'auto',
@@ -386,7 +388,7 @@ class Create extends Component {
                     <GridList cellHeight={'auto'} className={classes
                     .gridList} cols={4}>
                         <GridListTile key="dropzone" cols={4} style={{ height:
-                                                'auto', paddingBottom:'20px'}}>
+                                                'auto', paddingBottom:'20px',borderRadius: '.2rem'}}>
                             <Dropzone onDrop={this.onDrop}>
                                 {({getRootProps, getInputProps}) => (
                                 <StyledSection className="container">
@@ -488,7 +490,7 @@ class Create extends Component {
 
             <Typography variant="body1" color="textSecondary" component="p"
             style={{ }}
-            className={classes.taskDetail}>
+            className={classes.taskInputProps}>
                     <TextField
                     id="standard-multiline-flexible"
                     label="description"
@@ -502,8 +504,11 @@ class Create extends Component {
             </Typography>
              <div>
              <Autocomplete
-                 style={{width: '100%',marginTop: '20px',height: '35px'}}
+                 style={{width: '100%',marginTop: '20px',height: '35px',border: '1px solid #dcdcdc',borderRadius: '.2rem',}}
                  placeholder={this.state.task.formattedAddress}
+                 InputProps={{
+                         className: classes.taskInputProps
+                       }}
                  onPlaceSelected={(place) => {
                  console.log(place);
                  this.setState({
@@ -524,6 +529,8 @@ class Create extends Component {
             <div className={classes.emailContainer}>
              <ReactMultiEmail
                        placeholder="push to @emails"
+                       style={{margin: '0px', fontFamily: 'Sans serif',color: '#bdbdbd', fontWeight: '400',border: '1px solid #dcdcdc',
+                                                                                                                   borderRadius: '.2rem',}}
                        emails={this.state.emails}
                        onChange={(_emails: string[]) => {
                          this.setState({ emails: _emails });
