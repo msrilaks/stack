@@ -59,7 +59,6 @@ const useStyles = makeStyles(theme => ({
     },
     emailContainer: {
         display: 'flex',
-        paddingTop: '20px',
         maxRows: '2',
         flexWrap: 'wrap',
         '& > *': {
@@ -489,13 +488,19 @@ class Create extends Component {
 
 
             <Typography variant="body1" color="textSecondary" component="p"
-            style={{ }}
+            style={{width: '100%',
+                                           marginTop: '30px',
+                                               marginLeft: '0px',
+                                               marginRight: '0px',
+                                               marginBottom: '0px',}}
             className={classes.taskInputProps}>
                     <TextField
                     id="standard-multiline-flexible"
+                    style={{marginBottom: '0px'}}
                     label="description"
                     multiline
                     fullWidth
+                    variant="outlined"
                     rowsMax="4"
                     name="description"
                     value={this.state.task.description} onChange={this.handleInputChange} required
@@ -503,8 +508,16 @@ class Create extends Component {
                     />
             </Typography>
              <div>
+             <Typography variant="body1" color="textSecondary" component="p"
+                         style={{width: '100%',
+                               marginTop: '30px',
+                                   marginLeft: '0px',
+                                   marginRight: '0px',
+                                   marginBottom: '0px',}}
+                         className={classes.taskInputProps}>
              <Autocomplete
-                 style={{width: '100%',marginTop: '20px',height: '35px',border: '1px solid #dcdcdc',borderRadius: '.2rem',}}
+                 style={{width: '100%',height: '38px',border: '1px solid #dcdcdc',borderRadius: '.2rem',
+                 padding: '14px'}}
                  placeholder={this.state.task.formattedAddress}
                  InputProps={{
                          className: classes.taskInputProps
@@ -525,12 +538,20 @@ class Create extends Component {
                  }}
                  types={['establishment']}
              />
+             </Typography>
              </div>
             <div className={classes.emailContainer}>
+            <Typography variant="body1" color="textSecondary" component="p"
+                                     style={{width: '100%',
+                                      marginTop: '30px',
+                                          marginLeft: '0px',
+                                          marginRight: '0px',
+                                          marginBottom: '0px',}}
+                                     className={classes.taskInputProps}>
              <ReactMultiEmail
                        placeholder="push to @emails"
-                       style={{margin: '0px', fontFamily: 'Sans serif',color: '#bdbdbd', fontWeight: '400',border: '1px solid #dcdcdc',
-                                                                                                                   borderRadius: '.2rem',}}
+                       style={{margin: '0px',color: '#bdbdbd',border: '1px solid #dcdcdc',borderRadius: '.2rem',width: '100%',
+                       height: '38px'}}
                        emails={this.state.emails}
                        onChange={(_emails: string[]) => {
                          this.setState({ emails: _emails });
@@ -553,7 +574,7 @@ class Create extends Component {
                          );
                        }}
                      />
-
+</Typography>
             </div>
 
             {UploadPanel}
