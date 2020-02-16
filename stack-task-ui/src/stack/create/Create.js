@@ -497,6 +497,11 @@ class Create extends Component {
                     <TextField
                     id="standard-multiline-flexible"
                     style={{marginBottom: '0px'}}
+                    inputProps={{style: {fontSize: '13px',
+                                                 fontFamily: "Sans Serif",}}} // font size of input text
+                    InputLabelProps={{style: {fontSize: '10px',
+                                                      fontFamily: "Sans Serif",
+                                                      color: '#BDBDBD',}}} // font size of input label
                     label="description"
                     multiline
                     fullWidth
