@@ -2,7 +2,7 @@ package com.stack.taskservice.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stack.library.constants.StackEmailConstants;
-import com.stack.library.model.email.EmailRequest;
+import com.stack.library.model.email.BackendServiceRequest;
 import com.stack.library.model.stack.Stack;
 import com.stack.library.model.stack.Task;
 import com.stack.library.model.user.User;
@@ -27,10 +27,10 @@ public class EmailHandler {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         try {
-            EmailRequest emailRequest =
-                    EmailRequest.builder().stackId(stack.getId()).topic(
+            BackendServiceRequest backendServiceRequest =
+                    BackendServiceRequest.builder().stackId(stack.getId()).topic(
                             StackEmailConstants.STACK_CREATED_TOPIC).build();
-            String reqBodyData = new ObjectMapper().writeValueAsString(emailRequest);
+            String reqBodyData = new ObjectMapper().writeValueAsString(backendServiceRequest);
             HttpEntity<String> requestEntity =
                     new HttpEntity<>(reqBodyData, headers);
             ResponseEntity<Void> response = restTemplate.exchange(stackEmailUrl,
@@ -48,11 +48,11 @@ public class EmailHandler {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         try {
-            EmailRequest emailRequest =
-                    EmailRequest.builder().stackId(stack.getId()).taskId(task.getId())
+            BackendServiceRequest backendServiceRequest =
+                    BackendServiceRequest.builder().stackId(stack.getId()).taskId(task.getId())
                             .fromUserEmail(fromUser.getEmail())
                             .topic(StackEmailConstants.TASK_PUSHED_TOPIC).build();
-            String reqBodyData = new ObjectMapper().writeValueAsString(emailRequest);
+            String reqBodyData = new ObjectMapper().writeValueAsString(backendServiceRequest);
             HttpEntity<String> requestEntity =
                     new HttpEntity<>(reqBodyData, headers);
             ResponseEntity<Void> response = restTemplate.exchange(stackEmailUrl,
@@ -70,11 +70,11 @@ public class EmailHandler {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         try {
-            EmailRequest emailRequest =
-                    EmailRequest.builder().stackId(stack.getId()).taskId(taskId)
+            BackendServiceRequest backendServiceRequest =
+                    BackendServiceRequest.builder().stackId(stack.getId()).taskId(taskId)
                             .fromUserEmail(fromUser.getEmail())
                             .topic(StackEmailConstants.TASK_NUDGE_TOPIC).build();
-            String reqBodyData = new ObjectMapper().writeValueAsString(emailRequest);
+            String reqBodyData = new ObjectMapper().writeValueAsString(backendServiceRequest);
             HttpEntity<String> requestEntity =
                     new HttpEntity<>(reqBodyData, headers);
             ResponseEntity<Void> response = restTemplate.exchange(stackEmailUrl,

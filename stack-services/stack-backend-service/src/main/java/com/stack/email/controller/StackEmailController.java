@@ -1,7 +1,7 @@
 package com.stack.email.controller;
 
 import com.stack.email.service.StackEmailService;
-import com.stack.library.model.email.EmailRequest;
+import com.stack.library.model.email.BackendServiceRequest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +21,8 @@ public class StackEmailController {
     @PostMapping(path = "/email", consumes = "application/json",
                  produces = "application/json")
     @ApiOperation(value = "Send an email", tags = {"Email"})
-    public ResponseEntity<Void> sendEmail(@Valid @RequestBody EmailRequest emailRequest) {
-        stackEmailService.sendEmail(emailRequest);
+    public ResponseEntity<Void> sendEmail(@Valid @RequestBody BackendServiceRequest backendServiceRequest) {
+        stackEmailService.sendEmail(backendServiceRequest);
         return ResponseEntity.ok()
                              .build();
     }

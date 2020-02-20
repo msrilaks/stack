@@ -47,7 +47,7 @@ public enum StackEmailTemplate {
             Task task,
             User user,
             User fromUser,
-            @Valid EmailRequest emailRequest) {
+            @Valid BackendServiceRequest backendServiceRequest) {
         String userName = (user == null) ? "" : user.getName();
         String fromUserName = (fromUser == null) ? "" : fromUser.getName();
         String taskTitle = (task == null)? "": task.getDescription();

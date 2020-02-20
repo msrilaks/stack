@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stack.email.service.StackEmailService;
-import com.stack.library.model.email.EmailRequest;
+import com.stack.library.model.email.BackendServiceRequest;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
 import org.springframework.messaging.Message;
@@ -21,8 +21,8 @@ public class PubSubConfiguration {
         System.out.println("### SRI Message arrived! Payload: " + message.getPayload());
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            EmailRequest emailRequest = objectMapper.readValue(message.getPayload(), EmailRequest.class);
-            stackEmailService.sendEmail(emailRequest);
+            BackendServiceRequest backendServiceRequest = objectMapper.readValue(message.getPayload(), BackendServiceRequest.class);
+            stackEmailService.sendEmail(backendServiceRequest);
         }catch(Exception e) {
             e.printStackTrace();
         }

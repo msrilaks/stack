@@ -4,14 +4,14 @@ import org.apache.commons.codec.binary.Base64;
 import com.google.api.services.gmail.model.Message;
 import com.stack.email.repository.StackRepository;
 import com.stack.email.repository.UserRepository;
-import com.stack.library.model.email.EmailRequest;
+import com.stack.library.model.email.BackendServiceRequest;
 import com.stack.library.model.email.StackEmailTemplate;
 import com.stack.library.model.stack.Stack;
 import com.stack.library.model.stack.Task;
 import com.stack.library.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.core.io.ClassPathResource;
+
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
@@ -23,8 +23,6 @@ import javax.validation.Valid;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Properties;
-
-import java.io.InputStream;
 
 @Component
 public class StackEmailService {
@@ -40,23 +38,23 @@ public class StackEmailService {
 
 
     public void sendEmail(
-            @Valid EmailRequest emailRequest) {
+            @Valid BackendServiceRequest backendServiceRequest) {
 
         try {
             Stack stack =
-                    stackRepository.findById(emailRequest.getStackId())
+                    stackRepository.findById(backendServiceRequest.getStackId())
                                    .orElse(null);
             if (stack == null) {
                 return;
             }
             StackEmailTemplate stackEmailTemplate =
-                    StackEmailTemplate.get(emailRequest.getTopic());
+                    StackEmailTemplate.get(backendServiceRequest.getTopic());
             User user = userRepository.findByEmail(stack.getUserId()).orElse(null);
             User fromUser = null;
-            if(emailRequest.getFromUserEmail() != null) {
-                fromUser = userRepository.findByEmail(emailRequest.getFromUserEmail()).orElse(null);
+            if(backendServiceRequest.getFromUserEmail() != null) {
+                fromUser = userRepository.findByEmail(backendServiceRequest.getFromUserEmail()).orElse(null);
             }
-            Task task = stackRepository.findTaskById(emailRequest.getTaskId(), stack);
+            Task task = stackRepository.findTaskById(backendServiceRequest.getTaskId(), stack);
             MimeMessage emailContent = createEmail(stack.getUserId(),
                                        "Stack It Down <stackitdown@gmail.com>",
                                        stackEmailTemplate.getSubject(),
@@ -64,7 +62,7 @@ public class StackEmailService {
                                                                      task,
                                                                      user,
                                                                      fromUser,
-                                                                     emailRequest));
+                                               backendServiceRequest));
             Message message = createMessageWithEmail(emailContent);
             message =
                     gmailService.getGmail().users().messages().send("me", message)
