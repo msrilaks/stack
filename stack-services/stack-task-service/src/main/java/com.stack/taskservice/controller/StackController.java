@@ -1,5 +1,7 @@
 package com.stack.taskservice.controller;
 
+import com.stack.library.model.ping.PingResponse;
+import com.stack.library.model.stack.Location;
 import com.stack.library.model.stack.Stack;
 import com.stack.library.model.stack.StackEvent;
 import com.stack.library.model.stack.Task;
@@ -176,5 +178,18 @@ public class StackController {
             @PathVariable("taskId") UUID taskId,
             @RequestBody @Valid StackEvent stackEvent) {
         return ResponseEntity.ok(googleCalendarService.addEvent(taskId, stackEvent));
+    }
+
+    @PostMapping(path = "/stack/{stackId}/ping",
+                 consumes = "application/json",
+                 produces = "application/json")
+    @ApiOperation(value = "Ping for location specific tasks and updates", tags = {
+            "Stack"})
+    public ResponseEntity<PingResponse> ping(
+            @PathVariable("stackId") String stackId,
+            @RequestHeader Map<String, String> headers,
+            @RequestBody @Valid Location location) {
+        PingResponse pingResponse = PingResponse.builder().build();
+        return ResponseEntity.ok(pingResponse);
     }
 }
