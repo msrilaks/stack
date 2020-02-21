@@ -7,6 +7,7 @@ import com.stack.library.model.stack.StackEvent;
 import com.stack.library.model.stack.Task;
 import com.stack.taskservice.context.StackRequestContext;
 import com.stack.taskservice.services.GoogleCalendarService;
+import com.stack.taskservice.services.PingService;
 import com.stack.taskservice.services.StackService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,6 +36,9 @@ public class StackController {
 
     @Autowired
     StackService stackService;
+
+    @Autowired
+    PingService pingService;
 
     @Autowired
     GoogleCalendarService googleCalendarService;
@@ -189,7 +193,7 @@ public class StackController {
             @PathVariable("stackId") String stackId,
             @RequestHeader Map<String, String> headers,
             @RequestBody @Valid Location location) {
-        PingResponse pingResponse = PingResponse.builder().build();
-        return ResponseEntity.ok(pingResponse);
+        pingService.setTasksNearMe();
+        return ResponseEntity.ok(pingService.fetchPingResponse());
     }
 }
