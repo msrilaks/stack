@@ -1,7 +1,7 @@
 package com.stack.email.service;
 
 import com.stack.email.configuration.StackLocationProperties;
-import com.stack.email.repository.StackLocationRepository;
+import com.stack.email.repository.StackTasksNearLocationRepository;
 import com.stack.email.repository.StackRecentTasksRepository;
 import com.stack.library.model.stack.*;
 import org.apache.commons.codec.binary.Base64;
@@ -51,7 +51,7 @@ public class StackEmailService {
     private StackLocationProperties stackLocationProperties;
 
     @Autowired
-    private StackLocationRepository stackLocationRepository;
+    private StackTasksNearLocationRepository stackTasksNearLocationRepository;
 
     @Autowired
     private StackRecentTasksRepository stackRecentTasksRepository;
@@ -168,19 +168,19 @@ public class StackEmailService {
     }
 
     private void setTasksNearLocation(Stack stack, List<Task> tasks, Location location, String deviceId) {
-        StackLocation stackLocation = new StackLocation();
-        stackLocation.setStackId(stack.getId());
-        stackLocation.setDeviceId(deviceId);
-        stackLocation.setUserId(stack.getUserId());
-        stackLocation.setLat(location.getLat());
-        stackLocation.setLng(location.getLng());
-        stackLocation.setLastLocationSearchDate(new Date());
+        StackTasksNearLocation stackTasksNearLocation = new StackTasksNearLocation();
+        stackTasksNearLocation.setStackId(stack.getId());
+        stackTasksNearLocation.setDeviceId(deviceId);
+        stackTasksNearLocation.setUserId(stack.getUserId());
+        stackTasksNearLocation.setLat(location.getLat());
+        stackTasksNearLocation.setLng(location.getLng());
+        stackTasksNearLocation.setLastLocationSearchDate(new Date());
         StringBuffer taskIds = new StringBuffer();
         for(Task task:tasks){
             taskIds.append(task.getId()).append(",");
         }
-        stackLocation.setTaskIdsNearLoc(taskIds.toString());
-        stackLocationRepository.save(stackLocation);
+        stackTasksNearLocation.setTaskIdsNearLoc(taskIds.toString());
+        stackTasksNearLocationRepository.save(stackTasksNearLocation);
         //LOGGER.debug("stackLocation saved : " + stackLocation);
     }
 

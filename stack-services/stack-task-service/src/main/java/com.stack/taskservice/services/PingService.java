@@ -6,7 +6,7 @@ import com.stack.library.model.stack.*;
 import com.stack.taskservice.configuration.StackPingLocationProperties;
 import com.stack.taskservice.context.StackRequestContext;
 import com.stack.taskservice.handler.PubSubEmailHandler;
-import com.stack.taskservice.repository.StackLocationRepository;
+import com.stack.taskservice.repository.StackTasksNearLocationRepository;
 import com.stack.taskservice.repository.StackRecentTasksRepository;
 import com.stack.taskservice.repository.StackRepository;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ public class PingService {
     private static final Logger LOGGER = LoggerFactory.getLogger(
             PingService.class.getName());
     @Autowired
-    private StackLocationRepository stackLocationRepository;
+    private StackTasksNearLocationRepository stackTasksNearLocationRepository;
 
     @Autowired
     private StackRecentTasksRepository stackRecentTasksRepository;
@@ -78,19 +78,19 @@ public class PingService {
     }
 
     private Map<String, Task> getTasksNearLocationMap(Stack stack, Location location) {
-        StackLocation stackLocation =
-                stackLocationRepository.findById(stack.getId()).orElse(null);
+        StackTasksNearLocation stackTasksNearLocation =
+                stackTasksNearLocationRepository.findById(stack.getId()).orElse(null);
         Map<String, Task> taskNearMeMap = new HashMap<>();
-        LOGGER.info("## stackLocation fetched from repo : " + stackLocation);
+        LOGGER.info("## stackLocation fetched from repo : " + stackTasksNearLocation);
         LOGGER.info("## stackPingLocationProperties : " + stackPingLocationProperties);
-        if(stackLocation == null) {
+        if(stackTasksNearLocation == null) {
             //Post a pub-sub request to search and populate the cache.
             emailHandler.sendEmailNotification(stack,
                        StackEmailConstants.TASK_NEAR_LOCATION_TOPIC, location);
             return taskNearMeMap;
         }
         //If new location has changed from cached search
-        double distanceInMiles = location.distanceInMilesTo(stackLocation.getLat(), stackLocation.getLng());
+        double distanceInMiles = location.distanceInMilesTo(stackTasksNearLocation.getLat(), stackTasksNearLocation.getLng());
         LOGGER.info("## distanceInMiles : " + distanceInMiles);
         if(distanceInMiles > stackPingLocationProperties.getSearchDistanceMiles()){
             //Post a pub-sub request to search and repopulate the cache.
@@ -100,21 +100,21 @@ public class PingService {
         }
 
         // If less than 24 hours have passed since last location based task share
-        if(stackLocation.getLastLocationSharedDate() !=null && stackLocation.getLastLocationSearchDate()!=null){
+        if(stackTasksNearLocation.getLastLocationSharedDate() !=null && stackTasksNearLocation.getLastLocationSearchDate()!=null){
             long hoursBetween =
                     ChronoUnit.MINUTES.between(Instant.ofEpochMilli(System.currentTimeMillis()),
-                            stackLocation.getLastLocationSearchDate().toInstant());
+                            stackTasksNearLocation.getLastLocationSearchDate().toInstant());
             LOGGER.info("## hoursBetween : " + hoursBetween);
             if(hoursBetween < stackPingLocationProperties.getSearchIntervalElapsedMinutes()) {
                 return taskNearMeMap;
             }
         }
 
-        if(stackLocation.getTaskIdsNearLoc()==null
-           || stackLocation.getTaskIdsNearLoc().isEmpty()) {
+        if(stackTasksNearLocation.getTaskIdsNearLoc()==null
+           || stackTasksNearLocation.getTaskIdsNearLoc().isEmpty()) {
             return taskNearMeMap;
         }
-        String[] taskIds = stackLocation.getTaskIdsNearLoc().split(",");
+        String[] taskIds = stackTasksNearLocation.getTaskIdsNearLoc().split(",");
         for (String taskId : taskIds) {
             try {
                 Task t = stackRepository.findTaskById(UUID.fromString(taskId), stack);
@@ -123,8 +123,8 @@ public class PingService {
                 LOGGER.error("Could not populate ping response", e);
             }
         }
-        stackLocation.setLastLocationSharedDate(new Date());
-        stackLocationRepository.save(stackLocation);
+        stackTasksNearLocation.setLastLocationSharedDate(new Date());
+        stackTasksNearLocationRepository.save(stackTasksNearLocation);
         return taskNearMeMap;
     }
 }

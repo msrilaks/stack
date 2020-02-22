@@ -49,7 +49,7 @@ public class StackEmailConstants {
         "<h3><i>{1}</i> has pushed a new task to your stack.</br></h3>"+
         "<h4>"+
         "<ul style=\"list-style-type:none;\">"+
-        "<li><img src=\"https://img.icons8.com/dusk/32/000000/edit.png\"><i style=\"margin:15px;\">{2}.</i></li><br/>"+
+        "{2}"+
         "</ul>"+
         "</h4>"+
         STACK_MESSAGE_FOOTER+

@@ -10,11 +10,11 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-@RedisHash("StackLocation")
+@RedisHash("StackTasksNearLocation")
 @Getter
 @Setter
 @ToString
-public class StackLocation implements Serializable {
+public class StackTasksNearLocation implements Serializable {
     @Id
     private String stackId;
     private String deviceId;
