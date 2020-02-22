@@ -53,8 +53,8 @@ public class PingService {
         StackLocation stackLocation =
                 stackLocationRepository.findById(stack.getId()).orElse(null);
         Map<String, Task> taskNearMeMap = new HashMap<>();
-        LOGGER.debug("stackLocation fetched from repo : " + stackLocation);
-
+        LOGGER.info("## stackLocation fetched from repo : " + stackLocation);
+        LOGGER.info("## stackPingLocationProperties : " + stackPingLocationProperties);
         if(stackLocation == null) {
             //Post a pub-sub request to search and populate the cache.
             emailHandler.sendEmailNotification(stack,
@@ -71,13 +71,15 @@ public class PingService {
         }
 
         // If less than 24 hours have passed since last location based task share
-        long hoursBetween =
-                ChronoUnit.MINUTES.between(Instant.ofEpochMilli(System.currentTimeMillis()),
-                                                     stackLocation.getLastLocationSearchDate().toInstant());
-        if(stackLocation.getLastLocationSharedDate() !=null &&
-           hoursBetween < stackPingLocationProperties.getSearchIntervalElapsedMinutes()) {
-            return taskNearMeMap;
+        if(stackLocation.getLastLocationSharedDate() !=null && stackLocation.getLastLocationSearchDate()!=null){
+            long hoursBetween =
+                    ChronoUnit.MINUTES.between(Instant.ofEpochMilli(System.currentTimeMillis()),
+                            stackLocation.getLastLocationSearchDate().toInstant());
+            if(hoursBetween < stackPingLocationProperties.getSearchIntervalElapsedMinutes()) {
+                return taskNearMeMap;
+            }
         }
+
         if(stackLocation.getTaskIdsNearLoc()==null
            || stackLocation.getTaskIdsNearLoc().isEmpty()) {
             return taskNearMeMap;

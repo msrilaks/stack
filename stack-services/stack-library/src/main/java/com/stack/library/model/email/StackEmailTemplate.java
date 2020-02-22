@@ -16,7 +16,8 @@ import static com.stack.library.constants.StackEmailConstants.*;
 public enum StackEmailTemplate {
     STACK_CREATED(STACK_CREATED_TOPIC, STACK_CREATED_SUBJECT, STACK_CREATED_MESSAGE),
     TASK_PUSHED(TASK_PUSHED_TOPIC, TASK_PUSHED_SUBJECT, TASK_PUSHED_MESSAGE),
-    TASK_NUDGE(TASK_NUDGE_TOPIC, TASK_NUDGE_SUBJECT, TASK_NUDGE_MESSAGE);
+    TASK_NUDGE(TASK_NUDGE_TOPIC, TASK_NUDGE_SUBJECT, TASK_NUDGE_MESSAGE),
+    TASK_NEAR_LOCATION(TASK_NEAR_LOCATION_TOPIC, TASK_NEAR_LOCATION_SUBJECT, TASK_NEAR_LOCATION_MESSAGE);
 
 
     @Getter
@@ -41,6 +42,8 @@ public enum StackEmailTemplate {
                 return TASK_PUSHED;
             case TASK_NUDGE_TOPIC:
                 return TASK_NUDGE;
+            case TASK_NEAR_LOCATION_TOPIC:
+                return TASK_NEAR_LOCATION;
         }
         return null;
     }
