@@ -23,9 +23,14 @@ public class StackCustomRepositoryImpl implements StackCustomRepository{
 
     @Override
     public List<Task> fetchTasksByLocation(Stack stack, Location location, long taskDistanceMiles) {
+        System.out.println("### SRI taskDistanceMiles: "+ taskDistanceMiles);
+        System.out.println("### SRI location: "+ location);
         Predicate<Task> predicate =
                 (task -> task.getLocation() != null
-                && task.getLocation().distanceInMilesTo(location) <= taskDistanceMiles);
+                && task.getLocation().distanceInMilesTo(location) <= taskDistanceMiles
+                && task.getDeletedTimeStamp() == null
+                && task.getCompletedTimeStamp() == null
+                && task.getPushedTimeStamp() == null);
         return stack.getTasks()
                 .stream()
                 .filter(predicate)

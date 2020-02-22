@@ -10,9 +10,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.messaging.Message;
 
 @SpringBootApplication
+@EnableRedisRepositories
 @PropertySource("classpath:application-${spring.profiles.active}.properties")
 @PropertySource("classpath:client_secrets_${spring.profiles.active}.json")
 @ComponentScan({"com.stack.email", "com.stack.library"})

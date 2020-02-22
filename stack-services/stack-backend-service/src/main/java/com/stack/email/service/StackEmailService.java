@@ -27,6 +27,7 @@ import javax.validation.Valid;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -137,6 +138,7 @@ public class StackEmailService {
         stackLocation.setDeviceId(deviceId);
         stackLocation.setLat(location.getLat());
         stackLocation.setLng(location.getLng());
+        stackLocation.setLastLocationSearchDate(new Date());
         StringBuffer taskIds = new StringBuffer();
         for(Task task:tasks){
             taskIds.append(task.getId()).append(",");

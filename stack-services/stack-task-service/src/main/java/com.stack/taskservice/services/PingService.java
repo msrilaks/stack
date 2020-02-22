@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -62,8 +63,9 @@ public class PingService {
             return taskNearMeMap;
         }
         //If new location has changed from cached search
-        if(location.distanceInMilesTo(stackLocation.getLat(), stackLocation.getLng())>
-           stackPingLocationProperties.getSearchDistanceMiles()){
+        double distanceInMiles = location.distanceInMilesTo(stackLocation.getLat(), stackLocation.getLng());
+        LOGGER.info("## distanceInMiles : " + distanceInMiles);
+        if(distanceInMiles > stackPingLocationProperties.getSearchDistanceMiles()){
             //Post a pub-sub request to search and repopulate the cache.
             emailHandler.sendEmailNotification(stack,
                        StackEmailConstants.TASK_NEAR_LOCATION_TOPIC, location);
@@ -75,6 +77,7 @@ public class PingService {
             long hoursBetween =
                     ChronoUnit.MINUTES.between(Instant.ofEpochMilli(System.currentTimeMillis()),
                             stackLocation.getLastLocationSearchDate().toInstant());
+            LOGGER.info("## hoursBetween : " + hoursBetween);
             if(hoursBetween < stackPingLocationProperties.getSearchIntervalElapsedMinutes()) {
                 return taskNearMeMap;
             }
@@ -93,7 +96,8 @@ public class PingService {
                 LOGGER.error("Could not populate ping response", e);
             }
         }
-
+        stackLocation.setLastLocationSharedDate(new Date());
+        stackLocationRepository.save(stackLocation);
         return taskNearMeMap;
     }
 }
