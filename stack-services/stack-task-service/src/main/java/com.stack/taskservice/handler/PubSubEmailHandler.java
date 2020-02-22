@@ -2,6 +2,7 @@ package com.stack.taskservice.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stack.library.model.email.BackendServiceRequest;
+import com.stack.library.model.stack.Location;
 import com.stack.library.model.stack.Stack;
 import com.stack.library.model.stack.Task;
 import com.stack.library.model.user.User;
@@ -50,4 +51,17 @@ public class PubSubEmailHandler {
         }
     }
 
+    public void sendEmailNotification(Stack stack, String topic, Location location) {
+        try {
+            BackendServiceRequest backendServiceRequest =
+                    BackendServiceRequest.builder().stackId(stack.getId())
+                                         .location(location)
+                                         .topic(topic).build();
+            String message = new ObjectMapper().writeValueAsString(backendServiceRequest);
+            STACK_EMAIL_TOPIC.send(MessageBuilder.withPayload(message).build());
+            LOGGER.info("Stack message posted to pub sub: " + topic);
+        } catch (Exception e) {
+            LOGGER.error("Stack message post to pub sub failure: "+topic, e);
+        }
+    }
 }

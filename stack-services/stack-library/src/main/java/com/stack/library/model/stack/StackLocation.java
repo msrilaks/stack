@@ -23,4 +23,5 @@ public class StackLocation implements Serializable {
     private double lng;
     private String taskIdsNearLoc;
     private Date lastLocationSearchDate;
+    private Date lastLocationSharedDate;
 }

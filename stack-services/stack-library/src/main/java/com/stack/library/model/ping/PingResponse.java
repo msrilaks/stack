@@ -11,6 +11,6 @@ import java.util.Map;
 @Setter
 @Builder
 public class PingResponse {
-    Map<String, Task> tasksNearMe;
+    Map<String, Task> tasksNearLocation;
     Map<String, Task> tasksRecent;
 }

@@ -193,7 +193,6 @@ public class StackController {
             @PathVariable("stackId") String stackId,
             @RequestHeader Map<String, String> headers,
             @RequestBody @Valid Location location) {
-        pingService.setTasksNearMe();
-        return ResponseEntity.ok(pingService.fetchPingResponse());
+        return ResponseEntity.ok(pingService.fetchPingResponse(location));
     }
 }
