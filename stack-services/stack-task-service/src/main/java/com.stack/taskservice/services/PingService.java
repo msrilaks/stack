@@ -42,17 +42,6 @@ public class PingService {
     @Autowired
     StackPingLocationProperties stackPingLocationProperties;
 
-    public void setTasksNearLocation() {
-        StackLocation stackLocation = new StackLocation();
-        stackLocation.setStackId("d1");
-        stackLocation.setDeviceId("d1");
-        stackLocation.setLat(999999);
-        stackLocation.setLng(888888);
-        stackLocation.setTaskIdsNearLoc("iamnearyouTASK");
-        stackLocationRepository.save(stackLocation);
-        LOGGER.debug("stackLocation saved : " + stackLocation);
-    }
-
     public PingResponse fetchPingResponse(Location location) {
         Stack stack = stackRequestContext.getStack();
         PingResponse pingResponse = PingResponse.builder().build();

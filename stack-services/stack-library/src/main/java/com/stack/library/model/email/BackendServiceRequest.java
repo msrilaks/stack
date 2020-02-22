@@ -17,4 +17,5 @@ public class BackendServiceRequest {
     private UUID   taskId;
     private String fromUserEmail;
     private Location location;
+    private String deviceId;
 }

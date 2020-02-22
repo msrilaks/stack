@@ -64,7 +64,7 @@ public class StackEmailConstants {
         "<h3><b><i>{1}</i></b> has nudged you for a task in your stack.<br/></h3>"+
         "<h4>"+
         "<ul style=\"list-style-type:none;\">"+
-        "<li><img src=\"https://img.icons8.com/dusk/32/000000/edit.png\"><i style=\"margin:15px;\">{2}.</i></li><br/>"+
+        "{2}"+
         "</ul>"+
         "</h4>"+
         STACK_MESSAGE_FOOTER+
@@ -82,10 +82,17 @@ public class StackEmailConstants {
             "</br></h3>"+
             "<h4>"+
             "<ul style=\"list-style-type:none;\">"+
-            "<li><img src=\"https://img.icons8.com/dusk/32/000000/edit.png\"><i style=\"margin:15px;\">{2}.</i></li><br/>"+
+            "{2}"+
             "</ul>"+
             "</h4>"+
             STACK_MESSAGE_FOOTER+
             STACK_MESSAGE_END;
+
+    public static final String TASK_MESSAGE =
+            "<li><img src=\"https://img.icons8.com/dusk/32/000000/edit.png\">" +
+            "<i style=\"margin:15px;\">" +
+            "<a href=\"{1}\">{0}.</a>" +
+            "</i>" +
+            "</li><br/>";
 
 }

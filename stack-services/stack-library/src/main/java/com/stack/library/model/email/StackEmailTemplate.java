@@ -8,6 +8,9 @@ import lombok.Getter;
 
 import javax.validation.Valid;
 
+import java.util.List;
+import java.util.UUID;
+
 import static com.stack.library.constants.StackEmailConstants.*;
 
 public enum StackEmailTemplate {
@@ -44,25 +47,35 @@ public enum StackEmailTemplate {
 
     public String getMessage(
             Stack stack,
-            Task task,
+            List<Task> taskList,
             User user,
             User fromUser,
             @Valid BackendServiceRequest backendServiceRequest) {
         String userName = (user == null) ? "" : user.getName();
         String fromUserName = (fromUser == null) ? "" : fromUser.getName();
-        String taskTitle = (task == null)? "": task.getDescription();
+        StringBuffer tasks = new StringBuffer();
+        for(Task task:taskList) {
+            String taskTitle = (task == null) ? "" : task.getDescription();
+            String taskId = (task == null) ? "" : task.getId().toString();
+            String taskLink = "https://www.stackitdown.com/stackitdown/";// + taskId;
+            tasks.append(java.text.MessageFormat.format(TASK_MESSAGE, taskTitle, taskLink));
+        }
         switch (topic) {
             case StackEmailConstants.STACK_CREATED_TOPIC: {
                 return java.text.MessageFormat.format(message, userName);
             }
+            case TASK_NEAR_LOCATION_TOPIC:
+                return java.text.MessageFormat.format(message,
+                        userName,
+                        fromUserName,
+                        tasks.toString()
+                        );
             case TASK_PUSHED_TOPIC:
             case TASK_NUDGE_TOPIC:
                 return java.text.MessageFormat.format(message,
                                                       userName,
                                                       fromUserName,
-                                                      taskTitle,
-                                                      stack.getId(),
-                                                      task.getId());
+                                                      tasks.toString());
         }
         return message;
     }
