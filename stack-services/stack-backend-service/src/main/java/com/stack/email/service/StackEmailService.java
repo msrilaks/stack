@@ -2,17 +2,17 @@ package com.stack.email.service;
 
 import com.stack.email.configuration.StackLocationProperties;
 import com.stack.email.repository.StackLocationRepository;
-import com.stack.library.model.stack.Location;
-import com.stack.library.model.stack.StackLocation;
+import com.stack.email.repository.StackRecentTasksRepository;
+import com.stack.library.model.stack.*;
 import org.apache.commons.codec.binary.Base64;
 import com.google.api.services.gmail.model.Message;
 import com.stack.email.repository.StackRepository;
 import com.stack.email.repository.UserRepository;
 import com.stack.library.model.email.BackendServiceRequest;
 import com.stack.library.model.email.StackEmailTemplate;
-import com.stack.library.model.stack.Stack;
-import com.stack.library.model.stack.Task;
 import com.stack.library.model.user.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,8 +31,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
+import static com.stack.library.constants.StackEmailConstants.TASK_PUSHED_TOPIC;
+
 @Component
 public class StackEmailService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+            StackEmailService.class.getName());
 
     @Autowired
     private GmailService gmailService;
@@ -48,6 +52,9 @@ public class StackEmailService {
 
     @Autowired
     private StackLocationRepository stackLocationRepository;
+
+    @Autowired
+    private StackRecentTasksRepository stackRecentTasksRepository;
 
     public void sendEmail(
             @Valid BackendServiceRequest backendServiceRequest) {
@@ -72,9 +79,16 @@ public class StackEmailService {
                 Task task = stackRepository.findTaskById(backendServiceRequest.getTaskId(), stack);
                 tasks.add(task);
             }
+            if(backendServiceRequest.getTopic().equals(TASK_PUSHED_TOPIC)) {
+                setTasksRecent(stack,tasks);
+            }
             if(backendServiceRequest.getLocation() != null) {
                 tasks = stackRepository.fetchTasksByLocation(stack,backendServiceRequest.getLocation(), stackLocationProperties.getTaskDistanceMiles());
                 setTasksNearLocation(stack,tasks,backendServiceRequest.getLocation(),backendServiceRequest.getDeviceId());
+                if (tasks == null || tasks.isEmpty()) {
+                    return;
+                    //No need to email if no tasks found
+                }
             }
             MimeMessage emailContent = createEmail(stack.getUserId(),
                                        "Stack It Down <stackitdown@gmail.com>",
@@ -132,10 +146,32 @@ public class StackEmailService {
         return message;
     }
 
+    private void setTasksRecent(Stack stack, List<Task> tasks) {
+        StackRecentTasks stackRecentTasks = stackRecentTasksRepository.findById(stack.getId()).orElse(null);
+        if(stackRecentTasks == null) {
+            stackRecentTasks = new StackRecentTasks();
+            stackRecentTasks.setStackId(stack.getId());
+            stackRecentTasks.setUserId(stack.getUserId());
+            stackRecentTasks.setTasksRecentIds("");
+        }
+        StringBuffer taskIds = new StringBuffer();
+        if(!stackRecentTasks.getTasksRecentIds().isEmpty()) {
+            taskIds.append(stackRecentTasks.getTasksRecentIds()).append(",");
+        }
+        for(Task task:tasks){
+            taskIds.append(task.getId()).append(",");
+        }
+        stackRecentTasks.setTasksRecentIds(taskIds.toString());
+        stackRecentTasks.setLastModifiedDate(new Date());
+        LOGGER.info("Adding stackRecentTasks to cache: " + stackRecentTasks);
+        stackRecentTasksRepository.save(stackRecentTasks);
+    }
+
     private void setTasksNearLocation(Stack stack, List<Task> tasks, Location location, String deviceId) {
         StackLocation stackLocation = new StackLocation();
         stackLocation.setStackId(stack.getId());
         stackLocation.setDeviceId(deviceId);
+        stackLocation.setUserId(stack.getUserId());
         stackLocation.setLat(location.getLat());
         stackLocation.setLng(location.getLng());
         stackLocation.setLastLocationSearchDate(new Date());

@@ -2,14 +2,12 @@ package com.stack.taskservice.services;
 
 import com.stack.library.constants.StackEmailConstants;
 import com.stack.library.model.ping.PingResponse;
-import com.stack.library.model.stack.Location;
-import com.stack.library.model.stack.Stack;
-import com.stack.library.model.stack.StackLocation;
-import com.stack.library.model.stack.Task;
+import com.stack.library.model.stack.*;
 import com.stack.taskservice.configuration.StackPingLocationProperties;
 import com.stack.taskservice.context.StackRequestContext;
 import com.stack.taskservice.handler.PubSubEmailHandler;
 import com.stack.taskservice.repository.StackLocationRepository;
+import com.stack.taskservice.repository.StackRecentTasksRepository;
 import com.stack.taskservice.repository.StackRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +29,9 @@ public class PingService {
     @Autowired
     private StackLocationRepository stackLocationRepository;
 
+    @Autowired
+    private StackRecentTasksRepository stackRecentTasksRepository;
+
     @Resource(name = "stackRequestContext")
     StackRequestContext stackRequestContext;
 
@@ -47,7 +48,33 @@ public class PingService {
         Stack stack = stackRequestContext.getStack();
         PingResponse pingResponse = PingResponse.builder().build();
         pingResponse.setTasksNearLocation(getTasksNearLocationMap(stack, location));
+        pingResponse.setTasksRecent(getRecentTasks(stack));
         return pingResponse;
+    }
+
+    private Map<String, Task> getRecentTasks(Stack stack) {
+        Map<String, Task> tasksRecent = new HashMap<>();
+        StackRecentTasks stackRecentTasks =
+                stackRecentTasksRepository.findById(stack.getId()).orElse(null);
+        LOGGER.info("## stackRecentTasks fetched from repo : " + stackRecentTasks);
+        if(stackRecentTasks == null) {
+            return tasksRecent;
+        }
+        if(stackRecentTasks.getTasksRecentIds()==null
+                || stackRecentTasks.getTasksRecentIds().isEmpty()) {
+            return tasksRecent;
+        }
+        String[] taskIds = stackRecentTasks.getTasksRecentIds().split(",");
+        for (String taskId : taskIds) {
+            try {
+                Task t = stackRepository.findTaskById(UUID.fromString(taskId), stack);
+                tasksRecent.put(t.getId().toString(), t);
+            } catch (Exception e) {
+                LOGGER.error("Could not populate ping response", e);
+            }
+        }
+        stackRecentTasksRepository.delete(stackRecentTasks);
+        return tasksRecent;
     }
 
     private Map<String, Task> getTasksNearLocationMap(Stack stack, Location location) {
