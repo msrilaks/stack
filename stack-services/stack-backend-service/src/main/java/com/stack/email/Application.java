@@ -12,12 +12,14 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.messaging.Message;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableRedisRepositories
 @PropertySource("classpath:application-${spring.profiles.active}.properties")
 @PropertySource("classpath:client_secrets_${spring.profiles.active}.json")
 @ComponentScan({"com.stack.email", "com.stack.library"})
+@EnableScheduling
 @EnableBinding(Sink.class)
 public class Application {
     public static void main(String[] args) {
