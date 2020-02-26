@@ -26,6 +26,9 @@ public class StackCustomRepositoryImpl implements StackCustomRepository {
     @Autowired
     StackPurgeProperties stackPurgeProperties;
 
+    @Autowired
+    StackTaskLocationRepository stackTaskLocationRepository;
+
     @Override
     public Task saveTaskToStack(Task task, Stack stack) {
         if (task.getId() == null) {
@@ -90,6 +93,8 @@ public class StackCustomRepositoryImpl implements StackCustomRepository {
     @Override
     public Stack saveStack(Stack stack) {
         reorderTasks(stack);
+        //Save to cache for location service
+        stackTaskLocationRepository.saveStack(stack);
         mongoTemplate.save(stack);
         return stack;
     }

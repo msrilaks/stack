@@ -5,5 +5,5 @@ import com.stack.library.model.stack.StackTaskLocation;
 import com.stack.library.model.stack.Task;
 
 public interface StackTaskLocationCustomRepository {
-    StackTaskLocation saveTask(Task task);
+    void saveStack(Stack stack);
 }
