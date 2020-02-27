@@ -30,14 +30,16 @@ public class StackTaskLocationCustomRepositoryImpl implements StackTaskLocationC
     public List<StackTaskLocation> fetchByLocation(String stackId, Location location, long taskDistanceMiles) {
         Map<String, StackTaskLocation> stackTaskLocationMap = redisTemplate.opsForHash().entries(stackId);
         System.out.println("### SRI taskDistanceMiles: " + taskDistanceMiles);
-        System.out.println("### SRI location: " + location);
+        System.out.println("### SRI stackTaskLocationMap: " + stackTaskLocationMap);
         Predicate<StackTaskLocation> predicate =
                 (stackTaskLocation -> stackTaskLocation.getLocation() != null
                         && stackTaskLocation.getLocation().distanceInMilesTo(location) <= taskDistanceMiles);
-        return stackTaskLocationMap.values()
+        List<StackTaskLocation> stackTaskLocations = stackTaskLocationMap.values()
                 .stream()
                 .filter(predicate)
                 .collect(Collectors.toList());
+        LOGGER.info("Tasks near:"+location+" are: "+stackTaskLocations);
+        return stackTaskLocations;
     }
 
 }

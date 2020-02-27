@@ -1,13 +1,11 @@
 package com.stack.email.service;
 
 import com.stack.email.configuration.StackLocationProperties;
-import com.stack.email.repository.StackTasksNearLocationRepository;
-import com.stack.email.repository.StackRecentTasksRepository;
+import com.stack.email.repository.*;
 import com.stack.library.model.stack.*;
+import com.stack.library.model.stack.Stack;
 import org.apache.commons.codec.binary.Base64;
 import com.google.api.services.gmail.model.Message;
-import com.stack.email.repository.StackRepository;
-import com.stack.email.repository.UserRepository;
 import com.stack.library.model.email.BackendServiceRequest;
 import com.stack.library.model.email.StackEmailTemplate;
 import com.stack.library.model.user.User;
@@ -26,10 +24,7 @@ import javax.mail.BodyPart;
 import javax.validation.Valid;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 import static com.stack.library.constants.StackEmailConstants.TASK_PUSHED_TOPIC;
 
@@ -55,6 +50,9 @@ public class StackEmailService {
 
     @Autowired
     private StackRecentTasksRepository stackRecentTasksRepository;
+
+    @Autowired
+    private StackTaskLocationRepository stackTaskLocationRepository;
 
     public void sendEmail(
             @Valid BackendServiceRequest backendServiceRequest) {
@@ -83,12 +81,22 @@ public class StackEmailService {
                 setTasksRecent(stack,tasks);
             }
             if(backendServiceRequest.getLocation() != null) {
-                tasks = stackRepository.fetchTasksByLocation(stack,backendServiceRequest.getLocation(), stackLocationProperties.getTaskDistanceMiles());
-                setTasksNearLocation(stack,tasks,backendServiceRequest.getLocation(),backendServiceRequest.getDeviceId());
+                List<StackTaskLocation> stackTaskLocations = stackTaskLocationRepository.fetchByLocation(
+                        stack.getId(),
+                        backendServiceRequest.getLocation(),
+                        stackLocationProperties.getTaskDistanceMiles());
+                for(StackTaskLocation stackTaskLocation: stackTaskLocations) {
+                    Task task = stackRepository.findTaskById(UUID.fromString(stackTaskLocation.getTaskId()), stack);
+                    tasks.add(task);
+                }
+                //tasks = stackRepository.fetchTasksByLocation(stack,backendServiceRequest.getLocation(), stackLocationProperties.getTaskDistanceMiles());
+
                 if (tasks == null || tasks.isEmpty()) {
+                    LOGGER.info("No tasks found near location");
                     return;
                     //No need to email if no tasks found
                 }
+                setTasksNearLocation(stack,tasks,backendServiceRequest.getLocation(),backendServiceRequest.getDeviceId());
             }
             MimeMessage emailContent = createEmail(stack.getUserId(),
                                        "Stack It Down <stackitdown@gmail.com>",
@@ -180,8 +188,8 @@ public class StackEmailService {
             taskIds.append(task.getId()).append(",");
         }
         stackTasksNearLocation.setTaskIdsNearLoc(taskIds.toString());
+        LOGGER.info("Caching tasks near location : " + stackTasksNearLocation);
         stackTasksNearLocationRepository.save(stackTasksNearLocation);
-        //LOGGER.debug("stackLocation saved : " + stackLocation);
     }
 
 }
