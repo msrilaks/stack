@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import java.util.Set;
+
 public class StackTaskLocationCustomRepositoryImpl implements StackTaskLocationCustomRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(
             StackTaskLocationCustomRepositoryImpl.class.getName());
@@ -18,18 +20,20 @@ public class StackTaskLocationCustomRepositoryImpl implements StackTaskLocationC
 
     @Override
     public void saveStack(Stack stack) {
-        redisTemplate.opsForHash().delete(stack.getId());
         for(Task task:stack.getTasks()) {
             saveTask(task);
         }
     }
     private void saveTask(Task task) {
+        Set<String> taskKeys = redisTemplate.opsForHash().keys(task.getStackId());
         // If placeId is removed from task, delete from cache
         if(task.getPlaceId() == null
                 || task.getDeletedTimeStamp() != null
                 || task.getCompletedTimeStamp() != null
                 || task.getPushedTimeStamp() != null) {
-            redisTemplate.opsForHash().delete(task.getStackId(), task.getId());
+            if(taskKeys!=null && !taskKeys.isEmpty()) {
+                redisTemplate.opsForHash().delete(task.getStackId(), task.getId());
+            }
             return;
         }
         StackTaskLocation stackTaskLocation =
@@ -45,6 +49,7 @@ public class StackTaskLocationCustomRepositoryImpl implements StackTaskLocationC
                                      .location(task.getLocation())
                                      .locationTimeStamp(System.currentTimeMillis())
                                      .build();
+            LOGGER.info("##SRI REDIS caching stackTaskLocation : "+ stackTaskLocation);
             redisTemplate.opsForHash().put(task.getStackId(), task.getId(),
                                            stackTaskLocation);
             //Do not save location in db

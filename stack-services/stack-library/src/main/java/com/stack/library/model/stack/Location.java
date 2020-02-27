@@ -1,13 +1,15 @@
 package com.stack.library.model.stack;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @Builder(toBuilder = true)
-public class Location {
+public class Location implements Serializable {
     private double lat;
     private double lng;
 
