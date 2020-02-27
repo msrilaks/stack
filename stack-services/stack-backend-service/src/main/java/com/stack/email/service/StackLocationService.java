@@ -10,7 +10,7 @@ public class StackLocationService {
     private static final Logger LOGGER = LoggerFactory.getLogger(
             StackLocationService.class.getName());
 
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 1800000)
     public void scheduledTaskLocationRefresh() {
         LOGGER.info(
                 "### SRI Fixed delay task - " + System.currentTimeMillis() / 1000);
