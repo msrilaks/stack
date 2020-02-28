@@ -15,6 +15,9 @@ import java.util.Date;
 @Setter
 @ToString
 @Builder
+/*
+This is a redis hash for keeping location of tasks in a stack which have a placeId.
+ */
 public class StackTaskLocation implements Serializable {
     @Id
     private String stackId;
