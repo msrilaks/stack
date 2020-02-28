@@ -3,6 +3,7 @@ package com.stack.taskservice.repository;
 import com.stack.library.exception.TaskException;
 import com.stack.library.model.error.ErrorCodes;
 import com.stack.library.model.stack.Stack;
+import com.stack.library.model.stack.StackLocationSearch;
 import com.stack.library.model.stack.Task;
 import com.stack.taskservice.configuration.StackPurgeProperties;
 import org.slf4j.Logger;
@@ -28,6 +29,9 @@ public class StackCustomRepositoryImpl implements StackCustomRepository {
 
     @Autowired
     StackTaskLocationRepository stackTaskLocationRepository;
+
+    @Autowired
+    StackLocationSearchRepository stackLocationSearchRepository;
 
     @Override
     public Task saveTaskToStack(Task task, Stack stack) {
@@ -96,6 +100,7 @@ public class StackCustomRepositoryImpl implements StackCustomRepository {
         //Save to cache for location service
         stackTaskLocationRepository.saveStack(stack);
         mongoTemplate.save(stack);
+        stackLocationSearchRepository.saveStackLocationSearch(stack.getId());
         return stack;
     }
 
