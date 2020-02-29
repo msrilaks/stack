@@ -1,6 +1,5 @@
 .login-container {
-     min-height: calc(100vh);
-     width: 100%;
+    background-image: url("/stackBkgM.jpg");
 }
  .login-content {
      background: #fff;

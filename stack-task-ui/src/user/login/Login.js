@@ -36,6 +36,7 @@ class Login extends Component {
         }
 
         return (
+        <div  class="login-container">
                   <Container maxWidth="sm">
                         <img id="f2" src="/stackHome1M.jpg" />
                         <img id="f1" src="/stackHome2M.jpg"/>
@@ -46,6 +47,7 @@ class Login extends Component {
                                            <LoginForm {...this.props} /> */}
                                            {/* <span className="signup-link">New user? <Link to="/signup">Sign up!</Link></span> */}
                   </Container>
+        </div>
         );
     }
 }

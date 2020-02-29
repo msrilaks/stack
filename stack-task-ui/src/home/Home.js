@@ -8,13 +8,13 @@ class Home extends Component {
     }
 
     StackHome(){
-    return <React.Fragment>
+    return <div  class="home-container">
           <Container maxWidth="sm">
                 <img id="f2" src="/stackHome1M.jpg" />
                 <img id="f1" src="/stackHome2M.jpg"/>
                 <p id="f3" class="centered"></p>
           </Container>
-        </React.Fragment>
+        </div>
     }
 
     render() {
