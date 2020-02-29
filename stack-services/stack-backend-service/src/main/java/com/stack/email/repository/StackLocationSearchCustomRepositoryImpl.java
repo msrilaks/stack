@@ -13,18 +13,25 @@ public class StackLocationSearchCustomRepositoryImpl implements StackLocationSea
     @Autowired
     RedisTemplate redisTemplate;
 
+    private static String STACK_LOCATION_SEARCH = "StackLocationSearch";
+
 
     @Override
     public void saveStackLocationSearch(String stackId) {
         StackLocationSearch stackLocationSearch = StackLocationSearch.builder()
                 .stackId(stackId)
                 .lastSearchTimeStamp(System.currentTimeMillis()).build();
-        redisTemplate.opsForList().leftPush("StackLocationSearch", stackLocationSearch);
+        redisTemplate.opsForList().leftPush(STACK_LOCATION_SEARCH , stackLocationSearch);
     }
 
     @Override
     public StackLocationSearch getStackLocationSearch() {
-        return (StackLocationSearch)redisTemplate.opsForList().rightPop("StackLocationSearch");
+        return (StackLocationSearch)redisTemplate.opsForList().rightPop(STACK_LOCATION_SEARCH);
+    }
+
+    @Override
+    public long size() {
+        return redisTemplate.opsForList().size(STACK_LOCATION_SEARCH);
     }
 
 
