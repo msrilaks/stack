@@ -7,6 +7,7 @@ import googleLogo from '../../img/google-logo.png';
 import githubLogo from '../../img/github-logo.png';
 import Alert from 'react-s-alert';
 import {config} from '../../constants';
+import Container from '@material-ui/core/Container';
 
 class Login extends Component {
     componentDidMount() {
@@ -35,19 +36,16 @@ class Login extends Component {
         }
 
         return (
-            <div className="login-container">
-                <div class="fadein">
-                    <img id="f2" src="/stackHome1M.jpg" />
-                    <img id="f1" src="/stackHome2M.jpg"/>
-                </div>
-                <SocialLogin id="f3" class="centered"/>
-                    {/* <div className="or-separator">
-                        <span className="or-text">OR</span>
-                    </div>
-                    <LoginForm {...this.props} /> */}
-                    {/* <span className="signup-link">New user? <Link to="/signup">Sign up!</Link></span> */}
-
-            </div>
+                  <Container maxWidth="sm">
+                        <img id="f2" src="/stackHome1M.jpg" />
+                        <img id="f1" src="/stackHome2M.jpg"/>
+                       <SocialLogin id="f3" class="centered"/>
+                       {/* <div className="or-separator">
+                                               <span className="or-text">OR</span>
+                                           </div>
+                                           <LoginForm {...this.props} /> */}
+                                           {/* <span className="signup-link">New user? <Link to="/signup">Sign up!</Link></span> */}
+                  </Container>
         );
     }
 }
