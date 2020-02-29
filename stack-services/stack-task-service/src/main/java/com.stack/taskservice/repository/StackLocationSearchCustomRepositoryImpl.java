@@ -1,5 +1,7 @@
 package com.stack.taskservice.repository;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stack.library.model.stack.Stack;
 import com.stack.library.model.stack.StackLocationSearch;
 import com.stack.library.model.stack.StackTaskLocation;
@@ -24,7 +26,14 @@ public class StackLocationSearchCustomRepositoryImpl implements StackLocationSea
         StackLocationSearch stackLocationSearch = StackLocationSearch.builder()
                 .stackId(stackId)
                 .lastSearchTimeStamp(System.currentTimeMillis()).build();
-        redisTemplate.opsForList().leftPush("StackLocationSearch", stackLocationSearch);
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            String jsonStackLocationSearch = objectMapper.writeValueAsString(stackLocationSearch);
+            redisTemplate.opsForList().leftPush("StackLocationSearch", jsonStackLocationSearch);
+        } catch (JsonProcessingException e) {
+            LOGGER.error("## Error : ",e);
+        }
+
     }
 
 
