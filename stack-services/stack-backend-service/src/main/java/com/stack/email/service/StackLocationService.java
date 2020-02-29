@@ -24,25 +24,29 @@ public class StackLocationService {
     private StackLocationProperties stackLocationProperties;
 
     @Async
-    @Scheduled(fixedDelay = 300000)
+    @Scheduled(fixedDelay = 60000)
     public void scheduledTaskLocationRefresh() {
-        LOGGER.info("### Running Location Refresh ");
-        long timeOut =  System.currentTimeMillis()
+        long timeOut = System.currentTimeMillis()
                 + stackLocationProperties.getLocationRefreshTimeMinutes() * 60 * 1000;
         long size = stackLocationSearchRepository.size();
+        LOGGER.info("### Running Location Refresh on StackLocationSearch Cache of size: " + size);
         StackLocationSearch stackLocationSearch = null;
-        for(int i=0; i<size; i++) {
-            stackLocationSearch = stackLocationSearchRepository.getStackLocationSearch();
-            if(stackLocationSearch.getLastSearchTimeStamp() > timeOut) {
-                break;
+
+        for (int i = 0; i < size; i++) {
+            try {
+                stackLocationSearch = stackLocationSearchRepository.getStackLocationSearch();
+                if (stackLocationSearch != null && stackLocationSearch.getLastSearchTimeStamp() > timeOut) {
+                    break;
+                }
+            } catch (Exception e) {
+                LOGGER.error("Error reading cache", e);
             }
         }
-        if(stackLocationSearch == null) {
-            LOGGER.info("### Found no Stack needing Location Refresh: " );
+        if (stackLocationSearch == null) {
+            LOGGER.info("### Found no Stack needing Location Refresh: ");
             return;
         }
         //Run location refresh on this stack
         LOGGER.info("### Picked for Location Refresh: " + stackLocationSearch);
-
     }
 }

@@ -1,9 +1,6 @@
 package com.stack.library.model.stack;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
@@ -14,6 +11,8 @@ import java.io.Serializable;
 @Setter
 @ToString
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 /*
 This is a redis hash for keeping stackId for location search by backend service.
  */

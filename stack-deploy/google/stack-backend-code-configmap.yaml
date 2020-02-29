@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: stack-backend-code-configmap
 data:
-  stackCode: 4/wwEfTkyMG6qeAOy2ctipOjlKuPWZPBwP0lNgms-Eg-layXTnKl5HKTs
+  stackCode: 4/xAExZXwXLVO5TvU1JDIcPYMgVQY9OccA3Egz9uwPU4bcw7G8LVou7mg
