@@ -5,3 +5,7 @@
 .s-alert-close::before, .s-alert-close::after {
     width: 2px;
 }
+
+.app-top-box {
+    height: 57px;
+}

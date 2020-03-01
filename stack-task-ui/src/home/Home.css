@@ -78,13 +78,13 @@ animation-duration: 20s;
 
 @keyframes pulse {
 0% {
-color: #051E3E;
+color: white;
 }
 50% {
 color: white;
 }
 100% {
-color: #051E3E;
+color: white;
 }
 }
 
