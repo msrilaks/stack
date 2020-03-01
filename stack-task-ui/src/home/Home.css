@@ -14,17 +14,15 @@ font-size: 25px;
 font-weight: 400;
 color: rgba(0,0,0,0.70);
 position: absolute;
-top: 50%;
+top: 85%;
 left: 50%;
 transform: translate(-50%, -50%);
 }
 .fadein img {
-min-height: calc(100vh);
-text-align: center;
-padding-right: 35px;
-padding-left: 35px;
 position:absolute;
-top:0;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
 -webkit-animation-name: fade;
 -webkit-animation-iteration-count: infinite;
 -webkit-animation-timing-function: ease-in-out;
@@ -53,14 +51,14 @@ animation-duration: 20s;
 #f1 {
 width:100%;
 height:100%;
-max-width:100%;
-max-height:100%;
+max-width:560px;
+max-height:420px;
 }
 #f2 {
 -webkit-animation-delay: 10s;
 animation-delay: 10s;
-max-width:100%;
-max-height:100%;
+max-width:560px;
+max-height:420px;
 width:100%;
 height:100%;
 }
@@ -79,13 +77,13 @@ animation-duration: 20s;
 
 @keyframes pulse {
 0% {
-color: white;
+color: black;
 }
 50% {
-color: white;
+color: black;
 }
 100% {
-color: white;
+color: black;
 }
 }
 
