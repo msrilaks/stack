@@ -1,5 +1,6 @@
 .home-container {
     background-image: url("/stackBkgM.jpg");
+    min-height: calc(100vh);
 }
 
 .home-title {
