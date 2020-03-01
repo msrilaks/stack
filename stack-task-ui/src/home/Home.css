@@ -63,32 +63,24 @@ width:100%;
 height:100%;
 }
 #f3 {
-font-size: 25px;
-font-weight: 'bold';
--webkit-animation-name: pulse;
+content: "Stay on top of your tasks.";
+font-size: 1.2em;
+font-weight: bold;
+font-color: black;
+width:auto;
+height:auto;
+-webkit-animation-name: spin;
 -webkit-animation-iteration-count: infinite;
 -webkit-animation-timing-function: ease-in-out;
 -webkit-animation-duration: 20s;
-animation-name: pulse;
+animation-name: spin;
 animation-iteration-count: infinite;
 animation-timing-function: ease-in-out;
 animation-duration: 20s;
 }
 
-@keyframes pulse {
-0% {
-color: black;
-}
-50% {
-color: black;
-}
-100% {
-color: black;
-}
-}
-
 #f3:after {
-content: "";
+content: "Stay on top of your tasks.";
 -webkit-animation-name: spin;
 -webkit-animation-iteration-count: infinite;
 -webkit-animation-timing-function: ease-in-out;
@@ -100,9 +92,8 @@ animation-duration: 20s;
 }
 
 @keyframes spin {
-0% { content:"Stay on top of your tasks."; }
 25% { content:"Push tasks to your friends."; }
 50% { content:"Collaborate. Get notified."; }
-100% { content:"Add Google Calender events."; }
+75% { content:"Add Google Calender events."; }
 }
 
