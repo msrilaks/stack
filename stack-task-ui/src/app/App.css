@@ -9,3 +9,8 @@
 .app-top-box {
     height: 57px;
 }
+
+.app-body {
+    background-image: url("/stackBkgM.jpg");
+    min-height: calc(100vh);
+}

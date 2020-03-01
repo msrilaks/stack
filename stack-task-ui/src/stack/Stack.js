@@ -277,14 +277,13 @@ class Stack extends Component {
     render() {
         const StackTabs = styled(Tabs)({
                     '& div': {
-                        backgroundColor: 'white',
+                        backgroundColor: 'aliceblue',
                         border: 'none',
-                        borderBottomColor: 'white',
                         height: '50px',
                     },
                     '& span': {
-                        color: '#1a9099',
-                        fontWeight: '300',
+                        color: 'black',
+                        fontWeight: 'bold',
                     }
                 });
         return (
