@@ -83,6 +83,7 @@ export const styles = {
     stackIcon: {
     //   background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
     color:'#1ea5ae',
+    fontSize: '35px',
     },
     stackTab: {
         indicatorColor:'#1ea5ae',
@@ -99,7 +100,10 @@ export const styles = {
     },
     stackControls: {
         display: 'inline-flex',
-        paddingTop: '20px',
+        marginTop: '35px',
+        marginBottom: '25px',
+        borderRadius: '50px',
+        background:'aliceblue'
     },
     stackControlContent: {
             display: 'inline-block',

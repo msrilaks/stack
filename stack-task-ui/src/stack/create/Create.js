@@ -385,8 +385,8 @@ class Create extends Component {
     let UploadPanel  =  (
                 <div className={classes.grid}>
                     <GridList cellHeight={'auto'} className={classes
-                    .gridList} cols={4}>
-                        <GridListTile key="dropzone" cols={4} style={{ height:
+                    .gridList} cols={2}>
+                        <GridListTile key="dropzone" cols={2} style={{ height:
                                                 'auto', paddingBottom:'20px',borderRadius: '.2rem'}}>
                             <Dropzone onDrop={this.onDrop}>
                                 {({getRootProps, getInputProps}) => (

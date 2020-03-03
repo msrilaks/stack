@@ -482,7 +482,7 @@ class Task extends Component {
         <Grow timeout={10} in={prevfiles}>
             <div className={classes.grid}>
                 <GridList cellHeight={'auto'} className={classes
-                .gridList} cols={4}>
+                .gridList} cols={2}>
                     {Object.entries(prevfiles).map(([key, file])=>(
                         <GridListTile key={file.id} style={{ padding: '2px' }}
                         cols={1}>
@@ -663,7 +663,7 @@ class Task extends Component {
 
                 <CardActions disableSpacing>
                     {TaskButtonPanel}
-                    <IconButton
+                    {/*<IconButton
                         className={clsx(classes.expand, {
                             [classes.expandOpen]: expanded,
                             })}
@@ -671,7 +671,7 @@ class Task extends Component {
                         aria-expanded={expanded}
                         aria-label="show more">
                         <ExpandMoreIcon />
-                    </IconButton>
+                    </IconButton>*/}
                 </CardActions>
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <CardContent >
