@@ -497,9 +497,9 @@ class Create extends Component {
                     <TextField
                     id="standard-multiline-flexible"
                     style={{marginBottom: '0px'}}
-                    inputProps={{style: {fontSize: '13px',
+                    inputProps={{style: {fontSize: '15px',
                                                  fontFamily: "Sans Serif",}}} // font size of input text
-                    InputLabelProps={{style: {fontSize: '10px',
+                    InputLabelProps={{style: {fontSize: '15px',
                                                       fontFamily: "Sans Serif",
                                                       color: '#BDBDBD',}}} // font size of input label
                     label="description"
@@ -527,6 +527,9 @@ class Create extends Component {
                  InputProps={{
                          className: classes.taskInputProps
                        }}
+                 InputLabelProps={{style: {fontSize: '15px',
+                       fontFamily: "Sans Serif",
+                       color: '#BDBDBD',}}} // font size of input label
                  onPlaceSelected={(place) => {
                  console.log(place);
                  this.setState({
@@ -557,6 +560,9 @@ class Create extends Component {
                        placeholder="push to @emails"
                        style={{margin: '0px',color: '#bdbdbd',border: '1px solid #dcdcdc',borderRadius: '.2rem',width: '100%',
                        height: '38px'}}
+                       InputLabelProps={{style: {fontSize: '15px',
+                             fontFamily: "Sans Serif",
+                             color: '#BDBDBD',}}} // font size of input label
                        emails={this.state.emails}
                        onChange={(_emails: string[]) => {
                          this.setState({ emails: _emails });

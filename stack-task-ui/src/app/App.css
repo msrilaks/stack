@@ -12,5 +12,6 @@
 
 .app-body {
     background-image: url("/stackBkgM.jpg");
-    min-height: calc(120vh);
+    min-height: calc(100vh);
+    background-repeat: repeat;
 }
