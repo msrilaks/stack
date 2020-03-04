@@ -631,8 +631,8 @@ class Task extends Component {
                          <Typography variant="caption"
                             color="textPrimary" component="p">
                             {
-                                this.props.task.createdDate
-                                }
+                                new Date(this.props.task.createdTimeStamp).toUTCString()
+                            }
                         </Typography>
                     }>
                     </CardHeader>
