@@ -44,7 +44,7 @@ public class StackCustomRepositoryImpl implements StackCustomRepository {
         task.setStackId(stack.getId());
         task.setUserId(stack.getUserId());
         if (taskFromStack == null) {
-            task.setCreatedDate(new Date());
+            task.setCreatedTimeStamp(System.currentTimeMillis());
             stack.getTasks().add(task);
         }
 

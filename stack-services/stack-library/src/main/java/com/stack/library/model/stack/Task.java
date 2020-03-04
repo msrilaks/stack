@@ -34,15 +34,13 @@ public class Task implements Comparable<Task>, Cloneable {
     private Long                     deletedTimeStamp;
     private Long                     completeByTimeStamp;
     private TreeMap<String, TaskPushLogEntry> taskPushLogEntryMap;
-    //private StackEvent stackEvent;
-    @CreatedDate
-    private Date                     createdDate;
+    private Long                     createdTimeStamp;
     @LastModifiedDate
     private Date                     lastModifiedDate;
 
     @Override
     public int compareTo(Task task) {
-        return this.createdDate.compareTo(task.getCreatedDate()) * -1;
+        return this.createdTimeStamp.compareTo(task.getCreatedTimeStamp()) * -1;
     }
 
     public void setTags(final String tagsInput){
@@ -63,7 +61,7 @@ public class Task implements Comparable<Task>, Cloneable {
         task.setFormattedAddress(getFormattedAddress());
         task.setLocationTimeStamp(System.currentTimeMillis());
         task.setCreatedByUserId(getCreatedByUserId());
-        task.setCreatedDate(getCreatedDate());
+        task.setCreatedTimeStamp(getCreatedTimeStamp());
         task.resetTimeStamps();
         return task;
     }
