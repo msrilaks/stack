@@ -31,27 +31,27 @@ public class StackEmailConstants {
         "<h4>"+
         "<ul style=\"list-style-type:none;\">"+
         "<li><img src=\"https://img.icons8.com/dusk/32/000000/edit.png\"><i style=\"margin:15px;\">" +
-            "Keep up with those many little things to do. Stack all your tasks in one place" +
-            "and free your mind for more creative thoughts. There is no need to cram a " +
-            "long list of to-do's into your mind or on little scribble notes only to " +
-            "have some of them fall off the back of your mind. Keeping up with an " +
-            "ever-growing, overwhelming list of to-do's has never been easier." +
+            "Keep up with those many little things to do. Stack all your tasks in one place " +
+            "and free your mind for more creative thoughts. There&#39;s no need to cram a " +
+            "long list of to-do&#39;s into your mind or on little scribble notes or to " +
+            "worry about some of them falling off the back of your mind. Keeping up with an " +
+            "ever-growing, overwhelming list of to-do&#39;s has never been easier." +
             "</i></li><br/>"+
        "<li><img src=\"https://img.icons8.com/dusk/32/000000/user-location.png\">" +
-            "<i style=\"margin:15px;\">Get notified, get reminded to run an errand when " +
+            "<i style=\"margin:15px;\">Get notified. Get reminded to run an errand when " +
             "you are in the vicinity. Stack It Down notifies you of tasks that you " +
             "can complete around your current location.</i></li><br/>"+
         "<li><img src=\"https://img.icons8.com/cute-clipart/32/000000/share.png\">" +
             "<i style=\"margin:15px;\">" +
-            "Collaborate, push tasks to your friends, nudge them to get it done" +
+            "Collaborate, push tasks to your friends and nudge them to get it done." +
             "</i></li><br/>"+
         "<li><img src=\"https://img.icons8.com/color/32/000000/price-tag.png\">" +
             "<i style=\"margin:15px;\">" +
-            "Tag your tasks, organize them into categories and search easily" +
+            "Tag your tasks and organize them into categories to search easily." +
             "</i></li><br/>"+
         "<li><img src=\"https://img.icons8.com/color/32/000000/google-calendar.png\">" +
             "<i style=\"margin:15px;\">" +
-            "Add Google Calendar Events" +
+            "Add Google Calendar Events." +
             "</I></li><br/>"+
         "</ul>"+
         "</h4>"+
