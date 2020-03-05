@@ -26,7 +26,7 @@ public class StackEmailConstants {
     public static final String STACK_CREATED_MESSAGE =
         STACK_MESSAGE_START+
         STACK_MESSAGE_HEADER +
-        "<h2>Hello, <b><i>{0}</i></b> !</h2><br/>"+
+        "<h2>Hello <b><i>{0}</i></b> !</h2><br/>"+
         "<h3>Welcome to <a href=\"http://www.stackitdown.com\" style=\"color:#1ea5ae;\">www.stackitdown.com</a> !</h3>"+
         "<h4>"+
         "<ul style=\"list-style-type:none;\">"+
