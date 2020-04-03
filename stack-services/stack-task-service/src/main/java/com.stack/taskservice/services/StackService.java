@@ -1,10 +1,10 @@
 package com.stack.taskservice.services;
 
+import com.stack.library.constants.StackEmailConstants;
 import com.stack.library.model.stack.Stack;
 import com.stack.library.model.stack.Task;
 import com.stack.library.model.stack.TaskPushLogEntry;
 import com.stack.library.model.user.User;
-import com.stack.library.constants.StackEmailConstants;
 import com.stack.taskservice.context.StackRequestContext;
 import com.stack.taskservice.handler.PubSubEmailHandler;
 import com.stack.taskservice.repository.StackRepository;
@@ -83,7 +83,7 @@ public class StackService {
         Task createdTask = stackRepository.saveTaskToStack(task.clone(), stack);
         LOGGER.info("Created task : " + createdTask);
         //Go over the push log in the task from request body
-        if (task.getTaskPushLogEntryMap()!=null && !task.getTaskPushLogEntryMap().isEmpty()) {
+        if (task.getTaskPushLogEntryMap() != null && !task.getTaskPushLogEntryMap().isEmpty()) {
             //If the task in the request has push entries, honour those entries.
             task.setId(createdTask.getId());
             return pushTask(task);
@@ -91,10 +91,10 @@ public class StackService {
         return createdTask;
     }
 
-    public Task pushTask(Task task){
+    public Task pushTask(Task task) {
         Iterator pushLogsIterator = task.getTaskPushLogEntryMap().values().iterator();
-        while(pushLogsIterator.hasNext()) {
-            TaskPushLogEntry pushEntry = (TaskPushLogEntry)pushLogsIterator.next();
+        while (pushLogsIterator.hasNext()) {
+            TaskPushLogEntry pushEntry = (TaskPushLogEntry) pushLogsIterator.next();
             pushTask(task.getId(), pushEntry.getPushedUserId());
         }
         return getTask(task.getId());
@@ -122,7 +122,7 @@ public class StackService {
             }
             stackRepository.saveTaskToStack(pushTask, pushStack);
             photoService.movePhotos(stack.getId(), taskId.toString(), pushStack.getId(),
-                                    pushTask.getId().toString());
+                    pushTask.getId().toString());
             emailHandler.sendEmailNotification(pushStack, pushTask, fromUser, StackEmailConstants.TASK_PUSHED_TOPIC);
             stackRepository.saveTaskAsPushed(taskId, stack, toUserId);
         }
@@ -138,10 +138,10 @@ public class StackService {
         Stack stack = stackRequestContext.getStack();
         User fromUser = stackRequestContext.getUser();
         Task task = stackRepository.findTaskById(taskId, stack);
-        if (task.getTaskPushLogEntryMap()!=null && !task.getTaskPushLogEntryMap().isEmpty()) {
+        if (task.getTaskPushLogEntryMap() != null && !task.getTaskPushLogEntryMap().isEmpty()) {
             Iterator pushLogsIterator = task.getTaskPushLogEntryMap().values().iterator();
-            while(pushLogsIterator.hasNext()) {
-                TaskPushLogEntry pushEntry = (TaskPushLogEntry)pushLogsIterator.next();
+            while (pushLogsIterator.hasNext()) {
+                TaskPushLogEntry pushEntry = (TaskPushLogEntry) pushLogsIterator.next();
                 Stack nudgeStack = stackRepository.findByUserId(pushEntry.getPushedUserId());
                 if (nudgeStack != null) {
                     emailHandler.sendEmailNotification(nudgeStack, task, fromUser, StackEmailConstants.TASK_NUDGE_TOPIC);
@@ -156,7 +156,7 @@ public class StackService {
             @Valid Task task) {
         Stack stack = stackRequestContext.getStack();
         Task modifiedTask = stackRepository.saveTaskAsModified(task.clone(), taskId, stack);
-        if (task.getTaskPushLogEntryMap()!=null && !task.getTaskPushLogEntryMap().isEmpty()) {
+        if (task.getTaskPushLogEntryMap() != null && !task.getTaskPushLogEntryMap().isEmpty()) {
             //If the task in the request has push entries, honour those entries.
             //modifiedTask will have the older push entries too.
             return pushTask(task);

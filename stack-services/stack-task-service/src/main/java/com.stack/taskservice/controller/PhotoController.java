@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @Controller
 @Api(value = "Photos",
-     description = "Upload and manage photos, files and media related to tasks",
+     description = "Upload and manage photos, files and media related to Tasks",
      tags = {"Photos"})
 public class PhotoController {
 
