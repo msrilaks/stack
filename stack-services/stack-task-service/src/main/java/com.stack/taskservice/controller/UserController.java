@@ -13,10 +13,13 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -42,18 +45,22 @@ public class UserController {
                                       userPrincipal.getEmail()));
     }
 
-    @GetMapping(path = "/stack/{stackId}/tasks/{taskId}/user",
+    @GetMapping(path = "/stack/{stackId}/tasks/{taskId}/users",
                 consumes = "application/json",
                 produces = "application/json")
-    @ApiOperation(value = "Get User who owns the Task", tags = {"Task"})
-    public User getTaskUser( @PathVariable("stackId") String stackId,
-                             @PathVariable("taskId") UUID taskId) {
+    @ApiOperation(value = "Get User who owns the Task", tags = {"User"})
+    public ResponseEntity<Map<String, User>> getTaskUser(@PathVariable("stackId") String stackId,
+                                                         @PathVariable("taskId") UUID taskId) {
         Task task = stackService.getTask(taskId);
-        String userId=(task.isPushed())?task.getTaskPushLogEntryMap().firstEntry().getValue().getPushedUserId()
-                :task.getUserId();
-        return userRepository.findByEmail(userId)
-                     .orElseThrow(() -> new ResourceNotFoundException("User",
-                                                                      "email",
-                                                                      userId));
+        Map<String, User> userMap = new HashMap<>();
+
+        if(task.isPushed()) {
+            task.getTaskPushLogEntryMap().values().stream()
+                .forEach(v->userRepository.findByEmail(v.getPushedUserId()).
+                        ifPresent(user ->userMap.put(user.getEmail(),user)));
+        } else {
+            userRepository.findByEmail(task.getUserId()).ifPresent(user ->userMap.put(user.getEmail(),user));
+        }
+        return ResponseEntity.ok(userMap);
     }
 }

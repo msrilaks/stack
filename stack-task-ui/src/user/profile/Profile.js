@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import { grey } from '@material-ui/core/colors';
 import PersonIcon from '@material-ui/icons/Person';
+import PeopleIcon from '@material-ui/icons/People';
 
 const useStyles = makeStyles(theme => ({
   popover: {
@@ -40,15 +41,23 @@ class Profile extends Component {
 
         const open = Boolean(anchorEl);
         let StackUserAvatar;
-        if(this.props.imageUrl == '') {
+        if(this.props.pushUsers && Object.keys(this.props.pushUsers).length == 1) {
             StackUserAvatar = <Avatar className={classes.avatar}>
                 <PersonIcon/>
             </Avatar>
-        } else {
+        } else if(this.props.pushUsers && Object.keys(this.props.pushUsers).length > 1) {
+             StackUserAvatar = <Avatar className={classes.avatar}>
+                 <PeopleIcon/>
+             </Avatar>
+        } else if(this.props.imageUrl != null && this.props.imageUrl !=''){
             StackUserAvatar = <Avatar aria-label="task"
                 className={classes.avatar}
                 src={this.props.imageUrl}
                 alt={this.props.name}>
+            </Avatar>
+        } else {
+            StackUserAvatar = <Avatar className={classes.avatar}>
+                <PersonIcon/>
             </Avatar>
         }
         return (

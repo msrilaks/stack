@@ -217,11 +217,7 @@ class Task extends Component {
                  start:new Date(),
                  end:new Date(),
              },
-             pushUser:{
-                 imageUrl:'',
-                 name:'',
-                 email:'',
-             }
+             pushUsers: null,
         };
 
 
@@ -255,11 +251,7 @@ class Task extends Component {
                 start:new Date(),
                 end:new Date(),
             },
-            pushUser:{
-                imageUrl:'',
-                name:'',
-                email:'',
-            }
+            pushUsers: null
         },function () {
             console.log("location "+this.state.event.location);
             console.log("eventStartDate "+this.state.event.start);
@@ -274,15 +266,10 @@ class Task extends Component {
          getUser(this.props.task)
                  .then(response => {
                      this.setState({
-                          pushUser:{
-                               ...this.state.pushUser,
-                           name : response.name,
-                           email: response.email,
-                           imageUrl: response.imageUrl,
-                           }
+                        pushUsers: response,
                      },function () {
                          console.log("pushUser" + this.state
-                         .pushUser.name);
+                         .pushUsers);
                      });
                  }).catch(error => {
                  });
@@ -520,8 +507,8 @@ class Task extends Component {
         }
 
         let StackUserAvatar;
-        if(this.props.task.pushedUserId == '' ||
-            this.props.task.pushedUserId == null) {
+        if(this.props.task.pushedTimeStamp == '' ||
+            this.props.task.pushedTimeStamp == null) {
                  StackUserAvatar = <Profile
                         authenticated={this.props.authenticated}
                         currentUser={this.props.currentUser}
@@ -530,22 +517,23 @@ class Task extends Component {
                         name={this.props.currentUser.name}
                         email={this.props.currentUser.email}/>
         } else {
-            if(this.state.pushUser.imageUrl == '') {
+            if(this.state.pushUsers && Object.keys(this.state.pushUsers).length > 0) {
                 StackUserAvatar = <Profile
                                     authenticated={this.props.authenticated}
                                     currentUser={this.props.currentUser}
                                     stack={this.props.stack}
+                                    pushUsers={this.state.pushUsers}
                                     imageUrl=''
                                     name=''
-                                    email={this.props.task.pushedUserId}/>
+                                    email=''/>
             } else {
                 StackUserAvatar = <Profile
                                         authenticated={this.props.authenticated}
                                         currentUser={this.props.currentUser}
                                         stack={this.props.stack}
-                                        imageUrl={this.state.pushUser.imageUrl}
-                                        name={this.state.pushUser.name}
-                                        email={this.state.pushUser.email}/>
+                                        imageUrl={this.props.currentUser.imageUrl}
+                                        name={this.props.currentUser.name}
+                                        email={this.props.currentUser.email}/>
             }
         }
 

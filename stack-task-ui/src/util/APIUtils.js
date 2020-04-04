@@ -275,7 +275,7 @@ export function getUser(task) {
     }
     return request({
         url: config.API_BASE_URL + "/stack/"+task.stackId
-            +"/tasks/"+task.id+"/user",
+            +"/tasks/"+task.id+"/users",
         method: 'GET'
     });
 }
