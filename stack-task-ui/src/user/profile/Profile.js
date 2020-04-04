@@ -41,11 +41,7 @@ class Profile extends Component {
 
         const open = Boolean(anchorEl);
         let StackUserAvatar;
-        if(this.props.pushUsers && Object.keys(this.props.pushUsers).length == 1) {
-            StackUserAvatar = <Avatar className={classes.avatar}>
-                <PersonIcon/>
-            </Avatar>
-        } else if(this.props.pushUsers && Object.keys(this.props.pushUsers).length > 1) {
+        if(this.props.pushUsers && Object.keys(this.props.pushUsers).length > 1) {
              StackUserAvatar = <Avatar className={classes.avatar}>
                  <PeopleIcon/>
              </Avatar>

@@ -460,6 +460,23 @@ class Task extends Component {
             setExpanded(!expanded);
         };
 
+        let pushUserNames = new Array();
+        let pushUserEmails = new Array();
+        let pushImageUrl = '';
+        if(this.state.pushUsers && Object.keys(this.state.pushUsers).length == 1) {
+            Object.entries(this.state.pushUsers).forEach(([key, val]) => {
+                pushImageUrl = val.imageUrl;
+            });
+        }
+        if(this.state.pushUsers && Object.keys(this.state.pushUsers).length > 0) {
+            Object.entries(this.state.pushUsers).forEach(([key, val]) => {
+                pushUserNames.push(val.name);
+                pushUserEmails.push(val.email);
+            });
+            pushUserNames.join(',');
+            pushUserEmails.join(',');
+        }
+
         const prevfiles  =  (Object.entries(this.state.files).map(([key, file])=>(
             Object.assign(file, { preview: URL.createObjectURL(base64toBlob(file
             .image,''))}))))
@@ -518,14 +535,15 @@ class Task extends Component {
                         email={this.props.currentUser.email}/>
         } else {
             if(this.state.pushUsers && Object.keys(this.state.pushUsers).length > 0) {
+
                 StackUserAvatar = <Profile
                                     authenticated={this.props.authenticated}
                                     currentUser={this.props.currentUser}
                                     stack={this.props.stack}
                                     pushUsers={this.state.pushUsers}
-                                    imageUrl=''
-                                    name=''
-                                    email=''/>
+                                    imageUrl={pushImageUrl}
+                                    name={pushUserNames.toString()}
+                                    email={pushUserEmails.toString()}/>
             } else {
                 StackUserAvatar = <Profile
                                         authenticated={this.props.authenticated}
