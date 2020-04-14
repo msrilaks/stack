@@ -18,7 +18,7 @@ public class PubSubConfiguration {
 
     @StreamListener(Sink.INPUT)
     public void handleMessage(Message<String> message) {
-        System.out.println("### SRI Message arrived! Payload: " + message.getPayload());
+        System.out.println("### *** StackItDown PubSub Message arrived with Payload: " + message.getPayload());
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             BackendServiceRequest backendServiceRequest = objectMapper.readValue(message.getPayload(), BackendServiceRequest.class);
