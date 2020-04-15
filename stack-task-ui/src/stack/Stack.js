@@ -3,7 +3,7 @@ import Create from '../stack/create/Create';
 import TaskList from '../stack/tasklist/TaskList';
 import './Stack.css';
 import AddIcon from '@material-ui/icons/Add';
-import { getCompletedTasks, getDeletedTasks, getMovedTasks, getTodoTasks, styles } from '../util/APIUtils';
+import { getCompletedTasks, getDeletedTasks, getMovedTasks, getTodoTasks, pingStack, styles } from '../util/APIUtils';
 import Alert from 'react-s-alert';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
@@ -86,8 +86,28 @@ class Stack extends Component {
          },function () {
             console.log("stackTasks : "+ this.state.tasks)
         });
+        this.interval = setInterval(() => this.ping(), 20000);
         this.reloadTasks();
-       }
+    }
+
+    componentWillUnmount() {
+       clearInterval(this.interval);
+    }
+
+    ping() {
+        pingStack(new Object(), this.props.stack.id)
+            .then(response => {
+                if(Object.keys(response.tasksRecent).length > 0) {
+                    Alert.info('You have new tasks pushed to you.',
+                        {
+                            timeout: 10000,
+                            onClose: ()=>{ this.reloadTasks(); }
+                        });
+                }
+            }).catch(error => {
+                console.log('Ping failed');
+            });
+    }
 
     deleteFilterTag(chip) {
             var newTagsArr = this.state.filterTags.split(',');

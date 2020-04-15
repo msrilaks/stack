@@ -269,6 +269,18 @@ export function addEvent(eventRequest, stackId, taskId) {
     });
 }
 
+export function pingStack(location, stackId) {
+    if(!localStorage.getItem(config.ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: config.API_BASE_URL + "/stack/"+stackId+"/ping",
+        method: 'POST',
+        body: JSON.stringify(location)
+    });
+}
+
 export function getUser(task) {
     if(!localStorage.getItem(config.ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
